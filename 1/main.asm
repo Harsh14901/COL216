@@ -25,7 +25,8 @@ main:
 
 	addi $s0, $s0, -1
 
-	li $s5, 0
+#	li $s5, 0
+	mtc1 $zero, $f12
 
 	# increment s6
 	addi $s6, $s6, 1
@@ -42,7 +43,7 @@ loop:
 	move $s4, $v1
 
 	jal area
-	add $s5, $s5, $v0
+	add.s $f12, $f12, $f0
 	addi $s0, $s0, -1
 	addi $s6, $s6, 1
 
@@ -55,8 +56,8 @@ exit:
 	la	$a0, area_string	# Pointer to string (load the address of msg)
 	syscall
 
-	li $v0, 1
-	move $a0, $s5
+	li $v0, 2
+	# move $a0, $s5
 	syscall
 	
 	li $v0, 17	# Exit2
@@ -108,14 +109,27 @@ input:
 	move $ra, $t1
 	jr $ra
 
-# takes 4 points x1: $s1, y1: $s2, x2: $s3, y2: $s4 and returns the computed area in $v0
+# takes 4 points x1: $s1, y1: $s2, x2: $s3, y2: $s4 and returns the computed area in $f0
+# uses f2, f4, f6 for internal computation
 area: 
 	sub $t0, $s3, $s1 # (x2 - x1)
 	add $t1, $s2, $s4 # (y1 + y2)
-	srl $t1, $t1, 1 # (y1+y2)/2
-	mul $t3, $t0, $t1
-	move $v0, $t3
-	
+
+	mtc1 $t0, $f0
+	cvt.s.w $f0, $f0
+
+	mtc1 $t1, $f2
+	cvt.s.w $f2, $f2
+
+	li $t5, 2
+	mtc1 $t5, $f4
+	cvt.s.w $f4, $f4
+
+#	 srl $t1, $t1, 1 # (y1+y2)/2
+	mul.s $f6, $f0, $f2
+	div.s $f6, $f6, $f4
+
+	mov.s $f0, $f6
 	jr $ra
 	
 
@@ -134,6 +148,5 @@ area_string: .asciiz "The area is : "
 
 
 # TODO
-# 1) Fix floating points
 # 2) Keep sanity and input checks
 # 4) Write Tests
