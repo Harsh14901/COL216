@@ -42,11 +42,58 @@ loop:
 	move $s3, $v0
 	move $s4, $v1
 
+	mtc1 $s1, $f1
+	cvt.s.w $f1, $f1
+	mtc1 $s2, $f2
+	cvt.s.w $f2, $f2
+	mtc1 $s3, $f3
+	cvt.s.w $f3, $f3
+	mtc1 $s4, $f4
+	cvt.s.w $f4, $f4
+
+	mul $t6, $s2, $s4 # s2 = y1, s4 = y2, t6 = y1*y2
+	bltz $t6, split # if y1*y2 < 0 then split else normal
+	j normal
+split:
+	mtc1 $zero, $f11
+	cvt.s.w $f11, $f11 # f11 = 0
+
+	sub.s $f5, $f3, $f1    # x2 - x1
+	mul.s $f5, $f5, $f2	   #  (x2 - x1) * y1
+
+	sub.s $f6, $f2, $f4 	# (y1-y2)
+	div.s $f5, $f5, $f6		# (x2 - x1) * y1 / (y1-y2)
+
+	add.s $f5, $f5, $f1		# f5 = m = (x2 - x1) * y1 / (y1-y2) + x1
+
+	mov.s $f8, $f3	# store x2 in f8
+	mov.s $f9, $f4	# store y2 in f9
+
+	mov.s $f3, $f5	# passed x2 = m which is on x axis
+	mov.s $f4, $f11	# passed y2 = 0
+	
 	jal area
 	add.s $f12, $f12, $f0
-	addi $s0, $s0, -1
-	addi $s6, $s6, 1
 
+	mov.s $f1, $f3	# store passed x2 = m as passed x1
+	mov.s $f2, $f4	# store passed y2 = 0 as passed y1
+
+	mov.s $f3, $f8	# restore x2 from f8
+	mov.s $f4, $f9	# restore y2 from f9
+	jal area
+	add.s $f12, $f12, $f0
+
+
+	addi $s0, $s0, -1
+	move $s1, $s3
+	move $s2, $s4
+	j loop
+normal: 
+
+	jal area
+	add.s $f12, $f12, $f0
+	
+	addi $s0, $s0, -1
 	move $s1, $s3
 	move $s2, $s4
 	j loop
@@ -109,29 +156,22 @@ input:
 	move $ra, $t1
 	jr $ra
 
-# takes 4 points x1: $s1, y1: $s2, x2: $s3, y2: $s4 and returns the computed area in $f0
-# uses f2, f4, f6 for internal computation
+# takes 4 points x1: $f1, y1: $f2, x2: $f3, y2: $f4 and returns the computed area in $f0
+# uses f5, f6, f7 for internal computation
 area: 
-	sub $t0, $s3, $s1 # (x2 - x1)
-	add $t1, $s2, $s4 # (y1 + y2)
+	sub.s $f5, $f3, $f1 # (x2 - x1)
+	add.s $f6, $f2, $f4 # (y1 + y2)
 
-	mtc1 $t0, $f0
-	cvt.s.w $f0, $f0
+	li $t5, 2 
+	mtc1 $t5, $f7
+	cvt.s.w $f7, $f7 # f7 = 2
 
-	mtc1 $t1, $f2
-	cvt.s.w $f2, $f2
+	mul.s $f6, $f5, $f6 # f6 = (y1+y2)*(x2-x1)
+	div.s $f6, $f6, $f7 # f6 = area
 
-	li $t5, 2
-	mtc1 $t5, $f4
-	cvt.s.w $f4, $f4
+	abs.s $f0, $f6
 
-#	 srl $t1, $t1, 1 # (y1+y2)/2
-	mul.s $f6, $f0, $f2
-	div.s $f6, $f6, $f4
-
-	mov.s $f0, $f6
 	jr $ra
-	
 
 	.data
 
