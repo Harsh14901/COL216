@@ -13,8 +13,8 @@ def set_bounds(b):
 set_bounds(bits)
 epsilon = 1e-2
 
-def get_tolerance():
-  return epsilon * (BOUNDS[1] - BOUNDS[0])/100
+def get_tolerance(area):
+  return epsilon * area/100
 
 
 cmd = "spim -file main.asm"
@@ -79,7 +79,7 @@ def test(n):
   out = execute_asm(input_pts=pts)
   area = compute_area(pts)
 
-  if abs(out - area) > get_tolerance():
+  if abs(out - area) > get_tolerance(area):
     log.failure("Test failed!")
     context.log_level = 'debug'
     log.debug(f"Program returned area: {out}")
