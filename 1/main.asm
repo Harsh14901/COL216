@@ -15,26 +15,39 @@ main:
 	syscall
 	move $s0, $v0	# $s0 contains the number of points n
 
-	li $a1, 1
+	li $s6, 1	# s6 stores the index of the point
+	move $a0, $s6
 	jal input
-	move $s3, $s1
-	move $s4, $s2
+	
+	# store x1, y1 in s1 and s2
+	move $s1, $v0
+	move $s2, $v1
 
 	addi $s0, $s0, -1
 
 	li $s5, 0
 
-	# increment a1
-	addi $a1, $a1, 1
+	# increment s6
+	addi $s6, $s6, 1
 	j loop
 
 loop:
 	beq $s0, $zero, exit
+	
+	move $a0, $s6
 	jal input
+
+	# store x2, y2 in s3, s4
+	move $s3, $v0
+	move $s4, $v1
+
 	jal area
 	add $s5, $s5, $v0
 	addi $s0, $s0, -1
-	addi $a1, $a1, 1
+	addi $s6, $s6, 1
+
+	move $s1, $s3
+	move $s2, $s4
 	j loop
 exit:
 	# print area
@@ -55,15 +68,16 @@ print_newline:
 	syscall
 	jr $ra
 
-# NOTE: Returns the coordinates in $s1 and $s2 and index of the point in $a1
+# Returns the coordinates in $v0 and $v1 and takes index of the point in $a0
 input:
-	move $t4, $ra
+	move $t0, $a0	# t0 stores the index of the input
+	move $t1, $ra	# t1 stores return address
 	li	$v0,4		# Code for syscall: print_string
 	la	$a0, msg_point_x
 	syscall	
 	# Print index of the point
 	li $v0,1
-	move $a0, $a1
+	move $a0, $t0
 	syscall
 	jal print_newline
 	
@@ -71,7 +85,7 @@ input:
 	# x coordinate
 	li $v0, 5
 	syscall
-	move $s1, $v0
+	move $t2, $v0	# t2 stores the x coordinate
 
 	############
 
@@ -79,22 +93,25 @@ input:
 	la	$a0, msg_point_y
 	syscall
 	li $v0,1
-	move $a0,$a1
+	move $a0,$t0
 	syscall
 	jal print_newline
 
 	# y coordinate
 	li $v0, 5
 	syscall
-	move $s2, $v0
+	move $t3, $v0 # t3 stores the y coordinate
 	
-	move $ra, $t4
+	move $v0, $t2 # store values of x and y coordinates for return
+	move $v1, $t3
+
+	move $ra, $t1
 	jr $ra
 
-# takes 4 points x1: $s3, y1: $s4, x2: $s1, y2: $s2 and returns the computed area in $v0
+# takes 4 points x1: $s1, y1: $s2, x2: $s3, y2: $s4 and returns the computed area in $v0
 area: 
-	sub $t0, $s1, $s3 # (x2 - x1)
-	add $t1, $s4, $s2 # (y1 + y2)
+	sub $t0, $s3, $s1 # (x2 - x1)
+	add $t1, $s2, $s4 # (y1 + y2)
 	srl $t1, $t1, 1 # (y1+y2)/2
 	mul $t3, $t0, $t1
 	move $v0, $t3
@@ -119,5 +136,4 @@ area_string: .asciiz "The area is : "
 # TODO
 # 1) Fix floating points
 # 2) Keep sanity and input checks
-# 3) Reftacor code (use stack)
 # 4) Write Tests
