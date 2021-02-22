@@ -11,7 +11,10 @@ def set_bounds(b):
   BOUNDS.append(-2**(b-1))
   BOUNDS.append(2**(b-1) - 1)
 set_bounds(bits)
-epsilon = 1e-4
+epsilon = 1e-2
+
+def get_tolerance():
+  return epsilon * (BOUNDS[1] - BOUNDS[0])/100
 
 
 cmd = "spim -file main.asm"
@@ -65,7 +68,7 @@ def test(n):
   assert(n >= 2)
   pts = []
 
-  log.progress("Generating points")
+  log.info("Generating points")
   for i in range(n):
     x = random.randint(BOUNDS[0], BOUNDS[1])
     y = random.randint(BOUNDS[0], BOUNDS[1])
@@ -76,7 +79,7 @@ def test(n):
   out = execute_asm(input_pts=pts)
   area = compute_area(pts)
 
-  if abs(out - area) > epsilon:
+  if abs(out - area) > get_tolerance():
     log.failure("Test failed!")
     context.log_level = 'debug'
     log.debug(f"Program returned area: {out}")
@@ -92,7 +95,7 @@ def parse():
   args = argparse.ArgumentParser()
   args.add_argument("-m", dest="m" ,type=int, help="Number of points in test case", default=5)
   args.add_argument("-n", dest="n" ,type=int, help="Number of test cases to run", default=1)
-  args.add_argument("-e", "--epsilon", dest="e", type=float, help="Error tolerance for test", default=epsilon)
+  args.add_argument("-e", "--epsilon", dest="e", type=float, help="Error tolerance for test in percentage", default=epsilon)
   args.add_argument("-b", "--bits",dest="b" ,type=int, help="Number of bits to be used for the point coordinates", default=bits)
 
   return args.parse_args()
