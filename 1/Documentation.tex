@@ -1,0 +1,65 @@
+\documentclass{article}
+\usepackage{xcolor}
+\usepackage{listings}
+\lstset{basicstyle=\ttfamily,
+  showstringspaces=false,
+  commentstyle=\color{red},
+  keywordstyle=\color{blue}
+}
+\begin{document}
+\subsection{Approach}
+    We Made an outline of the task we have to complete and broke it down into stages.
+    In this case we prepared the following stages. 
+    \begin{enumerate}
+        \item Make a procedure (input) to take coordinates as input.
+        Also display instructions to the user while asking for input. 
+        \item Make a procedure (area) that takes 2 points and returns the area of the 
+        trapeziod formed by those points. The area is calculated using single precision
+        floating point registers. This procedure assumes that the input points are on the same side of the X axis.
+        \item In the main procedure, using the procedure input, accept coordinates from the user.
+        Call the procedure area using the coordinates received from the user. If two successive coordinates \( (x_1, y_1) \) and \( (x_2, y_2) \) are on different
+        sides of the X-axis (which we determine by checking the sign of the product \( y_1y_2 \)), we break the area into 2 triangles, one lying on each side of the X-axis, and call the procedure
+        area on each separately.
+        \item An accumulator keeps track of the sum of all areas calculated, and after all the points have
+        been processed, stores the area, which is to be displayed to the user. 
+    \end{enumerate}
+\subsection{Formulae used}
+\begin{itemize}
+    \item Area of trapeziod formed by \( (x_1, y_1) \) and \( (x_2, y_2) \)  when both points are above the X-axis is given by \[ Area = (y_2 - y_1)*(x_1 + x_2)/2 \].
+    \item When both of the points are below X-axis then the negative of the above expression gives the absolute area.
+    \item In the third case, we have that one point is above the X-axis and one is below. In this case, we introduce a third point, M on the X-axis where the line joining points A and B meet
+    the X-axis. Then we can calculate the absolute area covered by A,B to be the sum of the areas of triangles formed by A,M and M,B. The coordinates of M are given by - \[ M = (x_1 -  y_1.(x_2 - x_1)/(y_2 - y_1),0)\]
+\end{itemize}
+
+\subsection{User Interface}
+On running the program, we are first prompted to enter the number of points.
+Then on each line we ask for the X or Y coordinates of the \(i\,th\) point.
+After calculating the area is printed on the console with a message.
+
+\subsection{Testing}
+\subsubsection{Automated}
+We wrote a python script that generates random coordinates, runs the asm file, and compares the
+output with the expected area within a margin of error that can be specified while testing. We use spim command line
+tool to automate the testing using the python script. To run the script, we enter the following commands once inside root project folder 
+\begin{lstlisting}[language=bash]
+    sudo apt install spim
+    python3 -m pip install -r requirements.txt
+    python3 tester.py -n 20 -m 100 -b 10 -e 0.0001 
+\end{lstlisting}
+This will run 20 random test cases with 100 coordinates of at max 10 bits each,
+with an error tolerance of  0.0001 percent. \\
+We tested with different values of error tolerance and bitsizes, and found that overflow occured at 16 bit inputs
+and with 15 bit inputs, we could achieve an accuracy of about \(10^{-4}\,\%\). 
+
+\subsubsection{Manual}
+We also checked a few corner cases manually in QtSpim, which are listed below : 
+\begin{enumerate}
+    \item number of points 0 or 1
+    \item all points on X-axis.
+    \item All points on Y-axis.
+    \item Duplicate points.
+\end{enumerate}
+In all these cases we got the expected output without overflows, that is 0.
+
+\end{document}
+
