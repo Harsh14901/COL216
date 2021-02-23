@@ -128,11 +128,18 @@ and with 15 bit inputs, we were able to achieve an accuracy of about \(10^{-4}\,
 \subsection{Manual}
 We also checked a few corner cases manually in QtSpim, which are listed below : 
 \begin{itemize}
-    \item number of points 0 or 1
-    \item all points on X-axis.
+    \item Number of points 0 or 1
+    \item All points on X-axis.
     \item All points on Y-axis.
     \item Duplicate points.
 \end{itemize}
+
+We can execute custom test cases using the same tester script that was developed for automated testing.
+Execute the command below with a custom test case file. The test case file should begin with the number of points
+and the following lines will contain the coordinates of each point in a separate line (x and y coordinate on separate line as well).
+\begin{lstlisting}[language=bash]
+    $ python3 tester.py -i <testcase_file_path>
+\end{lstlisting}
 \subsubsection{Results}
 In all these cases we got the expected output without overflows, that is 0.
 \section{Assumptions}

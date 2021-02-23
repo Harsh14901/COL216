@@ -63,16 +63,22 @@ def compute_area(input_pts):
       area += positive_area(prev_pt[0], prev_pt[1], pt[0], pt[1])
     prev_pt = pt
   return area
-    
-def test(n):
-  assert(n >= 2)
-  pts = []
 
+def generate_pts(n):
   log.info("Generating points")
-  for i in range(n):
+  pts = []
+  for _ in range(n):
     x = random.randint(BOUNDS[0], BOUNDS[1])
     y = random.randint(BOUNDS[0], BOUNDS[1])
-    pts.append((x,y))
+    pts.append((x,y))  
+  return pts
+
+def test(n, input_pts=[]):
+  assert(n >= 2)
+
+  pts = input_pts
+  if len(pts) == 0:
+    pts = generate_pts(n)
 
   pts = sorted(pts, key=lambda x: x[0])
 
@@ -90,16 +96,26 @@ def test(n):
   else:
     log.success("Test Passed!")
     return True
-  
+
+def read_input(filename):
+  inputs_pts = []
+
+  with open(filename, 'r') as f:
+    n = int(f.readline())
+    for _ in range(n):
+      x = int(f.readline())
+      y = int(f.readline())
+      inputs_pts.append((x,y))
+  return inputs_pts
+
 def parse():
   args = argparse.ArgumentParser()
   args.add_argument("-m", dest="m" ,type=int, help="Number of points in test case", default=5)
   args.add_argument("-n", dest="n" ,type=int, help="Number of test cases to run", default=1)
   args.add_argument("-e", "--epsilon", dest="e", type=float, help="Error tolerance for test in percentage", default=epsilon)
   args.add_argument("-b", "--bits",dest="b" ,type=int, help="Number of bits to be used for the point coordinates", default=bits)
-
+  args.add_argument("-i", "--input", dest="file", type=str, help="Input file path for custom test cases")
   return args.parse_args()
-  
 
 if __name__ == "__main__":
 
@@ -107,9 +123,13 @@ if __name__ == "__main__":
   set_bounds(args.b)
   epsilon = args.e
 
-  count = 0
-  for i in tqdm(range(args.n)):
-    if test(args.m):
-      count += 1
-  
-  log.info(f"Passed {count}/{args.n} test cases!")
+  if args.file is not None:
+    pts = read_input(args.file)
+    test(n=len(pts), input_pts=pts)
+  else:
+    count = 0
+    for i in tqdm(range(args.n)):
+      if test(args.m):
+        count += 1
+    
+    log.info(f"Passed {count}/{args.n} test cases!")
