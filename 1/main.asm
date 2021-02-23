@@ -15,6 +15,9 @@ main:
 	syscall
 	move $s0, $v0	# $s0 contains the number of points n
 
+	li $t9, 2
+	blt $s0, $t9, exit
+
 	li $s6, 1	# s6 stores the index of the point
 	move $a0, $s6
 	jal input
@@ -85,6 +88,7 @@ split:
 
 
 	addi $s0, $s0, -1
+	addi $s6, $s6, 1
 	move $s1, $s3
 	move $s2, $s4
 	j loop
@@ -94,6 +98,7 @@ normal:
 	add.s $f12, $f12, $f0
 	
 	addi $s0, $s0, -1
+	addi $s6, $s6, 1
 	move $s1, $s3
 	move $s2, $s4
 	j loop
@@ -108,6 +113,7 @@ exit:
 	syscall
 	
 	li $v0, 17	# Exit2
+	move $a0, $zero
 	syscall
 	
 print_newline:
@@ -180,13 +186,10 @@ area:
 	# the null character. Note that strings are
 	# surrounded by double-quotes
 msg:	.asciiz	"Please Enter number of points: "
-msg_point_x:	.asciiz "Please enter x coordinate of point: "
-msg_point_y:	.asciiz "Please enter y coordinate of point: "
+msg_point_x:	.asciiz "Please enter x coordinate of point - "
+msg_point_y:	.asciiz "Please enter y coordinate of point - "
 newline: .asciiz "\n"
 area_string: .asciiz "The area is : "
 
-
-
 # TODO
-# 2) Keep sanity and input checks
-# 4) Write Tests
+# 1) Check corner cases
