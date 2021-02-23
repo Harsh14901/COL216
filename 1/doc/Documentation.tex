@@ -1,0 +1,149 @@
+\documentclass[hidelinks,12pt]{article}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{fancyhdr}
+\usepackage{tabularx}
+\usepackage{hyperref}
+\usepackage{float}
+\usepackage{subcaption}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\lstset{style=mystyle}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=cyan,
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\chead{Area Calculator in MIPS}
+\rfoot{\thepage}
+
+\begin{document}
+
+\begin{titlepage}
+    \centering
+    \includegraphics[scale=0.5]{./logo.png}\\[1.0cm]
+    \Large INDIAN INSTITUTE OF TECHNOLOGY DELHI\\[1.0 cm]
+    \LARGE COL216\\[0.1cm]
+    \Large \underline{Report}\\
+    \large \[Assignment-1\]
+    \LARGE \textbf{Area Calculator in MIPS}
+    
+
+    \rule{\textwidth}{0.2 mm} \\[0.1cm]
+    \begin{abstract}
+        This program computes the area of a set of input points given in order of increasing x coordinate.
+        This has been written in MIPS assembly language to better understand the hardware abstractions.
+                \\[0.1cm]    
+    \end{abstract}
+    \rule{\textwidth}{0.2 mm} \\[0.1cm]
+    \begin{flushright}
+        
+        \begin{tabular}{c c}
+            \small {Harsh Agrawal} & \small {2019CS10431} \\
+            \small {Saptarshi Dasgupta} & \small {2019CS50447} \\
+        \end{tabular}
+    \end{flushright}
+\end{titlepage}
+\tableofcontents
+\newpage
+
+\section{Approach}
+    We Made an outline of the task we have to complete and broke it down into subtasks.
+    In this case we prepared the following subtasks. 
+    \begin{enumerate}
+        \item Make a procedure (\textit{input}) to take coordinates as input.
+        Also display instructions to the user while asking for input. 
+        \item Make a procedure (\textit{area}) that takes 2 points and returns the area of the 
+        trapeziod formed by those points. The area is calculated using \textbf{single precision floating point registers}.
+        This procedure assumes that the input points are on the same side of the X axis.
+        \item In the main procedure, using the procedure \textit{input}, accept coordinates from the user.
+        Call the procedure \textit{area} using the coordinates received from the user. If two successive coordinates \( (x_1, y_1) \) and \( (x_2, y_2) \) are on different
+        sides of the X-axis (which we determine by checking the sign of the product \( y_1*y_2 \)), we break the area into 2 triangles, one lying on each side of the X-axis, and call the procedure
+        \textit{area} on each separately.
+        \item An accumulator keeps track of the sum of all areas calculated, and after all the points have
+        been processed, stores the area, which is to be displayed to the user. 
+    \end{enumerate}
+\section{Formulae used}
+\begin{itemize}
+    \item Area of trapeziod formed by \( (x_1, y_1) \) and \( (x_2, y_2) \)  when both points are above the X-axis is given by \[ Area = (y_2 - y_1)*(x_1 + x_2)/2 \].
+    \item When both of the points are below X-axis then the negative of the above expression gives the absolute area.
+    \item In the third case, we have that one point is above the X-axis and one is below. In this case, we introduce a third point, M on the X-axis where the line joining points A and B meet
+    the X-axis. Then we can calculate the absolute area covered by A,B to be the sum of the areas of triangles formed by $(A,M)$ and $(M,B)$. The coordinates of M are: \[ M = (x_1 -  \frac{y_1.(x_2 - x_1)}{(y_2 - y_1)},0)\]
+\end{itemize}
+
+\section{User Interface}
+On running the program, we are first prompted to enter the number of points.
+Then on each line we ask for the X or Y coordinates of the \(i^{th}\) point.
+After calculating the area is printed on the console with a message.
+
+\section{Testing}
+We employed both automated and manual modes of testing. The automated mode helped establish the correctness whereas the manual mode helped handle the corner cases.
+\subsection{Automated}
+We wrote a \textbf{python3} script that generates random coordinates, executes the asm file in a MIPS emulator (\textit{spim}), communicates with the executed process through unix pipes, and compares the
+output with the expected area within a specified \textit{error tolerance}. To run the script, we enter the following commands once inside root project folder
+\begin{lstlisting}[language=bash]
+    $ sudo apt install spim
+    $ python3 -m pip install -r requirements.txt
+    $ python3 tester.py -n 20 -m 100 -b 10 -e 0.0001 
+\end{lstlisting}
+
+This will run 20 random test cases with 100 coordinates of at max 10 bits each,
+with an error tolerance of  0.0001 percent. \\[0.2cm]
+
+\subsubsection{Results}
+The script developed is heavily customizable as evident from the command line flags available.
+We tested with different values of error tolerance and bitsizes, and found that overflow occured at 16 bit inputs
+and with 15 bit inputs, we were able to achieve an accuracy of about \(10^{-4}\,\%\). 
+\newpage
+\subsection{Manual}
+We also checked a few corner cases manually in QtSpim, which are listed below : 
+\begin{itemize}
+    \item number of points 0 or 1
+    \item all points on X-axis.
+    \item All points on Y-axis.
+    \item Duplicate points.
+\end{itemize}
+\subsubsection{Results}
+In all these cases we got the expected output without overflows, that is 0.
+\section{Assumptions}
+\begin{itemize}
+    \item We have used 32 bit floating point registers for our computation. So this program can only be used for calculating areas that take 32
+    bits in memory i.e. upto $2^{32} = 4294967296$ sq. units.
+    \item We have assumed that points input to the program are sorted according to their x-coordinate values. If this is not the case then our
+    program will double count certain areas leading to a higher value than expected.
+    \item The tester script written is \textit{assumed} to be correct as it is a much easier to verify the correctness of a program written in a high level
+    programming language like python than a much lower level programming language like assembly. This comes partly due to the fact that compilers
+    for high level programming languages have been thouroughly verified and partly due to the fact that the problem in hand is a farily easy one.
+\end{itemize}
+\end{document}
+
