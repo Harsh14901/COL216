@@ -13,6 +13,8 @@ main:
 	jal input
 	la $s0, input_str	# s0 is the pointer to string
 
+	li $s6, 0
+
 	j loop
 
 loop:
@@ -33,7 +35,7 @@ loop:
 not_operand:
 	# check if character is an operator
 	jal is_operator
-	beq $v0, $zero, exit
+	beq $v0, $zero, abort
 	
 	jal evaluate_operand
 
@@ -84,9 +86,17 @@ multiply:
 	j return_operand
 
 abort:
+	li $v0,4
+	la $a0, abort_msg
+	syscall
+
+	li $v0, 17	# Exit2
+	move $a0, $zero
+	syscall
 
 
 exit:
+	bne $s6, 1, abort
 	move $t0, $a0
 	li	$v0,4		# Code for syscall: print_string
 	la	$a0, value	# Pointer to string (load the address of msg)
@@ -95,6 +105,8 @@ exit:
 	move $a0, $t0
 	li $v0, 1
 	syscall	# prints contents of a0
+
+	jal print_newline
 		
 	li $v0, 17	# Exit2
 	move $a0, $zero
@@ -115,11 +127,14 @@ input:
 	jr $ra
 
 push:
+	addi $s6, $s6, 1
 	subu $sp, $sp, 4
 	sw $a0, ($sp)
 	jr $ra
 
 pop:
+	ble $s6, 0, abort
+	addi $s6, $s6, -1
 	lw $v0, ($sp)
 	addu $sp, $sp, 4
 	jr $ra
@@ -150,4 +165,4 @@ msg:	.asciiz	"Enter the postfix expression: \n"
 newline: .asciiz "\n"
 value: .asciiz "The value is : "
 input_str: .space 1024
-abort_msg: .asciiz "Fatal Error: cannot recover"
+abort_msg: .asciiz "Fatal Error: cannot recover\n"
