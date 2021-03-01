@@ -161,7 +161,7 @@ is_operator:
 
 .data
 
-msg:	.asciiz	"Enter the postfix expression: \n"
+msg:	.asciiz	"Enter the postfix expression:\n"
 newline: .asciiz "\n"
 value: .asciiz "The value is : "
 input_str: .space 1024
