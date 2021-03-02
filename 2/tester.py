@@ -110,16 +110,32 @@ def get_automated_postfix(k):
 			
 
 def check_validity(line):
+	testcase = line[:-1]
+	
+	log.info(f"Executing test case - {testcase}")
 	val,valid,_ = execute_asm(line)
+	context.log_level = 'debug'
 	try:
 		expected_val = evaluate_postfix(line)
 		val = int(val)
-		msg = "Correct" if val == expected_val else "Incorrect"
-		print(f"{msg} --- Expected: {expected_val}, Got : {val} in {line[:-1]}")
+		if val == expected_val:
+			log.success("Test Passed")
+			log.info(f"Expected value: {expected_val}, Computed value: {val}")
+			log.indented("="*100)
+			return True
+		else:
+			log.failure("Test Failed")
+			log.debug(f"Expected value: {expected_val}, Computed value: {val}")
+			log.indented("="*100)
+			return False
 	except WrongInputException:
+		context.log_level = 'error'
 		detail = "Error" if not valid else val
 		msg = "Correct" if not valid else "Incorrect"
-		print(f"{msg} --- Expected Error, Got : {detail} in {line[:-1]}")
+		log.error(f"{msg} --- Expected Error, Got : {detail}")
+		log.indented("="*100)
+		return False
+	
 
 
 if __name__ == "__main__":
@@ -148,8 +164,11 @@ if __name__ == "__main__":
 		plt.plot(value,times)
 		plt.show()
 	elif args.n:
+		count = 0
 		for _ in range(args.n):
 			line = get_automated_postfix(args.k)
-			check_validity(line+'\n')
+			if check_validity(line+'\n'):
+				count += 1
+		log.info(f"Passed {count}/{args.n} test cases!")
 	else:
 		pass
