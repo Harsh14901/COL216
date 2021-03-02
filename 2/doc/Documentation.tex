@@ -139,7 +139,7 @@ We found that the graph came out to be a straight line, indicating that the time
 
 \section{Assumptions}
 \begin{itemize}
-    \item The size of input string is capped at \verb|1 Mb|, which is equivalent to $1048576$ characters. This design decision was made to ensure that the input string does not cause a stack overflow.
+    \item The size of input string is capped at \verb|8 KB|, which is equivalent to $8192$ characters. This design decision was made to ensure that the input string does not cause a stack overflow.
     \item We have assumed that the digits are one of $(0-9)$ and the operands are $(+|-|*)$, any other operator or operand is flagged as illegal character and appropriate exceptions are raised.
     \item We make the assumption that the result of the postfix expression will not lead to an integer overflow. This means our program is capable of evaluating only those expressions that are within the bounds $\[2^15-1, 2^15\]$
     \item Lastly we assume that the logic for evaluating the postfix expression in tester script is correct since it is fairly easy to code it in a high level programming language like python than a low level programming language like assembly.

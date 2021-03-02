@@ -91,7 +91,7 @@ abort:
 	syscall
 
 	li $v0, 17	# Exit2
-	move $a0, $zero
+	li $a0, -1
 	syscall
 
 
@@ -164,5 +164,5 @@ is_operator:
 msg:	.asciiz	"Enter the postfix expression:\n"
 newline: .asciiz "\n"
 value: .asciiz "The value is : "
-input_str: .space 1024
-abort_msg: .asciiz "Fatal Error: cannot recover\n"
+input_str: .space 8192
+abort_msg: .asciiz "Fatal Error: Invalid postfix expression.\n"
