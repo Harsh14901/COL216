@@ -50,7 +50,7 @@ def evaluate_postfix(expr):
 		if is_operand(char):
 			stack.append(int(char))
 		else:
-			if len(stack) <= 0:
+			if len(stack) <= 1:
 				abort()
 			a1, a2 = stack.pop(), stack.pop()
 			if char == "+":
@@ -117,24 +117,30 @@ def check_validity(line):
 	context.log_level = 'debug'
 	try:
 		expected_val = evaluate_postfix(line)
-		val = int(val)
-		if val == expected_val:
-			log.success("Test Passed")
-			log.info(f"Expected value: {expected_val}, Computed value: {val}")
+		if val.startswith("Overflow occured"):
+			log.info("Overflow occured")
 			log.indented("="*100)
 			return True
 		else:
-			log.failure("Test Failed")
-			log.debug(f"Expected value: {expected_val}, Computed value: {val}")
-			log.indented("="*100)
-			return False
+			val = int(val)
+			if val == expected_val:
+				log.success("Test Passed")
+				log.info(f"Expected value: {expected_val}, Computed value: {val}")
+				log.indented("="*100)
+				return True
+			else:
+				log.failure("Test Failed")
+				log.debug(f"Expected value: {expected_val}, Computed value: {val}")
+				log.indented("="*100)
+				return False
 	except WrongInputException:
-		context.log_level = 'error'
+		context.log_level = 'debug'
 		detail = "Error" if not valid else val
 		msg = "Correct" if not valid else "Incorrect"
-		log.error(f"{msg} --- Expected Error, Got : {detail}")
+		log.info(f"{msg} --- Expected Error, Got : {detail}")
 		log.indented("="*100)
 		return False
+
 	
 
 

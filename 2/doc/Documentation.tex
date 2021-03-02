@@ -133,10 +133,22 @@ The execution logs for these test cases are stored in the \verb|./tests/manual| 
     \item \verb|empty_input|: The input string was empty, in this case our program generated the output $0$.
     \item \verb|overflow|: These test cases explicitly introduce arithmetic overflow in computations. Our program generates an arithmetic overflow exception for such cases.
 \end{enumerate}
+\begin{figure}[h!]
+    \includegraphics[width=\linewidth]{logs.png}
+    \caption{Automated Testing example}
+    \label{fig:boat1}
+\end{figure}
 
 \subsubsection{Efficiency}
 We tested the efficiency of our program execution. We plotted the above graph with execution time on the y axis and the length of the input string on the axis.
 We found that the graph came out to be a straight line, indicating that the time complexity of the procedure is $O(n)$
+
+
+\begin{figure}[h!]
+    \includegraphics[width=\linewidth]{timing.png}
+    \caption{Graph of Execution time vs. Number of Operands}
+    \label{fig:boat1}
+\end{figure}
 
 \section{Assumptions}
 \begin{itemize}

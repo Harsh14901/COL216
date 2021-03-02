@@ -82,8 +82,21 @@ subtract:
 	j return_operand
 
 multiply:
-	mulo $t3, $t1, $t2	# mulo checks for overflows automatically
+	mult $t1, $t2
+	mfhi $t4
+	mflo $t3
+	sra $t3, $t3, 31
+	bne $t4, $t3 , mult_overflow
+
+	mflo $t3
 	j return_operand
+
+mult_overflow:
+	li $v0, 4
+	la $a0 , overflow_msg
+	syscall
+	j abort
+	
 
 abort:
 	li $v0,4
@@ -165,4 +178,5 @@ msg:	.asciiz	"Enter the postfix expression:\n"
 newline: .asciiz "\n"
 value: .asciiz "The value is : "
 input_str: .space 8192
-abort_msg: .asciiz "Fatal Error: Invalid postfix expression.\n"
+abort_msg: .asciiz "Fatal Error: Cannot proceed.\n"
+overflow_msg: .asciiz "Overflow occured\n"
