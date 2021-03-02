@@ -10,7 +10,7 @@ import sys
 cmd = "spim -f main.asm"
 start_text = "Enter the postfix expression:\n"
 valid_text = "The value is : "
-invalid_text = "Fatal Error: cannot recover"
+invalid_text = "Fatal Error: Invalid postfix expression.\n"
 
 class WrongInputException(Exception):
 	pass

@@ -131,6 +131,7 @@ The execution logs for these test cases are stored in the \verb|./tests/manual| 
     \item \verb|invalid_operator|: The operators are restricted to $(+|-|*)$. Any other character is flagged as an illegal character and an exception is raised.
     \item \verb|invalid_postfix|: The postfix expression is invalid, in such case our program generated an appropriate exception.
     \item \verb|empty_input|: The input string was empty, in this case our program generated the output $0$.
+    \item \verb|overflow|: These test cases explicitly introduce arithmetic overflow in computations. Our program generates an arithmetic overflow exception for such cases.
 \end{enumerate}
 
 \subsubsection{Efficiency}
@@ -141,7 +142,7 @@ We found that the graph came out to be a straight line, indicating that the time
 \begin{itemize}
     \item The size of input string is capped at \verb|8 KB|, which is equivalent to $8192$ characters. This design decision was made to ensure that the input string does not cause a stack overflow.
     \item We have assumed that the digits are one of $(0-9)$ and the operands are $(+|-|*)$, any other operator or operand is flagged as illegal character and appropriate exceptions are raised.
-    \item We make the assumption that the result of the postfix expression will not lead to an integer overflow. This means our program is capable of evaluating only those expressions that are within the bounds $\[2^15-1, 2^15\]$
+    \item We make the assumption that the result of the postfix expression will not lead to an integer overflow. This means our program is capable of evaluating only those expressions that are within the bounds $[-2^{31}, 2^{31}-1]$
     \item Lastly we assume that the logic for evaluating the postfix expression in tester script is correct since it is fairly easy to code it in a high level programming language like python than a low level programming language like assembly.
 \end{itemize}
 

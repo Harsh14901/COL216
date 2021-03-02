@@ -74,15 +74,15 @@ return_operand:
 	jr $ra
 
 addition:
-	add $t3, $t1, $t2
+	add $t3, $t1, $t2	# add automatically checks for overflows
 	j return_operand
 	
 subtract:
-	sub $t3, $t1, $t2
+	sub $t3, $t1, $t2	# sub automatically check for overflows
 	j return_operand
 
 multiply:
-	mul $t3, $t1, $t2
+	mulo $t3, $t1, $t2	# mulo checks for overflows automatically
 	j return_operand
 
 abort:
