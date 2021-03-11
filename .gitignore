@@ -137,7 +137,6 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 
-.vscode/
 Documentation.*
 !Documentation.tex
 !Documentation.pdf
