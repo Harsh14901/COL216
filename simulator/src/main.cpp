@@ -8,7 +8,6 @@ int main(int argc, char *argv[]) {
 
   std::vector<Instruction> ins = compile(name);
   for (Instruction in : ins) {
-    std::cout << " " << in.arg1 << " " << in.arg2 << " " << in.arg3
-              << std::endl;
+    std::cout << in.arg1 << " " << in.arg2 << " " << in.arg3 << std::endl;
   }
 }

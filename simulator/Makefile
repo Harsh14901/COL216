@@ -9,6 +9,7 @@ CXX = g++
 # define any compile-time flags
 CXXFLAGS	:= -g -std=c++11
 
+
 # define library paths in addition to /usr/lib
 #   if I wanted to include libraries not in /usr/lib I'd specify
 #   their path using -Lpath, something like:
@@ -64,7 +65,7 @@ OBJECTS		:= $(SOURCES:.cpp=.o)
 
 OUTPUTMAIN	:= $(call FIXPATH,$(OUTPUT)/$(MAIN))
 
-all: $(OUTPUT) $(MAIN)
+all: clean $(OUTPUT) $(MAIN)
 	@echo Executing 'all' complete!
 
 $(OUTPUT):
@@ -87,5 +88,5 @@ clean:
 	@echo Cleanup complete!
 
 run: all
-	./$(OUTPUTMAIN)
+	./$(OUTPUTMAIN) input/file
 	@echo Executing 'run: all' complete!
