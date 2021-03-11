@@ -9,6 +9,24 @@
 
 typedef std::pair<bool, int> bip;
 
+static inline void ltrim(std::string &s) {
+  s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](unsigned char ch) {
+            return !std::isspace(ch);
+          }));
+}
+
+static inline void rtrim(std::string &s) {
+  s.erase(std::find_if(s.rbegin(), s.rend(),
+                       [](unsigned char ch) { return !std::isspace(ch); })
+              .base(),
+          s.end());
+}
+
+static inline void trim(std::string &s) {
+  ltrim(s);
+  rtrim(s);
+}
+
 std::vector<UnprocessedInstruction> parseInstructions(std::string fileName) {
   std::vector<UnprocessedInstruction> instructions;
 
@@ -36,7 +54,7 @@ std::vector<UnprocessedInstruction> parseInstructions(std::string fileName) {
 
     while (getline(stream, token, ',')) {
       // std::cout << "this " << token << " is as a token" << std::endl;
-
+      trim(token);
       if (index == 1)
         instruction.arg1 = token;
       else if (index == 2)
@@ -55,6 +73,7 @@ std::vector<UnprocessedInstruction> parseInstructions(std::string fileName) {
   return instructions;
 }
 bool isNum(std::string s) {
+  if (s == "") return false;
   for (char c : s)
     if (!isdigit(c)) return false;
   return true;
@@ -62,11 +81,12 @@ bool isNum(std::string s) {
 
 bip getRegister(std::string reg) {
   bip ans(false, 0);
-  std::string reg_val = reg.substr(1, reg.size() - 1);
+  if (reg == "") return ans;
+  std::string reg_val = reg.substr(1);
   if (!isNum(reg_val)) return ans;
   int val = stoi(reg_val);
   bool start_with_dollar = reg.at(0) == '$';
-  bool valid_reg_addr = 0 <= val && val <= 32;
+  bool valid_reg_addr = 0 <= val && val < 32;
   ans = std::make_pair(start_with_dollar && valid_reg_addr, val);
   return ans;
 }
@@ -88,6 +108,7 @@ std::vector<Instruction> compile(std::string fileName) {
         processedInstructions.push_back(
             Instruction{instr.op, p1.second, p2.second, p3.second});
         break;
+
       case Operator::ADDI:
       case Operator::SLT:
       case Operator::BEQ:
@@ -97,11 +118,26 @@ std::vector<Instruction> compile(std::string fileName) {
         processedInstructions.push_back(
             Instruction{instr.op, p1.second, p2.second, stoi(instr.arg3)});
         break;
+
       case Operator::LW:
-      case Operator::SW:
-        // TODO
+      case Operator::SW: {
+        bool b1 = p1.first;
+        bool b2 = instr.arg3 == "";
+        bool b3 = instr.arg2.at(instr.arg2.size() - 1) == ')';
+        int pos = instr.arg2.find('(');
+        bool b4 = pos >= 0;
+        std::string sub_p1 = instr.arg2.substr(0, pos),
+                    sub_p2 =
+                        instr.arg2.substr(pos + 1, instr.arg2.size() - pos - 2);
+        bip p3 = getRegister(sub_p2);
+        bool b5 = isNum(sub_p1);
+        bool b6 = p3.first;
+        if (!b1 || !b2 || !b3 || !b4 || !b5) throw InvalidInstruction();
         processedInstructions.push_back(
-            Instruction{instr.op, p1.second, p2.second, 0});
+            Instruction{instr.op, p1.second, stoi(sub_p1), p3.second});
+        break;
+      }
+
       case Operator::J:
         if (!isNum(instr.arg1) || instr.arg2 != "" || instr.arg3 != "")
           throw InvalidInstruction();
