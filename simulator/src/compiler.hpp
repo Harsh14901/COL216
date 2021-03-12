@@ -77,7 +77,8 @@ std::vector<UnprocessedInstruction> parseInstructions(std::string fileName) {
 }
 bool isNum(std::string s) {
   if (s == "") return false;
-  for (char c : s)
+  if (!s.at(0) == '-' && !isdigit(s.at(0))) return false;
+  for (char c : s.substr(1))
     if (!isdigit(c)) return false;
   return true;
 }
