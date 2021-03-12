@@ -7,7 +7,7 @@
 CXX = g++
 
 # define any compile-time flags
-CXXFLAGS	:= -g -std=c++11
+CXXFLAGS	:= -g -std=c++11 -m32
 
 
 # define library paths in addition to /usr/lib
@@ -22,7 +22,7 @@ OUTPUT	:= output
 SRC		:= src
 
 # define include directory
-INCLUDE	:= include
+INCLUDE	:= src
 
 # define lib directory
 LIB		:= lib

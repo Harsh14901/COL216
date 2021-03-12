@@ -1,13 +1,18 @@
+#include <compiler.hpp>
+#include <hardware.hpp>
 #include <iostream>
 
-#include "compiler.hpp"
+using namespace std;
+int main(int argc, char* argv[]) {
+  string name = argv[1];
+  cout << "[+] Loading file : " << name << endl;
 
-int main(int argc, char *argv[]) {
-  std::string name = argv[1];
-  std::cout << name << std::endl;
-
-  std::vector<Instruction> ins = compile(name);
-  for (Instruction in : ins) {
-    std::cout << in.arg1 << " " << in.arg2 << " " << in.arg3 << std::endl;
-  }
+  vector<Instruction> ins = compile(name);
+  cout << "[+] Program compiled successfully !" << endl;
+  // for (auto& in : ins) {
+  //   cout << in.arg1 << " " << in.arg2 << " " << in.arg3 << endl;
+  // }
+  cout << "[+] Executing program ..." << endl;
+  auto mips = Hardware(ins);
+  mips.start_execution();
 }

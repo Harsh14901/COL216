@@ -1,24 +1,24 @@
 #include <hardware.hpp>
 using namespace std;
 
-Hardware::Hardware() {
+void Hardware::initialize_registers() {
   registers = vector<hd_t>(REGISTER_NUM, 0);
-  // memory = vector<hd_t>(MAX_MEMORY, 0);
-  memory[MAX_MEMORY] = {0};
-  registers[SP_REG_ID] = hd_t(&memory);
+  registers[SP_REG_ID] = hd_t(memory + mem_size - 1);
 }
 
-Hardware::Hardware(vector<Instruction> program)
-    : program(program), pc(program.begin()) {
+Hardware::Hardware() {
+  mem_size = MAX_MEMORY;
+  initialize_registers();
+}
+
+Hardware::Hardware(vector<Instruction> program) : program(program) {
   auto program_size = program.size() * (BITS / 8);
-  auto mem_size = MAX_MEMORY - program_size;
+  mem_size = MAX_MEMORY - program_size;
 
   assert(mem_size <= MAX_MEMORY && mem_size > 0);
 
-  registers = vector<hd_t>(REGISTER_NUM, 0);
-
-  memory[mem_size] = {0};
-  registers[SP_REG_ID] = hd_t(&memory);
+  initialize_registers();
+  pc = this->program.begin();
 }
 
 void Hardware::execute_current() {
@@ -68,20 +68,24 @@ void Hardware::terminate() { pc = program.end(); }
 
 void Hardware::start_execution() {
   while (pc != program.end()) {
+    print_instruction();
     execute_current();
     print_contents();
   }
 }
 
-void Hardware::print_contents() {
-  // cout << "[#] Current instruction - " << endl;
-  // cout << validTokens[int(pc->op)] << " " << pc->arg1 << ", " << pc->arg2
-  //      << ", " << pc->arg3 << endl;
+void Hardware::print_instruction() {
+  cout << "[#] Executing current instruction - " << pc->raw << endl;
+}
 
+void Hardware::print_contents() {
   cout << "[#] Register contents -" << endl;
-  for (int i = 0; i < registers.size(); i++) {
-    cout << i << " : " << registers[i] << endl;
+  auto n = registers.size() / 2;
+  for (int i = 0; i < n; i++) {
+    printf("%d : %#010x\t\t%d : %#010x\n", i, registers[i], i + n,
+           registers[i + n]);
   }
+  cout << "----------------------------------------------" << endl;
 }
 
 void Hardware::is_valid_reg(int id) {
@@ -152,22 +156,21 @@ void Hardware::bne(int src1, int src2, int jump) {
 }
 
 void Hardware::is_valid_memory(hd_t* p) {
-  assert(p >= (hd_t*)(&memory) &&
-         p <= (hd_t*)(memory + (sizeof(memory) / sizeof(memory[0])) - 1));
+  assert(p >= (hd_t*)(&memory) && p <= (hd_t*)(memory + mem_size) - 1);
 }
 
-void Hardware::lw(int dst, int src, int offset) {
+void Hardware::lw(int dst, int offset, int src) {
   is_valid_reg(dst, src);
 
-  hd_t* p = (hd_t*)(registers[src] - offset);
+  hd_t* p = (hd_t*)(registers[src] + offset);
   is_valid_memory(p);
 
   registers[dst] = *p;
 }
-void Hardware::sw(int src, int dst, int offset) {
+void Hardware::sw(int src, int offset, int dst) {
   is_valid_reg(dst, src);
 
-  hd_t* p = (hd_t*)(registers[dst] - offset);
+  hd_t* p = (hd_t*)(registers[dst] + offset);
   is_valid_memory(p);
 
   *p = registers[src];

@@ -1,8 +1,8 @@
 {
   "files.associations": {
+    "*.yacc": "yacc",
     "*.conf": "xml",
     "*.lex": "lex",
-    "*.yacc": "yacc",
     "vector": "cpp",
     "fstream": "cpp",
     "array": "cpp",
@@ -53,9 +53,35 @@
     "initializer_list": "cpp",
     "iostream": "cpp",
     "stdexcept": "cpp",
-    "cinttypes": "cpp"
+    "cinttypes": "cpp",
+    "any": "cpp",
+    "bitset": "cpp",
+    "cfenv": "cpp",
+    "charconv": "cpp",
+    "codecvt": "cpp",
+    "complex": "cpp",
+    "condition_variable": "cpp",
+    "csetjmp": "cpp",
+    "csignal": "cpp",
+    "cuchar": "cpp",
+    "forward_list": "cpp",
+    "list": "cpp",
+    "set": "cpp",
+    "unordered_set": "cpp",
+    "regex": "cpp",
+    "rope": "cpp",
+    "slist": "cpp",
+    "future": "cpp",
+    "iomanip": "cpp",
+    "mutex": "cpp",
+    "scoped_allocator": "cpp",
+    "shared_mutex": "cpp",
+    "typeindex": "cpp",
+    "valarray": "cpp",
+    "variant": "cpp"
   },
   "editor.formatOnSave": true,
   "editor.tabSize": 2,
-  "C_Cpp.clang_format_style": "google"
+  "C_Cpp.clang_format_style": "google",
+  "C_Cpp.errorSquiggles": "Enabled"
 }

@@ -1,11 +1,13 @@
+#ifndef COMPILER_H
+#define COMPILER_H
+
 #include <algorithm>
 #include <fstream>
 #include <iostream>
 #include <sstream>
 #include <string>
+#include <structures.hpp>
 #include <vector>
-
-#include "structures.hpp"
 
 typedef std::pair<bool, int> bip;
 
@@ -40,8 +42,9 @@ std::vector<UnprocessedInstruction> parseInstructions(std::string fileName) {
   std::string line;
   while (getline(file, line)) {
     UnprocessedInstruction instruction;
+    instruction.raw = line;
 
-    std::cout << line << std::endl;
+    // std::cout << line << std::endl;
     std::stringstream stream(line);
 
     std::string token;
@@ -62,7 +65,7 @@ std::vector<UnprocessedInstruction> parseInstructions(std::string fileName) {
       else if (index == 3)
         instruction.arg3 = token;
       else
-        throw InvalidInstruction();
+        throw InvalidInstruction(line);
       index++;
     }
 
@@ -95,7 +98,7 @@ std::vector<Instruction> compile(std::string fileName) {
   std::vector<UnprocessedInstruction> instructions =
       parseInstructions(fileName);
   std::vector<Instruction> processedInstructions;
-  for (UnprocessedInstruction instr : instructions) {
+  for (auto &instr : instructions) {
     bip p1 = getRegister(instr.arg1), p2 = getRegister(instr.arg2),
         p3 = getRegister(instr.arg3);
     // std::cout << "here " << p1.second << " " << p2.second << " " << p3.second
@@ -104,9 +107,10 @@ std::vector<Instruction> compile(std::string fileName) {
       case Operator::ADD:
       case Operator::SUB:
       case Operator::MUL:
-        if (!p1.first || !p2.first || !p3.first) throw InvalidInstruction();
+        if (!p1.first || !p2.first || !p3.first)
+          throw InvalidInstruction(instr.raw);
         processedInstructions.push_back(
-            Instruction{instr.op, p1.second, p2.second, p3.second});
+            Instruction{instr.op, p1.second, p2.second, p3.second, instr.raw});
         break;
 
       case Operator::ADDI:
@@ -114,9 +118,9 @@ std::vector<Instruction> compile(std::string fileName) {
       case Operator::BEQ:
       case Operator::BNE:
         if (!p1.first || !p2.first || !isNum(instr.arg3))
-          throw InvalidInstruction();
-        processedInstructions.push_back(
-            Instruction{instr.op, p1.second, p2.second, stoi(instr.arg3)});
+          throw InvalidInstruction(instr.raw);
+        processedInstructions.push_back(Instruction{
+            instr.op, p1.second, p2.second, stoi(instr.arg3), instr.raw});
         break;
 
       case Operator::LW:
@@ -132,19 +136,22 @@ std::vector<Instruction> compile(std::string fileName) {
         bip p3 = getRegister(sub_p2);
         bool b5 = isNum(sub_p1);
         bool b6 = p3.first;
-        if (!b1 || !b2 || !b3 || !b4 || !b5) throw InvalidInstruction();
-        processedInstructions.push_back(
-            Instruction{instr.op, p1.second, stoi(sub_p1), p3.second});
+        if (!b1 || !b2 || !b3 || !b4 || !b5)
+          throw InvalidInstruction(instr.raw);
+        processedInstructions.push_back(Instruction{
+            instr.op, p1.second, stoi(sub_p1), p3.second, instr.raw});
         break;
       }
 
       case Operator::J:
         if (!isNum(instr.arg1) || instr.arg2 != "" || instr.arg3 != "")
-          throw InvalidInstruction();
+          throw InvalidInstruction(instr.raw);
         processedInstructions.push_back(
-            Instruction{instr.op, stoi(instr.arg1), 0, 0});
+            Instruction{instr.op, stoi(instr.arg1), 0, 0, instr.raw});
         break;
     }
   }
   return processedInstructions;
 }
+
+#endif

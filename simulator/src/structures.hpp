@@ -1,44 +1,34 @@
+#ifndef STRUCTURES_H
+#define STRUCTURES_H
+
+#include <bits/stdc++.h>
+
 #include <string>
 #include <vector>
 
-class InvalidInstruction : public std::exception {};
+using namespace std;
+class InvalidInstruction : public std::runtime_error {
+ public:
+  InvalidInstruction() : std::runtime_error("") {}
+  InvalidInstruction(const string& msg) : std::runtime_error(msg) {}
+};
 
 enum class Operator { ADD, SUB, MUL, BEQ, BNE, SLT, J, LW, SW, ADDI };
 
-std::vector<std::string> validTokens{"add", "sub", "mul", "beq", "bne",
-                                     "slt", "j",   "lw",  "sw",  "addi"};
+extern vector<string> validTokens;
 
-Operator getOperator(std::string op_str) {
-  if (op_str == "add")
-    return Operator::ADD;
-  else if (op_str == "sub")
-    return Operator::SUB;
-  else if (op_str == "mul")
-    return Operator::MUL;
-  else if (op_str == "beq")
-    return Operator::BEQ;
-  else if (op_str == "bne")
-    return Operator::BNE;
-  else if (op_str == "slt")
-    return Operator::SLT;
-  else if (op_str == "j")
-    return Operator::J;
-  else if (op_str == "lw")
-    return Operator::LW;
-  else if (op_str == "sw")
-    return Operator::SW;
-  else if (op_str == "addi")
-    return Operator::ADDI;
-  else
-    throw InvalidInstruction();
-}
+Operator getOperator(string op_str);
 
 struct UnprocessedInstruction {
   Operator op;
-  std::string arg1, arg2, arg3;
+  string arg1, arg2, arg3;
+  string raw;
 };
 
 struct Instruction {
   Operator op;
   int arg1, arg2, arg3;
+  string raw;
 };
+
+#endif
