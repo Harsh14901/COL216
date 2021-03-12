@@ -102,6 +102,20 @@ void Hardware::print_contents() {
            registers[i + n]);
   }
   cout << "----------------------------------------------" << endl;
+
+  fstream out_file;
+  string file_name = "log";
+  out_file.open(file_name, ios::app);
+  if (!out_file) {
+    cerr << "[-] Error writing to the output file: " << file_name << endl;
+  } else {
+    for (int i = 0; i < registers.size() - 1; i++) {
+      out_file << registers[i] << ", ";
+    }
+    out_file << registers[registers.size() - 1] << endl;
+  }
+
+  out_file.close();
 }
 
 void Hardware::is_valid_reg(int id) {
