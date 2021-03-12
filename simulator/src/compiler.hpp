@@ -35,12 +35,15 @@ std::vector<UnprocessedInstruction> parseInstructions(std::string fileName) {
   std::fstream file;
   file.open(fileName, std::ios::in);
   if (!file.is_open()) {
-    std::cout << "File not found... exiting" << std::endl;
+    std::cout << "[-] File not found... exiting" << std::endl;
     return instructions;
   }
 
   std::string line;
   while (getline(file, line)) {
+    trim(line);
+    if (line == "") continue;
+
     UnprocessedInstruction instruction;
     instruction.raw = line;
 
@@ -83,12 +86,27 @@ bool isNum(std::string s) {
   return true;
 }
 
+int str_to_int(std::string s) {
+  try {
+    return stoi(s);
+  } catch (std::invalid_argument e) {
+    throw InvalidArgument(s + " is not an integer");
+  }
+  return -1;
+}
+
 bip getRegister(std::string reg) {
   bip ans(false, 0);
   if (reg == "") return ans;
   std::string reg_val = reg.substr(1);
   if (!isNum(reg_val)) return ans;
-  int val = stoi(reg_val);
+
+  int val;
+  try {
+    val = stoi(reg_val);
+  } catch (std::invalid_argument e) {
+    throw InvalidArgument(reg_val + " is not an integer");
+  }
   bool start_with_dollar = reg.at(0) == '$';
   bool valid_reg_addr = 0 <= val && val < 32;
   ans = std::make_pair(start_with_dollar && valid_reg_addr, val);
@@ -96,9 +114,9 @@ bip getRegister(std::string reg) {
 }
 
 std::vector<Instruction> compile(std::string fileName) {
-  std::vector<UnprocessedInstruction> instructions =
-      parseInstructions(fileName);
+  auto instructions = parseInstructions(fileName);
   std::vector<Instruction> processedInstructions;
+
   for (auto &instr : instructions) {
     bip p1 = getRegister(instr.arg1), p2 = getRegister(instr.arg2),
         p3 = getRegister(instr.arg3);
@@ -108,6 +126,7 @@ std::vector<Instruction> compile(std::string fileName) {
       case Operator::ADD:
       case Operator::SUB:
       case Operator::MUL:
+      case Operator::SLT:
         if (!p1.first || !p2.first || !p3.first)
           throw InvalidInstruction(instr.raw);
         processedInstructions.push_back(
@@ -115,13 +134,12 @@ std::vector<Instruction> compile(std::string fileName) {
         break;
 
       case Operator::ADDI:
-      case Operator::SLT:
       case Operator::BEQ:
       case Operator::BNE:
         if (!p1.first || !p2.first || !isNum(instr.arg3))
           throw InvalidInstruction(instr.raw);
         processedInstructions.push_back(Instruction{
-            instr.op, p1.second, p2.second, stoi(instr.arg3), instr.raw});
+            instr.op, p1.second, p2.second, str_to_int(instr.arg3), instr.raw});
         break;
 
       case Operator::LW:
@@ -140,7 +158,7 @@ std::vector<Instruction> compile(std::string fileName) {
         if (!b1 || !b2 || !b3 || !b4 || !b5)
           throw InvalidInstruction(instr.raw);
         processedInstructions.push_back(Instruction{
-            instr.op, p1.second, stoi(sub_p1), p3.second, instr.raw});
+            instr.op, p1.second, str_to_int(sub_p1), p3.second, instr.raw});
         break;
       }
 
@@ -148,7 +166,7 @@ std::vector<Instruction> compile(std::string fileName) {
         if (!isNum(instr.arg1) || instr.arg2 != "" || instr.arg3 != "")
           throw InvalidInstruction(instr.raw);
         processedInstructions.push_back(
-            Instruction{instr.op, stoi(instr.arg1), 0, 0, instr.raw});
+            Instruction{instr.op, str_to_int(instr.arg1), 0, 0, instr.raw});
         break;
     }
   }

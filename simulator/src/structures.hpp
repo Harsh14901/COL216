@@ -13,6 +13,12 @@ class InvalidInstruction : public std::runtime_error {
   InvalidInstruction(const string& msg) : std::runtime_error(msg) {}
 };
 
+class InvalidArgument : public std::runtime_error {
+ public:
+  InvalidArgument() : std::runtime_error("") {}
+  InvalidArgument(const string& msg) : std::runtime_error(msg) {}
+};
+
 enum class Operator { ADD, SUB, MUL, BEQ, BNE, SLT, J, LW, SW, ADDI };
 
 extern vector<string> validTokens;

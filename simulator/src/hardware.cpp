@@ -15,7 +15,9 @@ Hardware::Hardware(vector<Instruction> program) : program(program) {
   auto program_size = program.size() * (BITS / 8);
   mem_size = MAX_MEMORY - program_size;
 
-  assert(mem_size <= MAX_MEMORY && mem_size > 0);
+  assert(
+      ("Unable to allocate memory more than " + to_string(mem_size) + " bytes.",
+       mem_size <= MAX_MEMORY && mem_size > 0));
 
   initialize_registers();
   pc = this->program.begin();
@@ -25,41 +27,55 @@ void Hardware::execute_current() {
   switch (pc->op) {
     case Operator::ADD:
       add(pc->arg1, pc->arg2, pc->arg3);
+      advance_pc();
+
       break;
     case Operator::ADDI:
       addi(pc->arg1, pc->arg2, pc->arg3);
+      advance_pc();
+
       break;
     case Operator::SUB:
       sub(pc->arg1, pc->arg2, pc->arg3);
+      advance_pc();
+
       break;
     case Operator::MUL:
       mul(pc->arg1, pc->arg2, pc->arg3);
+      advance_pc();
+
       break;
     case Operator::BEQ:
       beq(pc->arg1, pc->arg2, pc->arg3);
+      advance_pc();
+
       break;
     case Operator::BNE:
       bne(pc->arg1, pc->arg2, pc->arg3);
+      advance_pc();
+
       break;
     case Operator::SLT:
       slt(pc->arg1, pc->arg2, pc->arg3);
+      advance_pc();
+
       break;
     case Operator::J:
       j(pc->arg1);
       break;
     case Operator::SW:
       sw(pc->arg1, pc->arg2, pc->arg3);
+      advance_pc();
+
       break;
     case Operator::LW:
       lw(pc->arg1, pc->arg2, pc->arg3);
+      advance_pc();
+
       break;
 
     default:
       break;
-  }
-
-  if (pc->op != Operator::J) {
-    advance_pc();
   }
 }
 
@@ -82,14 +98,14 @@ void Hardware::print_contents() {
   cout << "[#] Register contents -" << endl;
   auto n = registers.size() / 2;
   for (int i = 0; i < n; i++) {
-    printf("%d : %#010x\t\t%d : %#010x\n", i, registers[i], i + n,
+    printf("%2d : %#010x\t\t%d : %#010x\n", i, registers[i], i + n,
            registers[i + n]);
   }
   cout << "----------------------------------------------" << endl;
 }
 
 void Hardware::is_valid_reg(int id) {
-  assert(id < Hardware::REGISTER_NUM && id >= 0);
+  assert(("Invalid Register ID", id < Hardware::REGISTER_NUM && id >= 0));
 }
 
 void Hardware::is_valid_reg(int s1, int s2, int s3) {
@@ -129,10 +145,11 @@ void Hardware::slt(int dst, int src1, int src2) {
 }
 
 void Hardware::j(int jump) {
-  assert(jump % Hardware::BYTES == 0);
+  assert(("Unable to jump, The address is not word aligned",
+          jump % Hardware::BYTES == 0));
   jump /= Hardware::BYTES;
 
-  assert(jump < program.size());
+  assert(("Unable to jump to a non instruction", jump < program.size()));
 
   pc = program.begin() + jump;
 }
@@ -142,7 +159,7 @@ void Hardware::beq(int src1, int src2, int jump) {
 
   if (registers[src1] == registers[src2]) {
     int current_idx = pc - program.begin();
-    j(current_idx + jump);
+    j(current_idx * Hardware::BYTES + jump);
   }
 }
 
@@ -151,12 +168,13 @@ void Hardware::bne(int src1, int src2, int jump) {
 
   if (registers[src1] != registers[src2]) {
     int current_idx = pc - program.begin();
-    j(current_idx + jump);
+    j(current_idx * Hardware::BYTES + jump);
   }
 }
 
 void Hardware::is_valid_memory(hd_t* p) {
-  assert(p >= (hd_t*)(&memory) && p <= (hd_t*)(memory + mem_size) - 1);
+  assert(("Out of bounds memory access prevented",
+          p >= (hd_t*)(&memory) && p <= (hd_t*)(memory + mem_size) - 1));
 }
 
 void Hardware::lw(int dst, int offset, int src) {

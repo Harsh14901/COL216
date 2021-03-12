@@ -1,8 +1,8 @@
 {
   "files.associations": {
-    "*.yacc": "yacc",
     "*.conf": "xml",
     "*.lex": "lex",
+    "*.yacc": "yacc",
     "vector": "cpp",
     "fstream": "cpp",
     "array": "cpp",
@@ -78,7 +78,13 @@
     "shared_mutex": "cpp",
     "typeindex": "cpp",
     "valarray": "cpp",
-    "variant": "cpp"
+    "variant": "cpp",
+    "compare": "cpp",
+    "concepts": "cpp",
+    "numbers": "cpp",
+    "ranges": "cpp",
+    "span": "cpp",
+    "stop_token": "cpp"
   },
   "editor.formatOnSave": true,
   "editor.tabSize": 2,
