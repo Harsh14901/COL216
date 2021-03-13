@@ -184,7 +184,7 @@ void Hardware::addi(int dst, int src, hd_t value) {
 
 void Hardware::sub(int dst, int src1, int src2) {
   is_valid_reg(dst, src1, src2);
-  check_overflow(long(registers[src1]) - long(registers[src2]));
+  check_overflow((long long)(registers[src1]) - (long long)(registers[src2]));
 
   set_register(dst, registers[src1] - registers[src2]);
 }
