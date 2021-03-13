@@ -1,13 +1,10 @@
 import os
 from pwn import *
 from random import *
-from tqdm import tqdm
 import numpy as np
 import pandas as pd
-import time
 import random
 import argparse
-import sys
 import subprocess
 import re
 
@@ -61,15 +58,22 @@ def parse():
         "--output",
         dest="output",
         type=str,
-        help="Output file for the test case generated",
-        default="./input/test.in",
+        help="Output directory for the test case(s) generated",
+        default="./input",
+    )
+    args.add_argument(
+        "-m",
+        dest="m",
+        type=int,
+        help="Number of instructions to run per test case",
+        default=10,
     )
     args.add_argument(
         "-n",
         dest="n",
         type=int,
-        help="Number of instructions to run",
-        default=10,
+        help="Number of test cases",
+        default=1,
     )
 
     return args.parse_args()
@@ -85,12 +89,14 @@ def query_spim_regs(p):
     return reg_vals
 
 
-def get_spim_output():
+def execute_spim(filename):
+    log.progress("Fetching registers from SPIM")
     output = []
-
+    global asm_statements
+    context.log_level = "critical"
     p = process("spim", stdin=PTY)
     p.recvuntil(prompt)
-    p.send(f'load "{args.output}.asm"\n')
+    p.send(f'load "{filename}"\n')
     p.recvuntil(prompt)
     p.send(f"breakpoint main\n")
     p.recvuntil(prompt)
@@ -103,13 +109,15 @@ def get_spim_output():
         output.append(query_spim_regs(p))
 
     p.kill()
+
+    context.log_level = "info"
     return np.array(output)
 
 
-def execute_program(args):
+def execute_program(args, filename):
     log.progress("Extracting program output")
     p = subprocess.Popen(
-        f"make run file={args.output}".split(),
+        f"make run file={filename}".split(),
         stdout=subprocess.DEVNULL,
         stderr=subprocess.DEVNULL,
     )
@@ -119,45 +127,74 @@ def execute_program(args):
     ).to_numpy()
 
     # print(program_regs.shape)
-    assert program_regs.shape == (args.n, REG_NUM)
+    assert program_regs.shape == (args.m, REG_NUM)
     return program_regs
 
 
-def cleanup(args):
+def check_valid(program_regs, spim_regs):
+    global asm_statements
+    valid = True
+    for i in range(len(asm_statements)):
+        for reg in valid_regs:
+            if program_regs[i][reg] != spim_regs[i][reg]:
+                valid = False
+                log.critical(
+                    f'Test case failed for instruction ({i+1}/{len(asm_statements)}) "{asm_statements[i]}" for register ${reg}: C++({program_regs[i][reg]}), spim({spim_regs[i][reg]})'
+                )
+    if valid:
+        log.success("Test case passed!")
+    else:
+        log.failure("Test failed!")
+    log.indented("-" * 50)
+    return valid
+
+
+def cleanup(filename):
     os.remove(LOG_FILE)
-    os.remove(args.output + ".asm")
-
-
-if __name__ == "__main__":
     try:
-        args = parse()
-        log.info("Generating test cases ..")
+        os.remove(filename)
+        log.success("ASM file cleared successfully")
+    except:
+        log.failure("Could not delete file :" + filename)
+
+
+def run(args, idx):
+    global asm_statements
+    try:
+        out_file = args.output + f"/test{idx}.in"
+        out_asm = out_file + ".asm"
+        log.info(f"Generating test case ({idx + 1}/{args.n})")
 
         if args.input:
             asm_statements = open(args.input, "r").read().split("\n")
         else:
-            with open(args.output, "w") as f:
-                for i in range(args.n):
+            with open(out_file, "w") as f:
+                for i in range(args.m):
                     instr = get_instr(random.randint(0, 1))
                     asm_statements.append(instr)
                     f.writelines(instr + "\n")
 
-        with open(args.output + ".asm", "w") as f:
+        with open(out_asm, "w") as f:
             f.writelines(".text\n.globl main\nmain:\n")
             f.writelines("\n".join(asm_statements) + "\n")
 
-        program_regs = execute_program(args)
-        spim_regs = get_spim_output()
-        for i in range(len(asm_statements)):
-            for reg in valid_regs:
-                if program_regs[i][reg] != spim_regs[i][reg]:
-                    log.critical(
-                        f'Test case failed for instruction ({i+1}/{len(asm_statements)}) "{asm_statements[i]}" for register ${reg}: C++({program_regs[i][reg]}), spim({spim_regs[i][reg]})'
-                    )
-        log.success("Test case passed")
-        cleanup(args)
+        program_regs = execute_program(args, out_file)
+        spim_regs = execute_spim(out_asm)
+        cleanup(out_asm)
+
+        return check_valid(program_regs, spim_regs)
 
     except Exception as e:
-        cleanup(args)
-        log.error("An Error occured")
+        cleanup(out_asm)
         print(e)
+    return False
+
+
+if __name__ == "__main__":
+    args = parse()
+    count = 0
+    for i in range(args.n):
+        if run(args, i):
+            count += 1
+        asm_statements.clear()
+    log.info(f"Passed {count}/{args.n} test cases")

@@ -12,4 +12,5 @@ int main(int argc, char* argv[]) {
   cout << "[+] Executing program ..." << endl;
   auto mips = Hardware(ins);
   mips.start_execution();
+  cout << "[+] Program terminated" << endl;
 }
