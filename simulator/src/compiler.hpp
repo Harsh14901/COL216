@@ -98,12 +98,15 @@ std::vector<UnprocessedInstruction> parseInstructions(std::string fileName) {
   // << std::endl;
   return instructions;
 }
-bool isNum(std::string s) {
-  if (s == "") return false;
-  if (!s.at(0) == '-' && !isdigit(s.at(0))) return false;
-  for (char c : s.substr(1))
+bool isPositiveNum(std::string s) {
+  for (char c : s)
     if (!isdigit(c)) return false;
   return true;
+}
+bool isNum(std::string s) {
+  if (s == "") return false;
+  if (!s.at(0) == '-') return isPositiveNum(s.substr(1));
+  return isPositiveNum(s);
 }
 
 int str_to_int(std::string s) {
