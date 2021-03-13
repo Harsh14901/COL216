@@ -116,12 +116,15 @@ The generated test cases are saved in a the \verb|./output| directory by default
 \subsection{Manual}
 We have also included some manual \verb|ASM| files in the \verb|./tests/manual| directory. These test cases are meant to test the correctness of \verb|lw, sw, beq, bne, j| instructions.
 \begin{itemize}
-    \item \verb|TEST1:| SPECS HERE
-    \item \verb|TEST2:| SPECS HERE
-    \item \verb|TEST3:| SPECS HERE
-    \item \verb|TEST4:| SPECS HERE
-    \item \verb|TEST5:| SPECS HERE
+    \item \verb|TEST1:| arithmetic - testing validity of add, mul, sub
+    \item \verb|TEST2:| conditional - implementing if-then-else using bne, beq and jump statements
+    \item \verb|TEST3:| looping - implementing loops for counter and fibonacci numbers
+    \item \verb|TEST4:| stacks - storing and retreiving values from the stack
+    \item \verb|TEST5:| errors - extensive testing for errors with invalid register, labels, integers, out of bounds memory addressing,
+                    non-word aligned adresses and accessing kernel reserved registers
 \end{itemize}
+These tests are present in the tests/manual/ folder.
+
 \subsection{Results}
 We evaluated the results of these tests in both the automated process and the manual process. Based on our testing we conclude the following:
 \subsubsection{Automated}
@@ -144,9 +147,22 @@ Since our approach allows us to test for arbitrarily large test cases we were ab
 \end{figure}
 
 \subsubsection{Manual}
-\begin{enumerate}
-    \item \verb|TODO|
-\end{enumerate}
+We tested for all the test cases described above. 
+Some of the outputs are shown below
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[t]{\textwidth}
+        \centering
+        \includegraphics[scale=0.4]{manual_errors.png}
+        \caption{test cases causing different errors}
+    \end{subfigure}
+    \begin{subfigure}[t]{\textwidth}
+        \centering
+        \includegraphics[scale=0.4]{manual_conditional.png}
+        \caption{1 test case with if-then-else implemented using beq}
+    \end{subfigure}
+    \caption{Automatic evaluation}
+\end{figure}
 
 
 \section{Assumptions}
