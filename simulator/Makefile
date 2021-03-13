@@ -92,3 +92,5 @@ clean:
 run: all
 	./$(OUTPUTMAIN) ${file}
 	@echo Executing 'run: all' complete!
+zip:
+	zip 2019CS10431_2019CS50447.zip -x ".git/" -x ".gitignore" -x ".vscode/*" -r ./

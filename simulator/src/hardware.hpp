@@ -21,6 +21,9 @@ class Hardware {
   const static int INT_TYPE_R_SIZE = 16;
   const static int INT_TYPE_I_SIZE = 16;
 
+  const static long HD_T_MAX = 2147483647;
+  const static long HD_T_MIN = -2147483648;
+
   Hardware();
   Hardware(vector<Instruction> program);
 
@@ -46,6 +49,7 @@ class Hardware {
   void is_valid_reg(int id);
   void is_valid_reg(int s1, int s2, int s3 = 0);
   void is_valid_memory(hd_t* p);
+  void check_overflow(long long val);
   void add(int dst, int src1, int src2);
   void sub(int dst, int src1, int src2);
   void mul(int dst, int src1, int src2);

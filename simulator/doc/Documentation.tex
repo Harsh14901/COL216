@@ -115,22 +115,25 @@ The generated test cases are saved in a the \verb|./output| directory by default
 
 \subsection{Manual}
 We have also included some manual \verb|ASM| files in the \verb|./tests/manual| directory. These test cases are meant to test the correctness of \verb|lw, sw, beq, bne, j| instructions.
+These tests are present in the \verb|./tests/manual/| folder.
 \begin{itemize}
-    \item \verb|TEST1:| arithmetic - testing validity of add, mul, sub
-    \item \verb|TEST2:| conditional - implementing if-then-else using bne, beq and jump statements
-    \item \verb|TEST3:| looping - implementing loops for counter and fibonacci numbers
-    \item \verb|TEST4:| stacks - storing and retreiving values from the stack
-    \item \verb|TEST5:| errors - extensive testing for errors with invalid register, labels, integers, out of bounds memory addressing,
-                    non-word aligned adresses and accessing kernel reserved registers
+    \item \verb|arithmetic:| This test case checks the correctness of \verb|add, mul, sub|. We have also handled overflows and raised an arithmetic overflow exception in such a case.
+    \item \verb|conditional:| \verb|if-then-else| implemented using \verb|bne, beq ,j|. These cases test the branching conditions in an assemblt program and ensure that the execution jumps to a logically correct statement.
+    \item \verb|looping:| Implementing loops for counter and fibonacci numbers. We have implemented loops using jump statements and matched the output with the expected output. The fibonacci numbers and a simple counter are the most intuitive examples.
+    \item \verb|stacks:| We implemented stacks using the \verb|lw| and \verb|sw| instructions. The push and pop methods were implemented and the expected values were checked.
+    \item \verb|errors:| Extensive testing for errors with invalid register, labels, integers, out of bounds memory addressing,
+          non-word aligned adresses and accessing kernel reserved registers
 \end{itemize}
-These tests are present in the tests/manual/ folder.
 
 \subsection{Results}
 We evaluated the results of these tests in both the automated process and the manual process. Based on our testing we conclude the following:
 \subsubsection{Automated}
 The register contents of \verb|spim| and our simulator were compared and all the test cases passed as expected. The snapshots of the results are attached below.\\
 
-Since our approach allows us to test for arbitrarily large test cases we were able to extensively test our implementation. The results showed that our implementation is robust as it passed all sorts of test cases.
+Since our approach allows us to test for arbitrarily large test cases we were able to extensively test our implementation. The results showed that our implementation is robust as it passed all sorts of test cases.\\
+
+We could not match our output with \verb|spim| output in cases where integer overflow occured. This is because spim automatically handles arithmetic overflows whereas our program raises an arithmetic overflow exception.
+Since our simulator aims to emulate the hardware as closely as possible we decided to not handle the exception by default.
 \begin{figure}[H]
     \centering
     \begin{subfigure}[t]{\textwidth}
@@ -147,7 +150,7 @@ Since our approach allows us to test for arbitrarily large test cases we were ab
 \end{figure}
 
 \subsubsection{Manual}
-We tested for all the test cases described above. 
+We tested for all the test cases described above.
 Some of the outputs are shown below
 \begin{figure}[H]
     \centering
@@ -161,7 +164,7 @@ Some of the outputs are shown below
         \includegraphics[scale=0.4]{manual_conditional.png}
         \caption{1 test case with if-then-else implemented using beq}
     \end{subfigure}
-    \caption{Automatic evaluation}
+    \caption{Manual evaluation}
 \end{figure}
 
 
@@ -174,7 +177,8 @@ Some of the outputs are shown below
           The first instruction skips supplying the offset to the register and the second one involves raw memory access. We have used actual memory addresses allocated by the OS to initialize the stack pointer as will be the case for any program running on an actual harware.
           This makes our implementation more scalable and robust as compared to using indexes from $0 - 2^{20}$ to reference memory which will most likely be a reserved address and lead to segmentation fault.
     \item Our implementation also enforces using numeric registers instead of their named counterparts. For example \verb|$5| is allowed but its named counterpart \verb|$a1| is disallowed
-    \item We have enforced a space between the operand and its arguments. For example \verb|add$4,$5,$6| is disallowed as there is no space between \verb|add| and \verb|$4|
+    \item We have enforced the use of a whitespace between the operand and its arguments. For example \verb|add$4,$5,$6| is disallowed as there is no whitespace between \verb|add| and \verb|$4|
+    \item We have implemented branching instructions like \verb|beq, bne, j| to take only labels and instruction numbers as the last argument.
 \end{itemize}
 
 \end{document}

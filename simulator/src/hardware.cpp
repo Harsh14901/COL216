@@ -163,20 +163,28 @@ void Hardware::set_register(int dst, hd_t value) {
   registers[dst] = value;
 }
 
+void Hardware::check_overflow(long long val) {
+  assert(("Artithmetic overflow occured",
+          val <= Hardware::HD_T_MAX && val >= Hardware::HD_T_MIN));
+}
+
 void Hardware::add(int dst, int src1, int src2) {
   is_valid_reg(dst, src1, src2);
+  check_overflow((long long)(registers[src1]) + (long long)(registers[src2]));
 
   set_register(dst, registers[src1] + registers[src2]);
 }
 
 void Hardware::addi(int dst, int src, hd_t value) {
   is_valid_reg(dst, src);
+  check_overflow((long long)(registers[src]) + (long long)(value));
 
   set_register(dst, registers[src] + value);
 }
 
 void Hardware::sub(int dst, int src1, int src2) {
   is_valid_reg(dst, src1, src2);
+  check_overflow(long(registers[src1]) - long(registers[src2]));
 
   set_register(dst, registers[src1] - registers[src2]);
 }
