@@ -50,10 +50,10 @@ struct Branch {
 
 struct Stats {
   unordered_map<string, int> frequency;
-  int clock_cycles;
+  int clock_cycles = 0;
   clock_t start_time;
   clock_t end_time;
-  float get_execution_time();
+  double get_execution_time();
   void print_verbose();
 };
 

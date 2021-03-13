@@ -10,7 +10,7 @@ typedef int32_t hd_t;
 class Hardware {
  public:
   //  TODO:
-  const static int MAX_MEMORY = 2 << 20;  // In Bytes
+  const static int MAX_MEMORY = 1 << 20;  // In Bytes
   // const static int MAX_MEMORY = 2 << 10;  // In Bytes
   const static int REGISTER_NUM = 32;
   const static int SP_REG_ID = 29;

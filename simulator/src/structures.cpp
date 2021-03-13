@@ -29,16 +29,16 @@ Operator getOperator(std::string op_str) {
     throw InvalidInstruction(op_str);
 }
 
-float Stats::get_execution_time() {
-  return (end_time - start_time) / CLOCKS_PER_SEC;
+double Stats::get_execution_time() {
+  return double(end_time - start_time) / CLOCKS_PER_SEC;
 }
 
 void Stats::print_verbose() {
-  cout << endl << endl << "[#] EXECUTION STATISTICS -----" << endl;
+  cout << endl << endl << "    ------ EXECUTION STATISTICS -----" << endl;
   cout << "[$] Frequency of instructions: " << endl;
   for (auto& it : frequency) {
     cout << it.first << " : " << it.second << endl;
   }
   cout << "[$] Clock cycles: " << clock_cycles << endl;
-  printf("[$] Processor execution time: %#.5f", get_execution_time());
+  printf("[$] Processor execution time: %#.7fs\n", get_execution_time());
 }
