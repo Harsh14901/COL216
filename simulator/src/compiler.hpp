@@ -1,15 +1,12 @@
 #ifndef COMPILER_H
 #define COMPILER_H
 
-#include <algorithm>
-#include <fstream>
-#include <iostream>
-#include <sstream>
-#include <string>
-#include <structures.hpp>
-#include <vector>
+#include <bits/stdc++.h>
+
+#include <hardware.hpp>
 
 typedef std::pair<bool, int> bip;
+std::vector<Branch> branches;
 
 static inline void ltrim(std::string &s) {
   s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](unsigned char ch) {
@@ -29,6 +26,13 @@ static inline void trim(std::string &s) {
   rtrim(s);
 }
 
+bool branch_exists(std::string branch_name) {
+  for (auto branch : branches) {
+    if (branch.name == branch_name) return true;
+  }
+  return false;
+}
+
 std::vector<UnprocessedInstruction> parseInstructions(std::string fileName) {
   std::vector<UnprocessedInstruction> instructions;
 
@@ -40,14 +44,31 @@ std::vector<UnprocessedInstruction> parseInstructions(std::string fileName) {
   }
 
   std::string line;
+  int line_no = -1;
   while (getline(file, line)) {
     trim(line);
     if (line == "") continue;
 
+    line_no++;
+
+    if (line.at(line.size() - 1) == ':') {
+      if (line.find(' ') != -1 || line.size() <= 1)
+        throw InvalidInstruction(line + " is not an instruction or label");
+      std::string branch_name = line.substr(0, line.size() - 1);
+
+      if (!branch_exists(branch_name))
+        branches.push_back({branch_name, line_no});
+      else
+        throw InvalidArgument(branch_name + " already exists");
+
+      line_no--;  // Decrement line_no as the label definition is not present in
+                  // the compiled code
+      continue;
+    }
+
     UnprocessedInstruction instruction;
     instruction.raw = line;
 
-    // std::cout << line << std::endl;
     std::stringstream stream(line);
 
     std::string token;
@@ -59,7 +80,6 @@ std::vector<UnprocessedInstruction> parseInstructions(std::string fileName) {
     int index = 1;
 
     while (getline(stream, token, ',')) {
-      // std::cout << "this " << token << " is as a token" << std::endl;
       trim(token);
       if (index == 1)
         instruction.arg1 = token;
@@ -113,15 +133,24 @@ bip getRegister(std::string reg) {
   return ans;
 }
 
+int get_label_addr(std::string label) {
+  for (auto branch : branches) {
+    if (branch.name == label) return branch.pos * Hardware::BYTES;
+  }
+  throw InvalidArgument("Cannot jump to non-existent label: " + label);
+}
+
 std::vector<Instruction> compile(std::string fileName) {
   auto instructions = parseInstructions(fileName);
   std::vector<Instruction> processedInstructions;
 
+  int line_no = -1;
   for (auto &instr : instructions) {
+    line_no++;
+
     bip p1 = getRegister(instr.arg1), p2 = getRegister(instr.arg2),
         p3 = getRegister(instr.arg3);
-    // std::cout << "here " << p1.second << " " << p2.second << " " << p3.second
-    //           << std::endl;
+
     switch (instr.op) {
       case Operator::ADD:
       case Operator::SUB:
@@ -133,9 +162,21 @@ std::vector<Instruction> compile(std::string fileName) {
             Instruction{instr.op, p1.second, p2.second, p3.second, instr.raw});
         break;
 
-      case Operator::ADDI:
       case Operator::BEQ:
       case Operator::BNE:
+        int arg3_int;
+        if (isNum(instr.arg3))
+          arg3_int = str_to_int(instr.arg3);
+        else {
+          int abs_pos = get_label_addr(instr.arg3);
+          arg3_int = abs_pos - (line_no + 1) * Hardware::BYTES;
+        }
+        if (!p1.first || !p2.first) throw InvalidInstruction(instr.raw);
+        processedInstructions.push_back(
+            Instruction{instr.op, p1.second, p2.second, arg3_int, instr.raw});
+        break;
+
+      case Operator::ADDI:
         if (!p1.first || !p2.first || !isNum(instr.arg3))
           throw InvalidInstruction(instr.raw);
         processedInstructions.push_back(Instruction{
@@ -163,10 +204,18 @@ std::vector<Instruction> compile(std::string fileName) {
       }
 
       case Operator::J:
-        if (!isNum(instr.arg1) || instr.arg2 != "" || instr.arg3 != "")
+        int arg1_val;
+        bool arg1_is_num = isNum(instr.arg1), arg1_valid = false;
+        if (arg1_is_num) {
+          arg1_val = str_to_int(instr.arg1);
+        } else {
+          arg1_val = get_label_addr(instr.arg1);
+        }
+
+        if (instr.arg2 != "" || instr.arg3 != "")
           throw InvalidInstruction(instr.raw);
         processedInstructions.push_back(
-            Instruction{instr.op, str_to_int(instr.arg1), 0, 0, instr.raw});
+            Instruction{instr.op, arg1_val, 0, 0, instr.raw});
         break;
     }
   }

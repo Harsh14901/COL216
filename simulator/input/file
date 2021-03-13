@@ -1,8 +1,9 @@
-.text
-.globl main
 main:
-  addi $0, $0, 5
-  addi $2, $2, 10
-  mul $3, $0, $2
-  lw $3, 4($29)
-  sw $4 , 4($29)
+addi $1, $0, 1
+addi $10, $0, 10
+loop:
+addi $1, $1, 1
+beq $1, $10, exit
+j loop
+exit:
+addi $3, $0, 1

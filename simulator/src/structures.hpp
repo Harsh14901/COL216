@@ -35,6 +35,17 @@ struct Instruction {
   Operator op;
   int arg1, arg2, arg3;
   string raw;
+
+  string to_string() {
+    stringstream ss;
+    ss << arg1 << " " << arg2 << " " << arg3;
+    return ss.str();
+  };
+};
+
+struct Branch {
+  std::string name;
+  int pos;
 };
 
 #endif
