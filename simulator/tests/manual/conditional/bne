@@ -1,0 +1,12 @@
+addi $1, $0, 12
+addi $2, $0, 12
+bne $1, $2, equal
+j else
+equal:
+addi $4, $0, 100
+j exit
+else:
+addi $4, $0, 200
+exit:
+addi $0, $0, 0
+
