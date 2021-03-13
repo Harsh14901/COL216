@@ -17,6 +17,10 @@ class Hardware {
   const static int BITS = 32;
   const static int BYTES = BITS / 8;
 
+  const static int INT_TYPE_J_SIZE = 26;
+  const static int INT_TYPE_R_SIZE = 16;
+  const static int INT_TYPE_I_SIZE = 16;
+
   Hardware();
   Hardware(vector<Instruction> program);
 

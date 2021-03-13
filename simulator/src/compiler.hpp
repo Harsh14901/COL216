@@ -8,6 +8,8 @@
 typedef std::pair<bool, int> bip;
 std::vector<Branch> branches;
 
+bool isNum(std::string s);
+
 static inline void ltrim(std::string &s) {
   s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](unsigned char ch) {
             return !std::isspace(ch);
@@ -54,7 +56,10 @@ std::vector<UnprocessedInstruction> parseInstructions(std::string fileName) {
     if (line.at(line.size() - 1) == ':') {
       if (line.find(' ') != -1 || line.size() <= 1)
         throw InvalidInstruction(line + " is not an instruction or label");
+
       std::string branch_name = line.substr(0, line.size() - 1);
+      if (isNum(branch_name))
+        throw InvalidInstruction(line + " is not a valid label");
 
       if (!branch_exists(branch_name))
         branches.push_back({branch_name, line_no});
@@ -103,10 +108,20 @@ bool isPositiveNum(std::string s) {
     if (!isdigit(c)) return false;
   return true;
 }
+
 bool isNum(std::string s) {
   if (s == "") return false;
-  if (!s.at(0) == '-') return isPositiveNum(s.substr(1));
+  if (s.at(0) == '-') return isPositiveNum(s.substr(1));
   return isPositiveNum(s);
+}
+
+bip isValidNum(std::string s, int max_bytes) {
+  bool is_num = isNum(s);
+  if (!is_num) return bip(false, 0);
+
+  int limit = 1 << max_bytes - 1;
+  int val = stoi(s);
+  return {is_num && (-limit <= val) && (val < limit), val};
 }
 
 int str_to_int(std::string s) {
@@ -158,19 +173,19 @@ std::vector<Instruction> compile(std::string fileName) {
       case Operator::ADD:
       case Operator::SUB:
       case Operator::MUL:
-      case Operator::SLT:
+      case Operator::SLT: {
         if (!p1.first || !p2.first || !p3.first)
           throw InvalidInstruction(instr.raw);
         processedInstructions.push_back(
             Instruction{instr.op, p1.second, p2.second, p3.second, instr.raw});
         break;
+      }
 
       case Operator::BEQ:
-      case Operator::BNE:
-        int arg3_int;
-        if (isNum(instr.arg3))
-          arg3_int = str_to_int(instr.arg3);
-        else {
+      case Operator::BNE: {
+        auto [valid, arg3_int] =
+            isValidNum(instr.arg3, Hardware::INT_TYPE_I_SIZE);
+        if (!valid) {
           int abs_pos = get_label_addr(instr.arg3);
           arg3_int = abs_pos - (line_no + 1) * Hardware::BYTES;
         }
@@ -178,48 +193,60 @@ std::vector<Instruction> compile(std::string fileName) {
         processedInstructions.push_back(
             Instruction{instr.op, p1.second, p2.second, arg3_int, instr.raw});
         break;
+      }
 
-      case Operator::ADDI:
-        if (!p1.first || !p2.first || !isNum(instr.arg3))
-          throw InvalidInstruction(instr.raw);
-        processedInstructions.push_back(Instruction{
-            instr.op, p1.second, p2.second, str_to_int(instr.arg3), instr.raw});
-        break;
+      case Operator::ADDI: {
+        auto [arg3_is_int, arg3_int] =
+            isValidNum(instr.arg3, Hardware::INT_TYPE_I_SIZE);
 
-      case Operator::LW:
-      case Operator::SW: {
-        bool b1 = p1.first;
-        bool b2 = instr.arg3 == "";
-        bool b3 = instr.arg2.at(instr.arg2.size() - 1) == ')';
-        int pos = instr.arg2.find('(');
-        bool b4 = pos >= 0;
-        std::string sub_p1 = instr.arg2.substr(0, pos),
-                    sub_p2 =
-                        instr.arg2.substr(pos + 1, instr.arg2.size() - pos - 2);
-        bip p3 = getRegister(sub_p2);
-        bool b5 = isNum(sub_p1);
-        bool b6 = p3.first;
-        if (!b1 || !b2 || !b3 || !b4 || !b5)
+        if (!p1.first || !p2.first || !arg3_is_int)
           throw InvalidInstruction(instr.raw);
-        processedInstructions.push_back(Instruction{
-            instr.op, p1.second, str_to_int(sub_p1), p3.second, instr.raw});
+
+        processedInstructions.push_back(
+            Instruction{instr.op, p1.second, p2.second, arg3_int, instr.raw});
         break;
       }
 
-      case Operator::J:
-        int arg1_val;
-        bool arg1_is_num = isNum(instr.arg1), arg1_valid = false;
-        if (arg1_is_num) {
-          arg1_val = str_to_int(instr.arg1);
-        } else {
-          arg1_val = get_label_addr(instr.arg1);
+      case Operator::LW:
+      case Operator::SW: {
+        bool extra_args_present = (instr.arg3 == "");
+        bool offset_present_1 = instr.arg2.at(instr.arg2.size() - 1) == ')';
+
+        int pos = instr.arg2.find('(');
+        bool offset_present_2 = pos >= 0;
+
+        std::string sub_p1 = instr.arg2.substr(0, pos),
+                    sub_p2 =
+                        instr.arg2.substr(pos + 1, instr.arg2.size() - pos - 2);
+
+        auto [arg1_is_register, arg1_register] = p1;
+        auto [arg2_is_offset, arg2_offset] =
+            isValidNum(sub_p1, Hardware::INT_TYPE_R_SIZE);
+        auto [arg3_is_register, arg3_register] = getRegister(sub_p2);
+
+        if (!arg1_is_register || !extra_args_present || !offset_present_1 ||
+            !offset_present_2 || !arg2_is_offset || !arg3_is_register)
+          throw InvalidInstruction(instr.raw);
+
+        processedInstructions.push_back(Instruction{
+            instr.op, arg1_register, arg2_offset, arg3_register, instr.raw});
+        break;
+      }
+
+      case Operator::J: {
+        auto [arg1_is_address, arg1_address] =
+            isValidNum(instr.arg1, Hardware::INT_TYPE_J_SIZE);
+
+        if (!arg1_is_address) {
+          arg1_address = get_label_addr(instr.arg1);
         }
 
         if (instr.arg2 != "" || instr.arg3 != "")
           throw InvalidInstruction(instr.raw);
         processedInstructions.push_back(
-            Instruction{instr.op, arg1_val, 0, 0, instr.raw});
+            Instruction{instr.op, arg1_address, 0, 0, instr.raw});
         break;
+      }
     }
   }
   return processedInstructions;

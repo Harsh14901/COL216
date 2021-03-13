@@ -7,7 +7,7 @@
 CXX = g++
 
 # define any compile-time flags
-CXXFLAGS	:= -g -std=c++11 -m32
+CXXFLAGS	:= -g -std=c++17 -m32
 
 
 # define library paths in addition to /usr/lib
