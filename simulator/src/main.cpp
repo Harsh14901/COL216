@@ -13,4 +13,7 @@ int main(int argc, char* argv[]) {
   auto mips = Hardware(ins);
   mips.start_execution();
   cout << "[+] Program terminated" << endl;
+  auto stats = mips.get_stats();
+  stats.print_verbose();
+  return 0;
 }

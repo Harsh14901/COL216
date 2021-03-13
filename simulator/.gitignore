@@ -3,3 +3,4 @@ src/*.o
 output/
 input/
 log
+*.gz

@@ -9,8 +9,9 @@ using namespace std;
 typedef int32_t hd_t;
 class Hardware {
  public:
-  //  TODO: const static int MAX_MEMORY = 2 << 18;  // In Bytes
-  const static int MAX_MEMORY = 2 << 10;  // In Bytes
+  //  TODO:
+  const static int MAX_MEMORY = 2 << 20;  // In Bytes
+  // const static int MAX_MEMORY = 2 << 10;  // In Bytes
   const static int REGISTER_NUM = 32;
   const static int SP_REG_ID = 29;
   const static int BITS = 32;
@@ -25,6 +26,7 @@ class Hardware {
   void advance_pc();
   void terminate();
   void start_execution();
+  Stats get_stats();
 
  private:
   vector<hd_t> registers;
@@ -33,6 +35,8 @@ class Hardware {
   unsigned int mem_size;
   vector<Instruction> program;
   vector<Instruction>::iterator pc;
+
+  Stats stats;
 
  protected:
   void is_valid_reg(int id);
@@ -49,6 +53,8 @@ class Hardware {
   void lw(int dst, int src, int offset);
   void sw(int src, int dst, int offset);
   void initialize_registers();
+  void set_register(int dst, hd_t value);
+  void update_stats(string reg);
 };
 
 #endif
