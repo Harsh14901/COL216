@@ -1,9 +1,8 @@
-main:
 addi $1, $0, 1
 addi $10, $0, 10
-loop:
+a2:
 addi $1, $1, 1
 beq $1, $10, exit
-j loop
+j a2
 exit:
 addi $3, $0, 1
