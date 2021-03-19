@@ -3,7 +3,7 @@ using namespace std;
 
 void Hardware::initialize_registers() {
   registers = vector<hd_t>(REGISTER_NUM, 0);
-  registers[SP_REG_ID] = hd_t(memory + mem_size - 1);
+  registers[SP_REG_ID] = hd_t(Hardware::MAX_MEMORY);
 }
 
 Hardware::Hardware() {
@@ -229,24 +229,39 @@ void Hardware::bne(int src1, int src2, int jump) {
   }
 }
 
-void Hardware::is_valid_memory(hd_t* p) {
+void Hardware::is_valid_memory(int p) {
   assert(("Out of bounds memory access prevented",
-          p >= (hd_t*)(&memory) && p <= (hd_t*)(memory + mem_size) - 1));
+          p >= program.size() * Hardware::BYTES &&
+              p <= MAX_MEMORY - Hardware::BYTES));
+}
+
+hd_t Hardware::get_mem_word(int p) {
+  is_valid_memory(p);
+
+  hd_t value = 0;
+  for (int i = Hardware::BYTES - 1; i >= 0; i--) {
+    value = (value << Hardware::BYTES) + hd_t(memory[p + i]);
+  }
+  return value;
+}
+
+void Hardware::set_mem_word(int p, hd_t val) {
+  is_valid_memory(p);
+  for (int i = 0; i < Hardware::BYTES; i++) {
+    memory[p + i] = byte{val % (1 << 4)};
+    val = val >> 4;
+  }
 }
 
 void Hardware::lw(int dst, int offset, int src) {
   is_valid_reg(dst, src);
 
-  hd_t* p = (hd_t*)(registers[src] + offset);
-  is_valid_memory(p);
-
-  set_register(dst, *p);
+  int p = registers[src] + offset;
+  set_register(dst, get_mem_word(p));
 }
 void Hardware::sw(int src, int offset, int dst) {
   is_valid_reg(dst, src);
 
-  hd_t* p = (hd_t*)(registers[dst] + offset);
-  is_valid_memory(p);
-
-  *p = registers[src];
+  int p = registers[dst] + offset;
+  set_mem_word(p, registers[src]);
 }
