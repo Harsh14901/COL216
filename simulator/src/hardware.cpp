@@ -89,8 +89,41 @@ void Hardware::check_blocking(Stats& stats) {
   if (dram.busy_until < stats.clock_cycles) {
     return;
   }
-  if (pc->op == Operator::LW || pc->op == Operator::SW) {
+  auto block = [&]() {
+    auto log = Log{};
+    log.cycle_period = make_pair(stats.clock_cycles + 1, dram.busy_until);
+    log.remarks.push_back("Blocking on DRAM call to finish");
+    log.instruction = pc->raw;
+    stats.logs.push_back(log);
     stats.clock_cycles = dram.busy_until;
+    if (this->blocking_reg != -1) {
+      this->set_register(this->blocking_reg, this->pending_value);
+      this->blocking_reg = -1;
+    }
+  };
+  if (pc->op == Operator::LW || pc->op == Operator::SW) {
+    block();
+  } else if (blocking_reg != -1) {
+    switch (pc->op) {
+      case Operator::ADD:
+      case Operator::SUB:
+      case Operator::MUL:
+      case Operator::SLT:
+        if (pc->arg1 == blocking_reg || pc->arg2 == blocking_reg ||
+            pc->arg3 == blocking_reg) {
+          block();
+        }
+        break;
+      case Operator::ADDI:
+      case Operator::BEQ:
+      case Operator::BNE:
+        if (pc->arg1 == blocking_reg || pc->arg2 == blocking_reg) {
+          block();
+        }
+        break;
+      default:
+        return;
+    }
   }
 }
 
@@ -100,6 +133,7 @@ void Hardware::terminate() { pc = program.end(); }
 void Hardware::start_execution(Stats& stats) {
   while (pc != program.end()) {
     check_blocking(stats);
+
     stats.clock_cycles += 1;
     stats.logs.push_back(Log{});
 
@@ -222,10 +256,11 @@ void Hardware::lw(int dst, int offset, int src, Stats& stats) {
   auto clock_time = stats.clock_cycles;
   stats.logs.back().remarks.push_back("DRAM request issued");
 
-  set_register(dst, dram.get_mem_word(p, stats));
+  blocking_reg = dst;
+  pending_value = dram.get_mem_word(p, stats);
 
   stats.logs.back().registers = registers;
-  pending_instr = *pc;
+  stats.logs.back().registers[blocking_reg] = pending_value;
   stats.clock_cycles = clock_time;
 }
 void Hardware::sw(int src, int offset, int dst, Stats& stats) {
@@ -237,6 +272,5 @@ void Hardware::sw(int src, int offset, int dst, Stats& stats) {
   stats.logs.back().remarks.push_back("DRAM request issued");
 
   dram.set_mem_word(p, registers[src], stats);
-  pending_instr = *pc;
   stats.clock_cycles = clock_time;
 }

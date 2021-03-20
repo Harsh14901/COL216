@@ -36,7 +36,8 @@ class Hardware {
   vector<Instruction>::iterator pc;
 
   Dram dram = Dram();
-  Instruction pending_instr;
+  int blocking_reg = -1;
+  hd_t pending_value = -1;
 
  protected:
   void is_valid_reg(int id);
