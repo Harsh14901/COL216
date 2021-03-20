@@ -11,6 +11,7 @@ void Dram::row2buffer(int row, Stats& stats) {
       make_pair(stats.clock_cycles + 1, stats.clock_cycles + ROW_ACCESS_DELAY);
   log.remarks.push_back("DRAM: activating row " + to_string(row));
   stats.clock_cycles += ROW_ACCESS_DELAY;
+  stats.rowbuff_update_count++;
   stats.logs.push_back(log);
 
   copy(memory[row], memory[row] + Dram::NUM_COLS, row_buff);
@@ -42,8 +43,9 @@ void Dram::buffer2row(int& row, Stats& stats) {
 }
 
 void Dram::check_word_aligned(int addr) {
-  assert(("Address not word aligned : " + to_string(addr),
-          addr % sizeof(hd_t) == 0));
+  if (!(addr % sizeof(hd_t) == 0)) {
+    throw runtime_error("Address not word aligned : " + to_string(addr));
+  }
 }
 
 pair<int, int> Dram::addr2rowcol(int addr) {
@@ -52,8 +54,9 @@ pair<int, int> Dram::addr2rowcol(int addr) {
   int row = addr / (Dram::NUM_COLS);
   int col = addr % (Dram::NUM_COLS);
 
-  assert(("Address out of bounds : " + to_string(addr),
-          row < NUM_ROWS && col < NUM_COLS));
+  if (!(row < NUM_ROWS && col < NUM_COLS)) {
+    throw runtime_error("Address out of bounds : " + to_string(addr));
+  }
   return make_pair(row, col);
 }
 

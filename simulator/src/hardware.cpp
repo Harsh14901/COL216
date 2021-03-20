@@ -11,9 +11,10 @@ Hardware::Hardware() { initialize_registers(); }
 Hardware::Hardware(vector<Instruction> program) : program(program) {
   auto program_size = program.size() * (BITS / 8);
 
-  assert(("Unable to allocate memory more than " + to_string(program_size) +
-              " bytes.",
-          program_size <= Dram::MAX_MEMORY && program_size > 0));
+  if (!(program_size <= Dram::MAX_MEMORY && program_size > 0)) {
+    throw runtime_error("Unable to allocate memory more than " +
+                        to_string(program_size) + " bytes.");
+  }
 
   initialize_registers();
   pc = this->program.begin();
@@ -103,7 +104,9 @@ void Hardware::start_execution(Stats& stats) {
 }
 
 void Hardware::is_valid_reg(int id) {
-  assert(("Invalid Register ID", id < Hardware::REGISTER_NUM && id >= 0));
+  if (!(id < Hardware::REGISTER_NUM && id >= 0)) {
+    throw runtime_error("Invalid Register ID");
+  }
 }
 
 void Hardware::is_valid_reg(int s1, int s2, int s3) {
@@ -117,16 +120,18 @@ void Hardware::set_register(int dst, hd_t value) {
     cerr << "[-] Warning: Modifying the $0 register has no effect" << endl;
     return;
   }
-  assert(("Access Denied: Cannot modify a kernel reserved register: $26",
-          dst != 26));
-  assert(("Access Denied: Cannot modify a kernel reserved register: $27",
-          dst != 27));
+  if (dst == 26 || dst == 27) {
+    throw runtime_error(
+        "Access Denied: Cannot modify a kernel reserved register: $" +
+        to_string(dst));
+  }
   registers[dst] = value;
 }
 
 void Hardware::check_overflow(long long val) {
-  assert(("Artithmetic overflow occured",
-          val <= Hardware::HD_T_MAX && val >= Hardware::HD_T_MIN));
+  if (!(val <= Hardware::HD_T_MAX && val >= Hardware::HD_T_MIN)) {
+    throw runtime_error("Artithmetic overflow occured");
+  }
 }
 
 void Hardware::add(int dst, int src1, int src2) {
@@ -163,11 +168,16 @@ void Hardware::slt(int dst, int src1, int src2) {
 }
 
 void Hardware::j(int jump) {
-  assert(("Unable to jump, The address is not word aligned",
-          jump % Hardware::BYTES == 0));
+  if (!(jump % Hardware::BYTES == 0)) {
+    throw runtime_error("Unable to jump, The address is not word aligned : " +
+                        to_string(jump));
+  }
   jump /= Hardware::BYTES;
 
-  assert(("Unable to jump to a non instruction", jump < program.size()));
+  if (!(jump < program.size())) {
+    throw runtime_error("Unable to jump to a non instruction: " +
+                        to_string(jump));
+  }
 
   pc = program.begin() + jump;
 }

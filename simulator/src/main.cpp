@@ -14,10 +14,16 @@ int main(int argc, char* argv[]) {
 
   Stats stats;
 
-  mips.start_execution(stats);
+  try {
+    mips.start_execution(stats);
+    stats.print_verbose();
+    cout << "[+] Program terminated" << endl;
 
-  stats.print_verbose();
+  } catch (const std::exception& e) {
+    stats.print_verbose();
+    cerr << "[-] A runtime error occured: " << e.what() << '\n';
+    return -1;
+  }
 
-  cout << "[+] Program terminated" << endl;
   return 0;
 }
