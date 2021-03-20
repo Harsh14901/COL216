@@ -24,7 +24,7 @@ class Hardware {
 
   const static long HD_T_MAX = 2147483647;
   const static long HD_T_MIN = -2147483648;
-  const static ENDIAN endianness = LITTLE;
+  const static ENDIAN endianness = BIG;
 
   Hardware();
   Hardware(vector<Instruction> program);

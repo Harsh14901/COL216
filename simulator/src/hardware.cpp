@@ -239,17 +239,47 @@ hd_t Hardware::get_mem_word(int p) {
   is_valid_memory(p);
 
   hd_t value = 0;
-  for (int i = Hardware::BYTES - 1; i >= 0; i--) {
-    value = (value << Hardware::BYTES) + hd_t(memory[p + i]);
+  switch (Hardware::endianness) {
+    case BIG:
+      for (int i = Hardware::BYTES - 1; i >= 0; i--) {
+        value = (value << 8) + hd_t(memory[p + i]);
+        // printf("memory[%d] = %d, value = %x\n", p + i, memory[p + i], value);
+      }
+      break;
+
+    case LITTLE:
+      for (int i = 0; i < Hardware::BYTES; i++) {
+        value = (value << 8) + hd_t(memory[p + i]);
+        // printf("memory[%d] = %d, value = %x\n", p + i, memory[p + i], value);
+      }
+      break;
+    default:
+      break;
   }
+
   return value;
 }
 
 void Hardware::set_mem_word(int p, hd_t val) {
   is_valid_memory(p);
-  for (int i = 0; i < Hardware::BYTES; i++) {
-    memory[p + i] = byte{val % (1 << 4)};
-    val = val >> 4;
+  switch (Hardware::endianness) {
+    case BIG:
+      for (int i = 0; i < Hardware::BYTES; i++) {
+        memory[p + i] = byte{val & 0xff};
+        // printf("memory[%d] = %d\n", p + i, memory[p + i]);
+        val = val >> 8;
+      }
+      break;
+
+    case LITTLE:
+      for (int i = Hardware::BYTES - 1; i >= 0; i--) {
+        memory[p + i] = byte{val & 0xff};
+        // printf("memory[%d] = %d\n", p + i, memory[p + i]);
+        val = val >> 8;
+      }
+      break;
+    default:
+      break;
   }
 }
 
