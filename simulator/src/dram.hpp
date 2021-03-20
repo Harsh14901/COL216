@@ -3,6 +3,8 @@
 
 #include <bits/stdc++.h>
 
+#include <structures.hpp>
+
 using namespace std;
 typedef int32_t hd_t;
 enum ENDIAN { BIG, LITTLE };
@@ -23,13 +25,13 @@ class Dram {
 
   Dram(int row_access_delay = 10, int col_access_delay = 2);
 
-  hd_t get_mem_word(int addr);
-  void set_mem_word(int addr, hd_t val);
+  hd_t get_mem_word(int addr, Stats& stats);
+  void set_mem_word(int addr, hd_t val, Stats& stats);
 
  protected:
   void check_word_aligned(int addr);
   pair<int, int> addr2rowcol(int addr);
-  void row2buffer(int row);
-  void buffer2row();
+  void row2buffer(int row, Stats& stats);
+  void buffer2row(int& row, Stats& stats);
 };
 #endif

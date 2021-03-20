@@ -11,9 +11,13 @@ int main(int argc, char* argv[]) {
   cout << "[+] Program compiled successfully !" << endl;
   cout << "[+] Executing program ..." << endl;
   auto mips = Hardware(ins);
-  mips.start_execution();
-  cout << "[+] Program terminated" << endl;
-  auto stats = mips.get_stats();
+
+  Stats stats;
+
+  mips.start_execution(stats);
+
   stats.print_verbose();
+
+  cout << "[+] Program terminated" << endl;
   return 0;
 }

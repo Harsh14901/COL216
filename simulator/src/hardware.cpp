@@ -19,76 +19,61 @@ Hardware::Hardware(vector<Instruction> program) : program(program) {
   pc = this->program.begin();
 }
 
-void Hardware::update_stats(string reg) {
-  stats.frequency[reg] += 1;
-  stats.clock_cycles += 1;
-}
-
-void Hardware::execute_current() {
+void Hardware::execute_current(Stats& stats) {
   switch (pc->op) {
     case Operator::ADD:
       add(pc->arg1, pc->arg2, pc->arg3);
-      update_stats("ADD");
       advance_pc();
 
       break;
     case Operator::ADDI:
       addi(pc->arg1, pc->arg2, pc->arg3);
-      update_stats("ADDI");
 
       advance_pc();
 
       break;
     case Operator::SUB:
       sub(pc->arg1, pc->arg2, pc->arg3);
-      update_stats("SUB");
 
       advance_pc();
 
       break;
     case Operator::MUL:
       mul(pc->arg1, pc->arg2, pc->arg3);
-      update_stats("MUL");
 
       advance_pc();
 
       break;
     case Operator::BEQ:
       beq(pc->arg1, pc->arg2, pc->arg3);
-      update_stats("BEQ");
 
       advance_pc();
 
       break;
     case Operator::BNE:
       bne(pc->arg1, pc->arg2, pc->arg3);
-      update_stats("BNE");
 
       advance_pc();
 
       break;
     case Operator::SLT:
       slt(pc->arg1, pc->arg2, pc->arg3);
-      update_stats("SLT");
 
       advance_pc();
 
       break;
     case Operator::J:
       j(pc->arg1);
-      update_stats("J");
 
       break;
     case Operator::SW:
-      sw(pc->arg1, pc->arg2, pc->arg3);
-      update_stats("SW");
+      sw(pc->arg1, pc->arg2, pc->arg3, stats);
 
       advance_pc();
 
       break;
     case Operator::LW:
-      lw(pc->arg1, pc->arg2, pc->arg3);
-      update_stats("LW");
+      lw(pc->arg1, pc->arg2, pc->arg3, stats);
 
       advance_pc();
 
@@ -101,44 +86,20 @@ void Hardware::execute_current() {
 
 void Hardware::advance_pc() { pc += 1; }
 void Hardware::terminate() { pc = program.end(); }
-Stats Hardware::get_stats() { return stats; }
 
-void Hardware::start_execution() {
-  stats.start_time = clock();
+void Hardware::start_execution(Stats& stats) {
   while (pc != program.end()) {
-    print_instruction();
-    execute_current();
-    print_contents();
+    stats.clock_cycles += 1;
+    stats.logs.push_back(Log{});
+
+    auto& log = stats.logs.back();
+    log.cycle_period = make_pair(stats.clock_cycles, stats.clock_cycles);
+    log.instruction = pc->raw;
+
+    execute_current(stats);
+
+    log.registers = registers;
   }
-  stats.end_time = clock();
-}
-
-void Hardware::print_instruction() {
-  cout << "[#] Executing current instruction - " << pc->raw << endl;
-}
-
-void Hardware::print_contents() {
-  cout << "[#] Register contents -" << endl;
-  auto n = registers.size() / 2;
-  for (int i = 0; i < n; i++) {
-    printf("%2d : %#010x\t\t%d : %#010x\n", i, registers[i], i + n,
-           registers[i + n]);
-  }
-  cout << "----------------------------------------------" << endl;
-
-  fstream out_file;
-  string file_name = "log";
-  out_file.open(file_name, ios::app);
-  if (!out_file) {
-    cerr << "[-] Error writing to the output file: " << file_name << endl;
-  } else {
-    for (int i = 0; i < registers.size() - 1; i++) {
-      out_file << registers[i] << ", ";
-    }
-    out_file << registers[registers.size() - 1] << endl;
-  }
-
-  out_file.close();
 }
 
 void Hardware::is_valid_reg(int id) {
@@ -229,15 +190,21 @@ void Hardware::bne(int src1, int src2, int jump) {
   }
 }
 
-void Hardware::lw(int dst, int offset, int src) {
+void Hardware::lw(int dst, int offset, int src, Stats& stats) {
   is_valid_reg(dst, src);
 
   int p = registers[src] + offset;
-  set_register(dst, dram.get_mem_word(p));
+
+  stats.logs.back().remarks.push_back("DRAM request issued");
+
+  set_register(dst, dram.get_mem_word(p, stats));
 }
-void Hardware::sw(int src, int offset, int dst) {
+void Hardware::sw(int src, int offset, int dst, Stats& stats) {
   is_valid_reg(dst, src);
 
   int p = registers[dst] + offset;
-  dram.set_mem_word(p, registers[src]);
+
+  stats.logs.back().remarks.push_back("DRAM request issued");
+
+  dram.set_mem_word(p, registers[src], stats);
 }

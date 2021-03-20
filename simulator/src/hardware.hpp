@@ -9,7 +9,6 @@ using namespace std;
 
 class Hardware {
  public:
-  //  TODO:
   const static int REGISTER_NUM = 32;
   const static int SP_REG_ID = 29;
   const static int BITS = 32;
@@ -25,13 +24,10 @@ class Hardware {
   Hardware();
   Hardware(vector<Instruction> program);
 
-  void print_instruction();
-  void print_contents();
-  void execute_current();
+  void execute_current(Stats& stats);
   void advance_pc();
   void terminate();
-  void start_execution();
-  Stats get_stats();
+  void start_execution(Stats& stats);
 
  private:
   vector<hd_t> registers;
@@ -40,7 +36,6 @@ class Hardware {
   vector<Instruction>::iterator pc;
 
   Dram dram = Dram();
-  Stats stats;
 
  protected:
   void is_valid_reg(int id);
@@ -54,11 +49,10 @@ class Hardware {
   void beq(int src1, int src2, int jump);
   void bne(int src1, int src2, int jump);
   void j(int jump);
-  void lw(int dst, int src, int offset);
-  void sw(int src, int dst, int offset);
+  void lw(int dst, int src, int offset, Stats& stats);
+  void sw(int src, int dst, int offset, Stats& stats);
   void initialize_registers();
   void set_register(int dst, hd_t value);
-  void update_stats(string reg);
 };
 
 #endif

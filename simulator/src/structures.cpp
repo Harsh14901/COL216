@@ -29,16 +29,46 @@ Operator getOperator(std::string op_str) {
     throw InvalidInstruction(op_str);
 }
 
-double Stats::get_execution_time() {
-  return double(end_time - start_time) / CLOCKS_PER_SEC;
+void Log::print_registers() {
+  cout << "[#] Register contents -" << endl;
+  auto n = registers.size() / 2;
+  for (int i = 0; i < n; i++) {
+    printf("\t%2d : %#010x\t\t%d : %#010x\n", i, registers[i], i + n,
+           registers[i + n]);
+  }
+}
+
+void Log::print_verbose() {
+  printf("[$] CYCLE %d-%d :\n", cycle_period.first, cycle_period.second);
+  printf("[#] Executing current instruction -> %s\n", instruction.c_str());
+  print_registers();
+
+  cout << "[#] Row buffer updates:" << endl;
+  for (auto& v : rowbuff_updates) {
+    printf("\t%d : %d\n", v.first, v.second);
+  }
+  cout << "[#] Memory updates:" << endl;
+  for (auto& v : memory_updates) {
+    printf("\t%d : %d\n", v.first, v.second);
+  }
+  cout << "[#] Remarks: " << endl;
+  for (auto& v : remarks) {
+    cout << "\t" << v << endl;
+  }
+  cout << "============================================================"
+       << endl;
 }
 
 void Stats::print_verbose() {
-  cout << endl << endl << "    ------ EXECUTION STATISTICS -----" << endl;
-  cout << "[$] Frequency of instructions: " << endl;
-  for (auto& it : frequency) {
-    cout << it.first << " : " << it.second << endl;
+  cout << "---------- Execution logs ----------" << endl;
+  for (auto& log : logs) {
+    log.print_verbose();
   }
-  cout << "[$] Clock cycles: " << clock_cycles << endl;
-  printf("[$] Processor execution time: %#.7fs\n", get_execution_time());
+  cout << "---------- Execution statistics ----------" << endl;
+  cout << "[#] Clock cycles: " << clock_cycles << endl;
+  cout << "[#] Number of row buffer updates: " << rowbuff_update_count << endl;
+  cout << "[#] Updated memory : " << endl;
+  for (auto& v : updated_memory) {
+    printf("\t%d : %d\n", v.first, v.second);
+  }
 }
