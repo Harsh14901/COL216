@@ -5,7 +5,7 @@
     "name": "Debug",
     "type": "cppdbg",
     "request": "launch",
-    "args": ["tests/manual/loops/fibonacci"],
+    "args": ["tests/manual/loops/counter"],
     "stopAtEntry": false,
     "cwd": "${workspaceFolder}",
     "environment": [],
