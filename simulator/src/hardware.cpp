@@ -57,10 +57,14 @@ void Hardware::execute_current() {
       beq(pc->arg1, pc->arg2, pc->arg3);
       update_stats("BEQ");
 
+      advance_pc();
+
       break;
     case Operator::BNE:
       bne(pc->arg1, pc->arg2, pc->arg3);
       update_stats("BNE");
+
+      advance_pc();
 
       break;
     case Operator::SLT:
