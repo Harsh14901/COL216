@@ -3,21 +3,17 @@ using namespace std;
 
 void Hardware::initialize_registers() {
   registers = vector<hd_t>(REGISTER_NUM, 0);
-  registers[SP_REG_ID] = hd_t(Hardware::MAX_MEMORY);
+  registers[SP_REG_ID] = hd_t(Dram::MAX_MEMORY);
 }
 
-Hardware::Hardware() {
-  mem_size = MAX_MEMORY;
-  initialize_registers();
-}
+Hardware::Hardware() { initialize_registers(); }
 
 Hardware::Hardware(vector<Instruction> program) : program(program) {
   auto program_size = program.size() * (BITS / 8);
-  mem_size = MAX_MEMORY - program_size;
 
-  assert(
-      ("Unable to allocate memory more than " + to_string(mem_size) + " bytes.",
-       mem_size <= MAX_MEMORY && mem_size > 0));
+  assert(("Unable to allocate memory more than " + to_string(program_size) +
+              " bytes.",
+          program_size <= Dram::MAX_MEMORY && program_size > 0));
 
   initialize_registers();
   pc = this->program.begin();
@@ -229,69 +225,15 @@ void Hardware::bne(int src1, int src2, int jump) {
   }
 }
 
-void Hardware::is_valid_memory(int p) {
-  assert(("Out of bounds memory access prevented",
-          p >= program.size() * Hardware::BYTES &&
-              p <= MAX_MEMORY - Hardware::BYTES));
-}
-
-hd_t Hardware::get_mem_word(int p) {
-  is_valid_memory(p);
-
-  hd_t value = 0;
-  switch (Hardware::endianness) {
-    case BIG:
-      for (int i = Hardware::BYTES - 1; i >= 0; i--) {
-        value = (value << 8) + hd_t(memory[p + i]);
-        // printf("memory[%d] = %d, value = %x\n", p + i, memory[p + i], value);
-      }
-      break;
-
-    case LITTLE:
-      for (int i = 0; i < Hardware::BYTES; i++) {
-        value = (value << 8) + hd_t(memory[p + i]);
-        // printf("memory[%d] = %d, value = %x\n", p + i, memory[p + i], value);
-      }
-      break;
-    default:
-      break;
-  }
-
-  return value;
-}
-
-void Hardware::set_mem_word(int p, hd_t val) {
-  is_valid_memory(p);
-  switch (Hardware::endianness) {
-    case BIG:
-      for (int i = 0; i < Hardware::BYTES; i++) {
-        memory[p + i] = byte{val & 0xff};
-        // printf("memory[%d] = %d\n", p + i, memory[p + i]);
-        val = val >> 8;
-      }
-      break;
-
-    case LITTLE:
-      for (int i = Hardware::BYTES - 1; i >= 0; i--) {
-        memory[p + i] = byte{val & 0xff};
-        // printf("memory[%d] = %d\n", p + i, memory[p + i]);
-        val = val >> 8;
-      }
-      break;
-    default:
-      break;
-  }
-}
-
 void Hardware::lw(int dst, int offset, int src) {
   is_valid_reg(dst, src);
 
   int p = registers[src] + offset;
-  set_register(dst, get_mem_word(p));
+  set_register(dst, dram.get_mem_word(p));
 }
 void Hardware::sw(int src, int offset, int dst) {
   is_valid_reg(dst, src);
 
   int p = registers[dst] + offset;
-  set_mem_word(p, registers[src]);
+  dram.set_mem_word(p, registers[src]);
 }
