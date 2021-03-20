@@ -22,6 +22,7 @@ class Dram {
   const static ENDIAN endianness = BIG;
   int ROW_ACCESS_DELAY;
   int COL_ACCESS_DELAY;
+  int busy_until = 0;
 
   Dram(int row_access_delay = 10, int col_access_delay = 2);
 

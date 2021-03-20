@@ -75,7 +75,7 @@ hd_t Dram::get_mem_word(int addr, Stats& stats) {
       make_pair(stats.clock_cycles + 1, stats.clock_cycles + COL_ACCESS_DELAY);
   log.remarks.push_back("DRAM: Read from row buffer");
   stats.clock_cycles += COL_ACCESS_DELAY;
-
+  busy_until = stats.clock_cycles;
   return row_buff[point.second];
 }
 
@@ -98,6 +98,6 @@ void Dram::set_mem_word(int addr, hd_t val, Stats& stats) {
   stats.clock_cycles += COL_ACCESS_DELAY;
   stats.rowbuff_update_count += 1;
   stats.logs.push_back(log);
-
+  busy_until = stats.clock_cycles;
   row_buff[point.second] = val;
 }

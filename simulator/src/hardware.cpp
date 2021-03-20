@@ -85,11 +85,21 @@ void Hardware::execute_current(Stats& stats) {
   }
 }
 
+void Hardware::check_blocking(Stats& stats) {
+  if (dram.busy_until < stats.clock_cycles) {
+    return;
+  }
+  if (pc->op == Operator::LW || pc->op == Operator::SW) {
+    stats.clock_cycles = dram.busy_until;
+  }
+}
+
 void Hardware::advance_pc() { pc += 1; }
 void Hardware::terminate() { pc = program.end(); }
 
 void Hardware::start_execution(Stats& stats) {
   while (pc != program.end()) {
+    check_blocking(stats);
     stats.clock_cycles += 1;
     stats.logs.push_back(Log{});
 
@@ -104,6 +114,7 @@ void Hardware::start_execution(Stats& stats) {
       log.registers = registers;
     }
   }
+  stats.clock_cycles = max(stats.clock_cycles, dram.busy_until);
 }
 
 void Hardware::is_valid_reg(int id) {
@@ -208,18 +219,24 @@ void Hardware::lw(int dst, int offset, int src, Stats& stats) {
 
   int p = registers[src] + offset;
 
+  auto clock_time = stats.clock_cycles;
   stats.logs.back().remarks.push_back("DRAM request issued");
 
   set_register(dst, dram.get_mem_word(p, stats));
 
   stats.logs.back().registers = registers;
+  pending_instr = *pc;
+  stats.clock_cycles = clock_time;
 }
 void Hardware::sw(int src, int offset, int dst, Stats& stats) {
   is_valid_reg(dst, src);
 
   int p = registers[dst] + offset;
 
+  auto clock_time = stats.clock_cycles;
   stats.logs.back().remarks.push_back("DRAM request issued");
 
   dram.set_mem_word(p, registers[src], stats);
+  pending_instr = *pc;
+  stats.clock_cycles = clock_time;
 }

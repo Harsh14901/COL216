@@ -36,11 +36,13 @@ class Hardware {
   vector<Instruction>::iterator pc;
 
   Dram dram = Dram();
+  Instruction pending_instr;
 
  protected:
   void is_valid_reg(int id);
   void is_valid_reg(int s1, int s2, int s3 = 0);
   void check_overflow(long long val);
+  void check_blocking(Stats& stats);
   void add(int dst, int src1, int src2);
   void sub(int dst, int src1, int src2);
   void mul(int dst, int src1, int src2);
