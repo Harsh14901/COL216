@@ -86,7 +86,7 @@ void Hardware::execute_current(Stats& stats) {
 }
 
 void Hardware::check_blocking(Stats& stats) {
-  if (dram.busy_until < stats.clock_cycles) {
+  if (dram.busy_until <= stats.clock_cycles) {
     return;
   }
   auto block = [&]() {

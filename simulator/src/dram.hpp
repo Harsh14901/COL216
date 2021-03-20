@@ -7,7 +7,6 @@
 
 using namespace std;
 typedef int32_t hd_t;
-enum ENDIAN { BIG, LITTLE };
 class Dram {
  private:
   const static int NUM_ROWS = 1 << 10;
@@ -19,7 +18,6 @@ class Dram {
 
  public:
   const static int MAX_MEMORY = sizeof(memory);  // In bytes
-  const static ENDIAN endianness = BIG;
   int ROW_ACCESS_DELAY;
   int COL_ACCESS_DELAY;
   int busy_until = 0;
