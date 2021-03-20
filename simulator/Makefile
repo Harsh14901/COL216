@@ -65,7 +65,7 @@ OBJECTS		:= $(SOURCES:.cpp=.o)
 
 OUTPUTMAIN	:= $(call FIXPATH,$(OUTPUT)/$(MAIN))
 
-file := input/file
+args := input/file
 
 all: clean $(OUTPUT) $(MAIN)
 	@echo Executing 'all' complete!
@@ -90,7 +90,7 @@ clean:
 	@echo Cleanup complete!
 
 run: all
-	./$(OUTPUTMAIN) ${file}
+	./$(OUTPUTMAIN) ${args}
 	@echo Executing 'run: all' complete!
 zip:
 	zip 2019CS10431_2019CS50447.zip -x ".git/" -x ".gitignore" -x ".vscode/*" -r ./

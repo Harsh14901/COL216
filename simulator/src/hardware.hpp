@@ -22,12 +22,13 @@ class Hardware {
   const static long HD_T_MIN = -2147483648;
 
   Hardware();
-  Hardware(vector<Instruction> program);
+  Hardware(vector<Instruction> program, int row_delay = 10, int col_delay = 2);
 
   void execute_current(Stats& stats);
   void advance_pc();
   void terminate();
   void start_execution(Stats& stats);
+  void set_blocking_mode(bool block);
 
  private:
   vector<hd_t> registers;
@@ -35,9 +36,10 @@ class Hardware {
   vector<Instruction> program;
   vector<Instruction>::iterator pc;
 
-  Dram dram = Dram();
+  Dram dram;
   int blocking_reg = -1;
   hd_t pending_value = -1;
+  bool blocking = false;
 
  protected:
   void is_valid_reg(int id);

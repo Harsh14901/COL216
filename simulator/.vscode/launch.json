@@ -5,7 +5,7 @@
     "name": "Debug",
     "type": "cppdbg",
     "request": "launch",
-    "args": ["input/file"],
+    "args": ["tests/store_and_use.in", "10", "2", "1"],
     "stopAtEntry": false,
     "cwd": "${workspaceFolder}",
     "environment": [],

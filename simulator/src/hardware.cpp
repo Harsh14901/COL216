@@ -6,9 +6,13 @@ void Hardware::initialize_registers() {
   registers[SP_REG_ID] = hd_t(Dram::MAX_MEMORY);
 }
 
-Hardware::Hardware() { initialize_registers(); }
+Hardware::Hardware() {
+  initialize_registers();
+  dram = Dram();
+}
 
-Hardware::Hardware(vector<Instruction> program) : program(program) {
+Hardware::Hardware(vector<Instruction> program, int row_delay, int col_delay)
+    : program(program) {
   auto program_size = program.size() * (BITS / 8);
 
   if (!(program_size <= Dram::MAX_MEMORY && program_size > 0)) {
@@ -18,7 +22,11 @@ Hardware::Hardware(vector<Instruction> program) : program(program) {
 
   initialize_registers();
   pc = this->program.begin();
+
+  dram = Dram(row_delay, col_delay);
 }
+
+void Hardware::set_blocking_mode(bool block) { blocking = block; }
 
 void Hardware::execute_current(Stats& stats) {
   switch (pc->op) {
@@ -86,9 +94,6 @@ void Hardware::execute_current(Stats& stats) {
 }
 
 void Hardware::check_blocking(Stats& stats) {
-  if (dram.busy_until <= stats.clock_cycles) {
-    return;
-  }
   auto block = [&]() {
     auto log = Log{};
     log.cycle_period = make_pair(stats.clock_cycles + 1, dram.busy_until);
@@ -101,6 +106,15 @@ void Hardware::check_blocking(Stats& stats) {
       this->blocking_reg = -1;
     }
   };
+
+  if (dram.busy_until <= stats.clock_cycles) {
+    return;
+  }
+  if (this->blocking) {
+    block();
+    return;
+  }
+
   if (pc->op == Operator::LW || pc->op == Operator::SW) {
     block();
   } else if (blocking_reg != -1) {
