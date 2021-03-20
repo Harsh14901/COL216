@@ -97,9 +97,12 @@ void Hardware::start_execution(Stats& stats) {
     log.cycle_period = make_pair(stats.clock_cycles, stats.clock_cycles);
     log.instruction = pc->raw;
 
-    execute_current(stats);
+    auto instr = pc->op;
 
-    log.registers = registers;
+    execute_current(stats);
+    if (instr != Operator::LW && instr != Operator::SW) {
+      log.registers = registers;
+    }
   }
 }
 
@@ -208,6 +211,8 @@ void Hardware::lw(int dst, int offset, int src, Stats& stats) {
   stats.logs.back().remarks.push_back("DRAM request issued");
 
   set_register(dst, dram.get_mem_word(p, stats));
+
+  stats.logs.back().registers = registers;
 }
 void Hardware::sw(int src, int offset, int dst, Stats& stats) {
   is_valid_reg(dst, src);
