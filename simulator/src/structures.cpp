@@ -33,7 +33,7 @@ void Log::print_registers() {
   cout << "[#] Register contents -" << endl;
   auto n = registers.size() / 2;
   for (int i = 0; i < n; i++) {
-    printf("\t%2d : %#010x\t\t%d : %#010x\n", i, registers[i], i + n,
+    printf("\t%2d : %#010x\t\t%ld : %#010x\n", i, registers[i], i + n,
            registers[i + n]);
   }
 }
@@ -45,11 +45,11 @@ void Log::print_verbose() {
 
   cout << "[#] Row buffer updates:" << endl;
   for (auto& v : rowbuff_updates) {
-    printf("\t%d : %d\n", v.first, v.second);
+    printf("\t%d-%ld : %d\n", v.first, v.first + sizeof(hd_t) - 1, v.second);
   }
   cout << "[#] Memory updates:" << endl;
   for (auto& v : memory_updates) {
-    printf("\t%d : %d\n", v.first, v.second);
+    printf("\t%d-%ld : %d\n", v.first, v.first + sizeof(hd_t) - 1, v.second);
   }
   cout << "[#] Remarks: " << endl;
   for (auto& v : remarks) {
@@ -69,6 +69,6 @@ void Stats::print_verbose() {
   cout << "[#] Number of row buffer updates: " << rowbuff_update_count << endl;
   cout << "[#] Updated memory : " << endl;
   for (auto& v : updated_memory) {
-    printf("\t%d : %d\n", v.first, v.second);
+    printf("\t%d-%ld : %d\n", v.first, v.first + sizeof(hd_t) - 1, v.second);
   }
 }

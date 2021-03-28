@@ -69,7 +69,7 @@
     \rule{\textwidth}{0.2 mm} \\[0.1cm]
     \begin{flushright}
 
-        \begin{tabular}{c c}
+        \begin{tabular}{c|c}
             \small {Harsh Agrawal} & \small {2019CS10431} \\
         \end{tabular}
     \end{flushright}
@@ -78,7 +78,7 @@
 \newpage
 
 \section{Modules}
-We implemented a simulator in \verb|C++| for executing MIPS instructions from input assembly code.The program was divided into three modules \verb|compiler| ,\verb|hardware|, and a \verb|DRAM| module.
+We implemented a simulator in \verb|C++| for executing MIPS instructions from assembly code. The program was divided into \verb|compiler| ,\verb|hardware|, and a \verb|DRAM| module.
 These modules perform different functions as outlined below
 \subsection{Compiler}
 \begin{itemize}
@@ -108,32 +108,33 @@ The approach used to simulate the DRAM timing model is described in this section
 \begin{itemize}
     \item The \verb|DRAM| maintains a \verb|2D| array to simulate the memory and stores a row buffer array to simulate the cache memory.
     \item In case of a \verb|read| operation if the memory address belongs to the row stored in the row buffer, a column access can yield the result.
-          However in the other case, the row buffer needs to be written back to the actual memory consuming a time equal to the row delay of DRAM. The new row is loaded into the row buffer and the address is then served from row buffer.
-    \item Similar to the above case the \verb|write| operation is implemented which involves writing to the row buffer if the row of the address matches the row stored in buffer else a write back is required.
+          However in the other case, the row buffer needs to be written back to the actual memory consuming a time equal to the row delay of DRAM. The new row is loaded into the row buffer and the address is then served from row buffer using column access.
+    \item Similarly, the \verb|write| operation involves writing to the row buffer if the row of the address matches the row-buffer else a write back is required.
 \end{itemize}
 
 \subsubsection{Advantages}
 \begin{itemize}
     \item Abstracting out the \verb|DRAM| methods in a separate module helped modularise the code and an easier implementation of the \verb|lw, sw| instructions
-    \item The row buffer in \verb|DRAM| helps to reduce the access time of memory addresses by caching an entire row. This reduces the access time of nearby memory addresses.
-    \item Implementing \verb|DRAM| in the form of a \verb|2D| array was necessary to implement a cache mechanism. Storing the data in a linear fashion increases the undecidability in the data to be cached for better performance.
+    \item The row buffer in \verb|DRAM| helps to reduce the access time of memory addresses by caching an entire row. This reduces the time taken to access nearby memory addresses consecutively.
+    \item Implementing \verb|DRAM| in the form of a \verb|2D| array helped implement a cache mechanism. Storing the data linearly increases the complexity by deciding on the appropriate data to be cached for better performance.
 \end{itemize}
-
 \subsubsection{Disadvantages}
 \begin{itemize}
-    \item When several distant memory addresses in \verb|DRAM| are accessed consecutively it leads to an additional overhead of writing back the memory buffer and reloading it with a fresh row.
-          Lots of cache misses can cause the implementation to be slower than a standard no cache implementation.
+    \item Access of several distant memory addresses consecutively leads to an additional overhead of writing back the memory buffer and reloading it with a fresh row.
+          Lots of cache misses can cause the implementation to be slower than a standard no-cache implementation.
     \item Copying a row into a row buffer seems like an unnecessary overhead as \verb|C++| already provides constant time random access to any element of the \verb|2D| array.
           Although random access in a \verb|2D| array could speed up our simulator significantly but it would foreshadow the actual hardware implementation of the \verb|DRAM|.
+    \item The row buffer implemented as a write back cache does not include a dirty bit for the cache. If the dirty bit is unset the DRAM can skip writing back the row buffer to memory.
 \end{itemize}
 
 \subsection{Non Blocking processor}
-A non blocking processor is one that does not block on data that requires a bus read/write. In this case the \verb|lw, sw| instructions
+A non blocking processor does not block on data that requires a bus read/write. In this case the \verb|lw, sw| instructions
 are responsible for storing and loading from the main memory(\verb|DRAM|). This involves a data transfer over the bus and the processor need not block on
-bus operation to complete if next instructions do not involve bus access.
+bus operation to execute instructions that only require register computations.
+\subsubsection{Specifications}
 \begin{itemize}
     \item When data is loaded/stored from/to the main memory the processor always attempts to execute the next instruction in the cycle immediately following the issue of a DRAM request
-    \item If the next instruction does not involve any register used in the \verb|lw, sw| instructions, the instruction is executed.
+    \item If the next instruction does not involve any register used in the \verb|lw, sw| instructions, the instruction is safely executed.
     \item If the next instruction is itself a \verb|lw, sw| instruction the processor blocks until the previous bus transfer is complete, irrespective of the registers and memory addresses involved.
     \item If the next instruction involves a register that is to be loaded from the memory, the processor blocks, waiting for the bus transfer to complete.
     \item However if the register was simply used to store a value into the main memory; it is not necessary to block, the processor continues execution.
@@ -141,25 +142,25 @@ bus operation to complete if next instructions do not involve bus access.
 
 \subsubsection{Advantages}
 \begin{itemize}
-    \item A non blocking processor reduces the number of clock cycles required to execute a set of instructions thus reducing the average \verb|CPI|.
-          Instructions that require a bus transfer are executed in parallel and instructions that are not relevant to the bus transfer are executed in the immediately next clock cycle.
-    \item The non blocking processor is very efficient for programs that consist majorly of register computations and less frequent bus transfers. This approach can convert the bus transfer instructions that take multiple clock cycles to execute into instructions that execute in a single clock cycle.
-    \item The processor blocks on instructions that use registers to be loaded from a pending \verb|lw| call. This ensures that the program output is same as expected if the program was executed completely sequentially.
-    \item The optimization introduced to not block on register used as the source of \verb|sw| instruction also reduces unnecessary blocking of the processor.
-    \item The approach can never be slower than a sequential program, i.e. there are no additional overheads introduced in the implementation.
+    \item A non blocking processor reduces the number of clock cycles to execute a set of instructions, reducing the average \verb|CPI|.
+          Instructions invloving a bus transfer do not block enabling other instructions to be executed.
+    \item The non blocking processor is very efficient for programs that consist majorly of register computations and less frequent bus transfers. It allows execution of \verb|lw, sw| instructions in a single clock cycle which would otherwise consume large clock cycles in blocking mode.
+    \item The processor blocks on instructions that use registers to be loaded from a pending \verb|lw| call. This ensures that the program output matches with a program executed in blocking mode.
+    \item The optimization to not block on register used as the source of \verb|sw| instruction reduces unnecessary blocking of the processor.
+    \item The approach can never be slower than a blocking program, i.e. there are no additional overheads introduced in the implementation.
 \end{itemize}
 
 \subsubsection{Disadvantages}
 \begin{itemize}
-    \item The approach is equivalent to a sequential program in case several \verb|lw, sw| instructions are executed one after the other.
-    \item The approach does not group consecutive \verb|lw, sw| instructions that are unrelated to each other as a single parallel instruction, instead it waits for each one of them to complete before the following instructions can be executed.
-    \item A further optimization could be introduced where a register is consecutively loaded from \verb|lw| instruction and a register operation. In such a case the \verb|lw| instruction could be eliminated completely as the immediately following instruction overwrites any value loaded from the memory thus introducing unnecessary overheads.
-    \item The memory accesses could be rearranged whenever possible to always access the most nearby address thus reducing the additional overheads incurred by cache misses in \verb|DRAM|. This could involve reordering of certain instructions that are not related to each other and any other instruction in between.
+    \item The approach is equivalent to a blocking program in case several \verb|lw, sw| instructions are executed consecutively.
+    \item The approach does not group consecutive \verb|lw, sw| instructions that are unrelated to each other as a single parallel instruction, instead it waits for each one of them to complete before the next can be executed.
+    \item A further optimization could help in case a register is consecutively loaded from \verb|lw| instruction followed by a register operation. The \verb|lw| instruction could be eliminated completely as the next register operation overwrites any value loaded from the memory.
+    \item The memory accesses could be rearranged to always access the most nearby address thus reducing the additional overheads incurred by cache misses in \verb|DRAM|. This involves reordering of unrelated instructions.
 \end{itemize}
 
 \section{Testing}
 
-The testing method was completely manual. The test cases written manually are included in the \verb|./tests| directory. The test cases were run with different parameters
+The testing method was completely manual. The test cases written manually are included in the \verb|./tests/input| directory. The test cases were run with different parameters
 of the program and the outcomes were compared.
 \begin{itemize}
     \item \verb|load_and_store.in| : This test case includes consecutive load and store instructions with different offsets to test the correctness of the \verb|DRAM| implementation.
@@ -170,7 +171,8 @@ of the program and the outcomes were compared.
 \end{itemize}
 
 \subsection{Result}
-The program output was observed and all the register, memory and row buffer values were inspected for correctness manually. In each of the test case the expected outputs matched. The program blocked when necessary and executed parallely when blocking was not required.
+The program output was observed and all the register, memory and row buffer values were inspected for correctness manually. In each of the test case the expected outputs matched. The program blocked when necessary and executed parallely when blocking was not required.\\[0.2cm]
+The output logs of the test cases are available in the \verb|./tests/output| directory. The test cases were run with different configuration options and each test case's blocking and non blocking version is included.
 
 \section{Assumptions}
 \begin{itemize}
