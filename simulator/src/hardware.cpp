@@ -217,10 +217,9 @@ void Hardware::j(int jump) {
 
 void Hardware::beq(int src1, int src2, int jump) {
   is_valid_reg(src1, src2);
-
   if (registers[src1] == registers[src2]) {
     int current_idx = pc - program.begin();
-    j((current_idx + 1) * Hardware::BYTES + jump);
+    j((current_idx)*Hardware::BYTES + jump);
   }
 }
 
@@ -229,7 +228,7 @@ void Hardware::bne(int src1, int src2, int jump) {
 
   if (registers[src1] != registers[src2]) {
     int current_idx = pc - program.begin();
-    j((current_idx + 1) * Hardware::BYTES + jump);
+    j((current_idx)*Hardware::BYTES + jump);
   }
 }
 
