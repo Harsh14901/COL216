@@ -3,15 +3,12 @@
 
 #include <bits/stdc++.h>
 
+#include <dram.hpp>
 #include <structures.hpp>
 using namespace std;
 
-typedef int32_t hd_t;
 class Hardware {
  public:
-  //  TODO:
-  const static int MAX_MEMORY = 1 << 20;  // In Bytes
-  // const static int MAX_MEMORY = 2 << 10;  // In Bytes
   const static int REGISTER_NUM = 32;
   const static int SP_REG_ID = 29;
   const static int BITS = 32;
@@ -25,31 +22,30 @@ class Hardware {
   const static long HD_T_MIN = -2147483648;
 
   Hardware();
-  Hardware(vector<Instruction> program);
+  Hardware(vector<Instruction> program, int row_delay = 10, int col_delay = 2);
 
-  void print_instruction();
-  void print_contents();
-  void execute_current();
+  void execute_current(Stats& stats);
   void advance_pc();
   void terminate();
-  void start_execution();
-  Stats get_stats();
+  void start_execution(Stats& stats);
+  void set_blocking_mode(bool block);
 
  private:
   vector<hd_t> registers;
-  hd_t memory[MAX_MEMORY] = {0};
 
-  unsigned int mem_size;
   vector<Instruction> program;
   vector<Instruction>::iterator pc;
 
-  Stats stats;
+  Dram dram;
+  int blocking_reg = -1;
+  hd_t pending_value = -1;
+  bool blocking = false;
 
  protected:
   void is_valid_reg(int id);
   void is_valid_reg(int s1, int s2, int s3 = 0);
-  void is_valid_memory(hd_t* p);
   void check_overflow(long long val);
+  void check_blocking(Stats& stats);
   void add(int dst, int src1, int src2);
   void sub(int dst, int src1, int src2);
   void mul(int dst, int src1, int src2);
@@ -58,11 +54,10 @@ class Hardware {
   void beq(int src1, int src2, int jump);
   void bne(int src1, int src2, int jump);
   void j(int jump);
-  void lw(int dst, int src, int offset);
-  void sw(int src, int dst, int offset);
+  void lw(int dst, int src, int offset, Stats& stats);
+  void sw(int src, int dst, int offset, Stats& stats);
   void initialize_registers();
   void set_register(int dst, hd_t value);
-  void update_stats(string reg);
 };
 
 #endif

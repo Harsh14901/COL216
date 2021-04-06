@@ -1,8 +1,0 @@
-addi $2, $0, 10
-loop:
-addi $1, $1, 1
-beq $1, $2, exit
-j loop
-exit:
-addi $0, $0, 0
-

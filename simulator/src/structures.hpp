@@ -7,6 +7,8 @@
 #include <vector>
 
 using namespace std;
+typedef int32_t hd_t;
+
 class InvalidInstruction : public std::runtime_error {
  public:
   InvalidInstruction() : std::runtime_error("") {}
@@ -48,12 +50,23 @@ struct Branch {
   int pos;
 };
 
+struct Log {
+  pair<int, int> cycle_period;
+  string instruction = "";
+  vector<hd_t> registers;
+  map<int, hd_t> memory_updates;
+  map<int, hd_t> rowbuff_updates;
+  vector<string> remarks;
+
+  void print_verbose();
+  void print_registers();
+};
+
 struct Stats {
-  unordered_map<string, int> frequency;
   int clock_cycles = 0;
-  clock_t start_time;
-  clock_t end_time;
-  double get_execution_time();
+  int rowbuff_update_count = 0;
+  map<int, hd_t> updated_memory;
+  vector<Log> logs;
   void print_verbose();
 };
 
