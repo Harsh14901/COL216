@@ -3,8 +3,8 @@
 
 #include <bits/stdc++.h>
 
-#include <dram.hpp>
-#include <structures.hpp>
+#include "dram.hpp"
+#include "structures.hpp"
 using namespace std;
 
 class Hardware {

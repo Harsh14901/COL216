@@ -70,4 +70,7 @@ struct Stats {
   void print_verbose();
 };
 
+extern map<string, string> reverse_register_map;
+extern map<string, string> register_map;
+
 #endif

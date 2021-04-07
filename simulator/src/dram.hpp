@@ -3,7 +3,7 @@
 
 #include <bits/stdc++.h>
 
-#include <structures.hpp>
+#include "structures.hpp"
 
 using namespace std;
 typedef int32_t hd_t;

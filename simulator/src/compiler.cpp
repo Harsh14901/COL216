@@ -1,5 +1,6 @@
-#include <compiler.hpp>
-#include <hardware.hpp>
+#include "compiler.hpp"
+
+#include "hardware.hpp"
 
 std::vector<Branch> branches;
 
@@ -117,21 +118,16 @@ bip isValidNum(std::string s, int max_bytes) {
   return {is_num && (-limit <= val) && (val < limit), val};
 }
 
-bip getRegister(std::string reg) {
+bip getRegister(std::string original_register) {
   bip ans(false, 0);
-  if (reg == "") return ans;
-  std::string reg_val = reg.substr(1);
-  if (!isNum(reg_val)) return ans;
 
-  int val;
-  try {
-    val = stoi(reg_val);
-  } catch (std::invalid_argument e) {
-    throw InvalidArgument(reg_val + " is not an integer");
-  }
-  bool start_with_dollar = reg.at(0) == '$';
-  bool valid_reg_addr = 0 <= val && val < 32;
-  ans = std::make_pair(start_with_dollar && valid_reg_addr, val);
+  auto pos = register_map.find(original_register);
+  if (pos == register_map.end()) return ans;
+
+  std::string register_string = pos->second;
+  int reg_val = stoi(register_string.substr(1));
+
+  ans = {true, reg_val};
   return ans;
 }
 
