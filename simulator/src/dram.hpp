@@ -26,10 +26,10 @@ class Dram {
 
   hd_t get_mem_word(int addr, Stats& stats);
   void set_mem_word(int addr, hd_t val, Stats& stats);
+  pair<int, int> addr2rowcol(int addr);
 
  protected:
   void check_word_aligned(int addr);
-  pair<int, int> addr2rowcol(int addr);
   void row2buffer(int row, Stats& stats);
   void buffer2row(int& row, Stats& stats);
 };

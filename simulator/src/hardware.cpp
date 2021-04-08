@@ -6,13 +6,12 @@ void Hardware::initialize_registers() {
   registers[SP_REG_ID] = hd_t(Dram::MAX_MEMORY);
 }
 
-Hardware::Hardware() {
+Hardware::Hardware(DramDriver dram_driver) : dram_driver(dram_driver) {
   initialize_registers();
-  dram = Dram();
 }
 
-Hardware::Hardware(vector<Instruction> program, int row_delay, int col_delay)
-    : program(program) {
+Hardware::Hardware(DramDriver dram_driver, vector<Instruction> program)
+    : program(program), dram_driver(dram_driver) {
   auto program_size = program.size() * (BITS / 8);
 
   if (!(program_size <= Dram::MAX_MEMORY && program_size > 0)) {
@@ -22,8 +21,6 @@ Hardware::Hardware(vector<Instruction> program, int row_delay, int col_delay)
 
   initialize_registers();
   pc = this->program.begin();
-
-  dram = Dram(row_delay, col_delay);
 }
 
 void Hardware::set_blocking_mode(bool block) { blocking = block; }
@@ -95,29 +92,33 @@ void Hardware::execute_current(Stats& stats) {
 
 void Hardware::check_blocking(Stats& stats) {
   auto block = [&]() {
+    auto issue_time = stats.clock_cycles;
+    dram_driver.execute_all(stats);
+    if (issue_time + 1 > stats.clock_cycles) {
+      return;
+    }
+
     auto log = Log{};
-    log.cycle_period = make_pair(stats.clock_cycles + 1, dram.busy_until);
+    log.cycle_period = make_pair(issue_time + 1, stats.clock_cycles);
     log.remarks.push_back("Blocking on DRAM call to finish");
     log.instruction = pc->raw;
     stats.logs.push_back(log);
-    stats.clock_cycles = dram.busy_until;
-    if (this->blocking_reg != -1) {
-      this->set_register(this->blocking_reg, this->pending_value);
-      this->blocking_reg = -1;
-    }
+    // stats.clock_cycles = dram.busy_until;
+    // if (this->blocking_reg != -1) {
+    //   this->set_register(this->blocking_reg, this->pending_value);
+    //   this->blocking_reg = -1;
+    // }
   };
 
-  if (dram.busy_until <= stats.clock_cycles) {
-    return;
-  }
+  // if (dram.busy_until <= stats.clock_cycles) {
+  //   return;
+  // }
   if (this->blocking) {
     block();
     return;
   }
 
-  if (pc->op == Operator::LW || pc->op == Operator::SW) {
-    block();
-  } else if (blocking_reg != -1) {
+  if (blocking_reg != -1) {
     switch (pc->op) {
       case Operator::ADD:
       case Operator::SUB:
@@ -126,14 +127,26 @@ void Hardware::check_blocking(Stats& stats) {
         if (pc->arg1 == blocking_reg || pc->arg2 == blocking_reg ||
             pc->arg3 == blocking_reg) {
           block();
+          blocking_reg = -1;
         }
+
         break;
       case Operator::ADDI:
       case Operator::BEQ:
       case Operator::BNE:
         if (pc->arg1 == blocking_reg || pc->arg2 == blocking_reg) {
           block();
+          blocking_reg = -1;
         }
+
+        break;
+      case Operator::LW:
+      case Operator::SW:
+        if (pc->arg1 == blocking_reg || pc->arg3 == blocking_reg) {
+          block();
+          blocking_reg = -1;
+        }
+
         break;
       default:
         return;
@@ -162,7 +175,8 @@ void Hardware::start_execution(Stats& stats) {
       log.registers = registers;
     }
   }
-  stats.clock_cycles = max(stats.clock_cycles, dram.busy_until);
+  dram_driver.execute_all(stats);
+  // stats.clock_cycles = max(stats.clock_cycles, dram.busy_until);
 }
 
 void Hardware::is_valid_reg(int id) {
@@ -270,10 +284,11 @@ void Hardware::lw(int dst, int offset, int src, Stats& stats) {
   stats.logs.back().remarks.push_back("DRAM request issued");
 
   blocking_reg = dst;
-  pending_value = dram.get_mem_word(p, stats);
+  // pending_value = dram.get_mem_word(p, stats);
 
-  stats.logs.back().registers = registers;
-  stats.logs.back().registers[blocking_reg] = pending_value;
+  // stats.logs.back().registers = registers;
+  // stats.logs.back().registers[blocking_reg] = pending_value;
+  dram_driver.issue_read(p, &registers[dst], stats);
   stats.clock_cycles = clock_time;
 }
 void Hardware::sw(int src, int offset, int dst, Stats& stats) {
@@ -284,6 +299,7 @@ void Hardware::sw(int src, int offset, int dst, Stats& stats) {
   auto clock_time = stats.clock_cycles;
   stats.logs.back().remarks.push_back("DRAM request issued");
 
-  dram.set_mem_word(p, registers[src], stats);
+  dram_driver.issue_write(p, registers[src], stats);
+  // dram.set_mem_word(p, registers[src], stats);
   stats.clock_cycles = clock_time;
 }

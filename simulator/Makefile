@@ -65,7 +65,7 @@ OBJECTS		:= $(SOURCES:.cpp=.o)
 
 OUTPUTMAIN	:= $(call FIXPATH,$(OUTPUT)/$(MAIN))
 
-args := tests/input/load_and_store.in
+args := input/file
 
 all: clean $(OUTPUT) $(MAIN)
 	@echo Executing 'all' complete!

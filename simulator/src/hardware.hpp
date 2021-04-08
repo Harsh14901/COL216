@@ -3,8 +3,8 @@
 
 #include <bits/stdc++.h>
 
-#include "dram.hpp"
-#include "structures.hpp"
+#include <dram_driver.hpp>
+#include <structures.hpp>
 using namespace std;
 
 class Hardware {
@@ -21,8 +21,8 @@ class Hardware {
   const static long HD_T_MAX = 2147483647;
   const static long HD_T_MIN = -2147483648;
 
-  Hardware();
-  Hardware(vector<Instruction> program, int row_delay = 10, int col_delay = 2);
+  Hardware(DramDriver dram_driver);
+  Hardware(DramDriver dram_driver, vector<Instruction> program);
 
   void execute_current(Stats& stats);
   void advance_pc();
@@ -36,9 +36,8 @@ class Hardware {
   vector<Instruction> program;
   vector<Instruction>::iterator pc;
 
-  Dram dram;
+  DramDriver dram_driver;
   int blocking_reg = -1;
-  hd_t pending_value = -1;
   bool blocking = false;
 
  protected:

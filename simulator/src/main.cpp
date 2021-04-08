@@ -11,19 +11,21 @@ int main(int argc, char* argv[]) {
   cout << "[+] Program compiled successfully !" << endl;
   cout << "[+] Executing program ..." << endl;
 
-  Hardware mips;
+  Dram dram;
 
   if (argc >= 4) {
     auto row_delay = stoi(argv[2]);
     auto col_delay = stoi(argv[3]);
-    mips = Hardware(ins, row_delay, col_delay);
+    dram = Dram(row_delay, col_delay);
   } else if (argc >= 3) {
     auto row_delay = stoi(argv[2]);
-    mips = Hardware(ins, row_delay);
+    dram = Dram(row_delay);
 
   } else {
-    mips = Hardware(ins);
+    dram = Dram();
   }
+  auto driver = DramDriver(dram);
+  auto mips = Hardware(dram, ins);
 
   if (argc >= 5 && stoi(argv[4]) == 1) {
     cout << "[+] Executing in BLOCKING MODE" << endl;

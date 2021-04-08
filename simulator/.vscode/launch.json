@@ -5,7 +5,7 @@
     "name": "Debug",
     "type": "cppdbg",
     "request": "launch",
-    "args": ["tests/bne.txt"],
+    "args": ["input/file"],
     "stopAtEntry": false,
     "cwd": "${workspaceFolder}",
     "environment": [],
