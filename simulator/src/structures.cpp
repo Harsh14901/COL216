@@ -55,7 +55,11 @@ void Log::print_registers() {
   cout << "[#] Register contents -" << endl;
   auto n = registers.size() / 2;
   for (int i = 0; i < n; i++) {
-    printf("\t%2d : %#010x\t\t%ld : %#010x\n", i, registers[i], i + n,
+    // printf("\t%2d : %#010x\t\t%ld : %#010x\n", i, registers[i], i + n,
+    //        registers[i + n]);
+    printf("\t%6s : %10d\t\t%6s : %10d\n",
+           reverse_register_map["$" + to_string(i)].c_str(), registers[i],
+           reverse_register_map["$" + to_string(i + n)].c_str(),
            registers[i + n]);
   }
 }

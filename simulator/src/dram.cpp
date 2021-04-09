@@ -7,10 +7,12 @@ Dram::Dram(int row_ad, int col_ad)
 
 void Dram::row2buffer(int row, Stats& stats) {
   auto log = Log{};
-  log.cycle_period =
-      make_pair(stats.clock_cycles + 1, stats.clock_cycles + ROW_ACCESS_DELAY);
+  log.cycle_period = {busy_until - ROW_ACCESS_DELAY - COL_ACCESS_DELAY + 1,
+                      busy_until - COL_ACCESS_DELAY};
+
+  // make_pair(stats.clock_cycles + 1, stats.clock_cycles + ROW_ACCESS_DELAY);
   log.remarks.push_back("DRAM: activating row " + to_string(row));
-  stats.clock_cycles += ROW_ACCESS_DELAY;
+  // stats.clock_cycles += ROW_ACCESS_DELAY;
   stats.rowbuff_update_count++;
   stats.logs.push_back(log);
 
@@ -18,17 +20,19 @@ void Dram::row2buffer(int row, Stats& stats) {
   active_row = row;
 }
 
+int Dram::get_active_row() { return active_row; }
+
 void Dram::buffer2row(int& row, Stats& stats) {
   if (row == -1) {
     return;
   }
 
   auto log = Log{};
-  log.cycle_period =
-      make_pair(stats.clock_cycles + 1, stats.clock_cycles + ROW_ACCESS_DELAY);
+  log.cycle_period = {start_from, start_from + ROW_ACCESS_DELAY - 1};
+  // make_pair(stats.clock_cycles + 1, stats.clock_cycles + ROW_ACCESS_DELAY);
   log.remarks.push_back("DRAM: flushing row buffer to memory for row: " +
                         to_string(row));
-  stats.clock_cycles += ROW_ACCESS_DELAY;
+  // stats.clock_cycles += ROW_ACCESS_DELAY;
 
   for (int i = 0; i < Dram::NUM_COLS; i++) {
     if (memory[row][i] != row_buff[i]) {
@@ -38,8 +42,9 @@ void Dram::buffer2row(int& row, Stats& stats) {
     memory[row][i] = row_buff[i];
   }
   stats.logs.push_back(log);
+  // active_row = row;
 
-  row = -1;
+  // row = -1;
 }
 
 void Dram::check_word_aligned(int addr) {
@@ -60,6 +65,20 @@ pair<int, int> Dram::addr2rowcol(int addr) {
   return make_pair(row, col);
 }
 
+void Dram::issue_request(int addr, Stats& stats) {
+  int new_active_row = addr2rowcol(addr).first;
+  start_from = stats.clock_cycles;
+  busy_until = start_from + COL_ACCESS_DELAY - 1;
+  if (active_row != new_active_row) {
+    busy_until += ROW_ACCESS_DELAY;
+    if (active_row != -1) {
+      busy_until += ROW_ACCESS_DELAY;
+    }
+  }
+
+  // active_row = new_active_row;
+}
+
 hd_t Dram::get_mem_word(int addr, Stats& stats) {
   auto point = addr2rowcol(addr);
 
@@ -71,11 +90,11 @@ hd_t Dram::get_mem_word(int addr, Stats& stats) {
   stats.logs.push_back(Log{});
   auto& log = stats.logs.back();
 
-  log.cycle_period =
-      make_pair(stats.clock_cycles + 1, stats.clock_cycles + COL_ACCESS_DELAY);
+  log.cycle_period = {busy_until - COL_ACCESS_DELAY + 1, busy_until};
+  // make_pair(stats.clock_cycles + 1, stats.clock_cycles + COL_ACCESS_DELAY);
   log.remarks.push_back("DRAM: Read from row buffer @ " + to_string(addr));
-  stats.clock_cycles += COL_ACCESS_DELAY;
-  busy_until = stats.clock_cycles;
+  // stats.clock_cycles += COL_ACCESS_DELAY;
+  // busy_until = stats.clock_cycles;
   return row_buff[point.second];
 }
 
@@ -88,16 +107,16 @@ void Dram::set_mem_word(int addr, hd_t val, Stats& stats) {
 
   auto log = Log{};
 
-  log.cycle_period =
-      make_pair(stats.clock_cycles + 1, stats.clock_cycles + COL_ACCESS_DELAY);
+  log.cycle_period = {busy_until - COL_ACCESS_DELAY + 1, busy_until};
+  // make_pair(stats.clock_cycles + 1, stats.clock_cycles + COL_ACCESS_DELAY);
 
   log.rowbuff_updates[addr] = val;
   stats.updated_memory[addr] = val;
 
   log.remarks.push_back("DRAM: Writing to row buffer @ " + to_string(addr));
-  stats.clock_cycles += COL_ACCESS_DELAY;
+  // stats.clock_cycles += COL_ACCESS_DELAY;
   stats.rowbuff_update_count += 1;
   stats.logs.push_back(log);
-  busy_until = stats.clock_cycles;
+  // busy_until = stats.clock_cycles;
   row_buff[point.second] = val;
 }

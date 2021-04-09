@@ -37,14 +37,17 @@ class Hardware {
   vector<Instruction>::iterator pc;
 
   DramDriver dram_driver;
-  int blocking_reg = -1;
+
+  // int blocking_reg = -1;
+  int blocked_register = -1;
+  map<int, int> blocking_registers;
   bool blocking = false;
 
  protected:
   void is_valid_reg(int id);
   void is_valid_reg(int s1, int s2, int s3 = 0);
   void check_overflow(long long val);
-  void check_blocking(Stats& stats);
+  vector<int> get_blocked_registers(Stats& stats);
   void add(int dst, int src1, int src2);
   void sub(int dst, int src1, int src2);
   void mul(int dst, int src1, int src2);

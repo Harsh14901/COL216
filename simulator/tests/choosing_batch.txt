@@ -1,0 +1,11 @@
+lw $s0, 100($zero)
+lw $s1, 1024($zero)
+lw $s2, 2048($zero)
+
+addi $a0, $s2, 5
+loop:
+  addi $t0, $t0, 1
+  beq $t0, $a0, exit
+  j loop
+exit:
+

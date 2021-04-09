@@ -20,13 +20,16 @@ class Dram {
   const static int MAX_MEMORY = sizeof(memory);  // In bytes
   int ROW_ACCESS_DELAY;
   int COL_ACCESS_DELAY;
-  int busy_until = 0;
+  int busy_until = -1;
+  int start_from = -1;
 
   Dram(int row_access_delay = 10, int col_access_delay = 2);
 
+  void issue_request(int addr, Stats& stats);
   hd_t get_mem_word(int addr, Stats& stats);
   void set_mem_word(int addr, hd_t val, Stats& stats);
   pair<int, int> addr2rowcol(int addr);
+  int get_active_row();
 
  protected:
   void check_word_aligned(int addr);
