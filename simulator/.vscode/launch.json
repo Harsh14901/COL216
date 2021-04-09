@@ -5,7 +5,7 @@
     "name": "Debug",
     "type": "cppdbg",
     "request": "launch",
-    "args": ["tests/trial1.txt"],
+    "args": ["tests/trial.txt"],
     "stopAtEntry": false,
     "cwd": "${workspaceFolder}",
     "environment": [],

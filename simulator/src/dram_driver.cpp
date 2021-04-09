@@ -23,39 +23,6 @@ void DramDriver::issue_read(int addr, hd_t* dst, Stats& stats, int dst_reg) {
   queue_request(req);
 }
 
-// q_t::iterator DramDriver::execute_pending_for_register(Stats& stats,
-//                                                        hd_t blocked_register)
-//                                                        {
-//   q_t::iterator temp_start, temp_end;
-//   for (; temp_start != req_queue.end(); temp_start++) {
-//     hd_t* dst = (*temp_start).dst;
-//     if (dst != nullptr && *dst == blocked_register) break;
-//   }
-//   temp_end = execute_pending(temp_start, req_queue.end(), stats);
-//   req_queue.erase(temp_start, temp_end);
-//   // TODO is it correct
-
-//   return temp_end;
-// }
-
-// q_t::iterator DramDriver::execute_pending(q_t::iterator start_it,
-//                                           q_t::iterator end_it, Stats& stats,
-//                                           bool exec_all) {
-//   auto before_time = stats.clock_cycles;
-//   for (start_it; start_it != end_it; start_it++) {
-//     auto req_time = max(start_it->timestamp, dram.busy_until);
-//     if (!exec_all && req_time >= before_time) {
-//       break;
-//     }
-//     stats.clock_cycles = req_time;
-//     execute_request(*start_it, stats);
-//   }
-//   if (!exec_all) {
-//     stats.clock_cycles = before_time;
-//   }
-//   return start_it;
-// }
-
 bool DramDriver::req_queue_not_empty() { return req_queue.size() > 0; }
 
 void DramDriver::issue_queue_requests(Stats& stats) {
@@ -63,11 +30,6 @@ void DramDriver::issue_queue_requests(Stats& stats) {
     return;
   }
   dram.issue_request(curr->addr, stats);
-
-  // auto next = curr;
-  // next++;
-  // req_queue.erase(curr);
-  // curr = next;
 }
 
 void DramDriver::goto_blocking_request_batch(vector<int> blocked_regs) {
@@ -111,29 +73,27 @@ void DramDriver::execute_current_in_queue(Stats& stats,
   }
 }
 
-// void DramDriver::update_queue(Stats& stats) {
-//   if (req_queue.empty()) {
-//     return;
-//   }
+void DramDriver::delete_stranded_SW(Request& request,
+                                    q_t::reverse_iterator reverse_it,
+                                    q_t::iterator forward_it) {
+  auto it = forward_it;
+  for (; it != req_queue.end(); it++) {
+    if (it->addr != forward_it->addr) return;
+    if (it->dst != nullptr && it != forward_it) return;
+    if (it->dst == nullptr) break;
+  }
+  if (it == req_queue.end()) return;
+  auto helper_it = forward_it;
+  auto it2 = reverse_it;
+  for (; it2 != req_queue.rend(); it2++, helper_it--) {
+    if (it2->addr != forward_it->addr) return;
+    if (it2->dst != nullptr && it2 != reverse_it) return;
+    if (it2->dst == nullptr && helper_it != curr) break;
+  }
+  if (it2 == req_queue.rend()) return;
 
-//   auto issue_time = stats.clock_cycles;
-
-//   auto it = execute_pending(curr, req_queue.end(), stats);
-
-//   if (it == req_queue.end()) {
-//     auto it2 = execute_pending(req_queue.begin(), curr, stats);
-//     req_queue.erase(req_queue.begin(), it2);
-//     req_queue.erase(curr, it);
-//     curr = req_queue.begin();
-//   } else {
-//     req_queue.erase(curr, it);
-//     curr = it;
-//   }
-
-//   if (curr == req_queue.end()) {
-//     curr = req_queue.begin();
-//   }
-// }
+  req_queue.erase(helper_it);
+}
 
 void DramDriver::queue_request(Request& request) {
   if (req_queue.empty()) {
@@ -141,12 +101,41 @@ void DramDriver::queue_request(Request& request) {
     curr = req_queue.begin();
     return;
   }
-  auto prev_it = req_queue.end();
-  auto it = req_queue.rbegin();
+
   int request_row = dram.addr2rowcol(request.addr).first;
   q_t::iterator inserted;
 
-  for (it; it != req_queue.rend(); it++) {
+  if (request.dst == nullptr) {  // is SW
+    auto helper_it = req_queue.end();
+    auto reverse_it = req_queue.rbegin();
+    for (; reverse_it != req_queue.rend(); reverse_it++) {
+      helper_it--;
+      if (reverse_it->addr == request.addr) {
+        if (reverse_it->dst == nullptr) {  // is SW
+          if (helper_it == curr) continue;
+
+          req_queue.erase(helper_it);
+        }  // is LW
+        break;
+      }
+    }
+  } else {  // is LW
+    auto reverse_it = req_queue.rend();
+    for (auto forward_it = req_queue.begin(); forward_it != req_queue.end();
+         forward_it++) {
+      reverse_it--;
+      if (forward_it->dst_reg == request.dst_reg && forward_it != curr) {
+        delete_stranded_SW(request, reverse_it, forward_it);
+        req_queue.erase(forward_it);
+        break;
+      }
+    }
+  }
+
+  auto prev_it = req_queue.end();
+  auto it = req_queue.rbegin();
+
+  for (it = req_queue.rbegin(); it != req_queue.rend(); it++) {
     auto it_row = dram.addr2rowcol(it->addr).first;
     if (it_row <= request_row) {
       inserted = req_queue.insert(prev_it, request);
@@ -158,20 +147,13 @@ void DramDriver::queue_request(Request& request) {
     inserted = req_queue.insert(req_queue.begin(), request);
   }
 
-  int inserted_row = dram.addr2rowcol(inserted->addr).first;
-  int curr_row = dram.addr2rowcol(curr->addr).first;
+  // int inserted_row = dram.addr2rowcol(inserted->addr).first;
+  // int curr_row = dram.addr2rowcol(curr->addr).first;
 
   // ???
   // if (inserted_row == dram_row && curr_row != dram_row) {
   //   curr = inserted;
   // }
-}
-
-void DramDriver::initialize_request(Request& req, Stats& stats) {
-  // if (dram.addr2rowcol(req.addr).first == dram.get_active_row()){
-  //   dram.busy_until = dram
-  // }
-  // dram.start_operation(req)
 }
 
 void DramDriver::execute_request(Request& req, Stats& stats) {
@@ -183,23 +165,3 @@ void DramDriver::execute_request(Request& req, Stats& stats) {
   }
   dram_row = dram.addr2rowcol(req.addr).first;
 }
-
-// void DramDriver::execute_all(Stats& stats, hd_t blocked_register) {
-//   auto issue_time = stats.clock_cycles;
-//   auto initial_pos = curr;
-
-//   if (blocked_register != -1) {
-//     auto it = execute_pending(curr, req_queue.end(), stats);
-//     req_queue.erase(curr, it);
-
-//     curr = execute_pending_for_register(stats, blocked_register);
-
-//   } else {
-//     execute_pending(curr, req_queue.end(), stats, true);
-//     execute_pending(req_queue.begin(), curr, stats, true);
-
-//     req_queue.clear();
-//     curr = req_queue.begin();
-//   }
-//   stats.clock_cycles = max(issue_time, dram.busy_until);
-// }

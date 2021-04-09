@@ -1,6 +1,7 @@
+#include <iostream>
+
 #include "compiler.hpp"
 #include "hardware.hpp"
-#include <iostream>
 
 using namespace std;
 int main(int argc, char* argv[]) {

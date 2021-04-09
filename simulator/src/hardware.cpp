@@ -109,7 +109,7 @@ vector<int> Hardware::get_blocked_registers(Stats& stats) {
       current_blocked_registers = {pc->arg1, pc->arg2};
       break;
     case Operator::LW:
-      current_blocked_registers = {pc->arg1, pc->arg3};
+      current_blocked_registers = {pc->arg3};
       break;
     case Operator::SW:
       current_blocked_registers = {pc->arg1, pc->arg3};
@@ -155,6 +155,7 @@ void Hardware::start_execution(Stats& stats) {
       stats.clock_cycles--;
     }
   }
+  stats.logs.back().registers = registers;
   // dram_driver.execute_all(stats);
 }
 

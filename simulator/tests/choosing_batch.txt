@@ -8,4 +8,4 @@ loop:
   beq $t0, $a0, exit
   j loop
 exit:
-
+addi $t7, $zero, 0
