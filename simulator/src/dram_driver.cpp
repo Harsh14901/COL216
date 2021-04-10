@@ -14,13 +14,13 @@ bool DramDriver::is_blocking_reg(int reg) {
 void DramDriver::issue_write(int addr, hd_t val, Stats& stats) {
   auto req = Request{addr, val, stats.clock_cycles};
   // update_queue(stats);
-  queue_request(req);
+  enqueue_request(req);
 }
 
 void DramDriver::issue_read(int addr, hd_t* dst, Stats& stats, int dst_reg) {
   auto req = Request{addr, -1, stats.clock_cycles, dst, dst_reg};
   // update_queue(stats);
-  queue_request(req);
+  enqueue_request(req);
 }
 
 bool DramDriver::req_queue_not_empty() { return req_queue.size() > 0; }
@@ -32,12 +32,50 @@ void DramDriver::issue_queue_requests(Stats& stats) {
   dram.issue_request(curr->addr, stats);
 }
 
-void DramDriver::goto_blocking_request_batch(vector<int> blocked_regs) {
+void DramDriver::goto_blocking_request_address(vector<int> blocked_regs) {
+  auto prev_curr = curr;
+  auto prev_curr_row = dram.addr2rowcol(prev_curr->addr).first;
+
+  q_t::iterator blocked_register_request = curr;
+
+  for (; blocked_register_request != req_queue.end();
+       blocked_register_request++) {
+    auto temp_row = dram.addr2rowcol(blocked_register_request->addr).first;
+
+    if (temp_row != prev_curr_row) {
+      return;
+    }
+    if (count(blocked_regs.begin(), blocked_regs.end(),
+              blocked_register_request->dst_reg)) {
+      q_t::iterator to_shift = prev_curr;
+      for (; to_shift != req_queue.end() &&
+             dram.addr2rowcol(to_shift->addr).first == prev_curr_row;
+           to_shift++) {
+        Request req = *to_shift;
+        if (to_shift->addr == blocked_register_request->addr) {
+          auto temp = to_shift;
+          temp--;
+
+          req_queue.erase(to_shift);
+          to_shift = temp;
+
+          curr = req_queue.insert(curr, req);
+        }
+      }
+
+      return;
+    }
+  }
+}
+
+void DramDriver::goto_blocking_request_row(vector<int> blocked_regs) {
   q_t::iterator temp = req_queue.begin();
   for (; temp != req_queue.end(); temp++) {
     if (count(blocked_regs.begin(), blocked_regs.end(), temp->dst_reg)) {
       q_t::iterator start_of_batch = temp;
-      while (start_of_batch->addr == temp->addr) start_of_batch--;
+      while (dram.addr2rowcol(start_of_batch->addr).first ==
+             dram.addr2rowcol(temp->addr).first)
+        start_of_batch--;
       curr = ++start_of_batch;
       return;
     }
@@ -55,6 +93,8 @@ void DramDriver::execute_current_in_queue(Stats& stats,
   if (dram.busy_until + 1 == stats.clock_cycles) {
     execute_request(*curr, stats);
 
+    int deleted_curr_addr = curr->addr;
+
     auto next = curr;
     next++;
     if (next == req_queue.end()) next = req_queue.begin();
@@ -62,8 +102,13 @@ void DramDriver::execute_current_in_queue(Stats& stats,
     curr = next;
 
     auto [next_row, _] = dram.addr2rowcol(curr->addr);
+
     if (dram.get_active_row() != next_row) {
-      goto_blocking_request_batch(blocked_regs);
+      goto_blocking_request_row(blocked_regs);
+    }
+
+    if (curr->addr != deleted_curr_addr) {
+      goto_blocking_request_address(blocked_regs);
     }
   }
 
@@ -95,7 +140,7 @@ void DramDriver::delete_stranded_SW(Request& request,
   req_queue.erase(helper_it);
 }
 
-void DramDriver::queue_request(Request& request) {
+void DramDriver::enqueue_request(Request& request) {
   if (req_queue.empty()) {
     req_queue.push_back(request);
     curr = req_queue.begin();
@@ -160,7 +205,7 @@ void DramDriver::execute_request(Request& req, Stats& stats) {
   if (req.dst == nullptr) {
     dram.set_mem_word(req.addr, req.val, stats);
   } else {
-    auto val = dram.get_mem_word(req.addr, stats);
+    auto val = dram.get_mem_word(req.addr, req.dst_reg, stats);
     *req.dst = val;
   }
   dram_row = dram.addr2rowcol(req.addr).first;

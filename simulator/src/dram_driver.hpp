@@ -28,9 +28,10 @@ class DramDriver {
   q_t::iterator execute_pending(q_t::iterator start_it, q_t::iterator end_it,
                                 Stats& stats, bool exec_all = false);
   void execute_request(Request& req, Stats& stats);
-  void queue_request(Request& request);
+  void enqueue_request(Request& request);
   void issue_queue_requests(Stats& stats);
-  void goto_blocking_request_batch(vector<int> blocked_regs);
+  void goto_blocking_request_row(vector<int> blocked_regs);
+  void goto_blocking_request_address(vector<int> blocked_regs);
   void delete_stranded_SW(Request& request, q_t::reverse_iterator reverse_it,
                           q_t::iterator helper_it);
 

@@ -79,7 +79,7 @@ void Dram::issue_request(int addr, Stats& stats) {
   // active_row = new_active_row;
 }
 
-hd_t Dram::get_mem_word(int addr, Stats& stats) {
+hd_t Dram::get_mem_word(int addr, int dst_reg, Stats& stats) {
   auto point = addr2rowcol(addr);
 
   if (active_row != point.first) {
@@ -92,7 +92,10 @@ hd_t Dram::get_mem_word(int addr, Stats& stats) {
 
   log.cycle_period = {busy_until - COL_ACCESS_DELAY + 1, busy_until};
   // make_pair(stats.clock_cycles + 1, stats.clock_cycles + COL_ACCESS_DELAY);
-  log.remarks.push_back("DRAM: Read from row buffer @ " + to_string(addr));
+  log.remarks.push_back(
+      "DRAM: Read " + to_string(row_buff[point.second]) +
+      " from row buffer @ " + to_string(addr) +
+      " to register: " + reverse_register_map["$" + to_string(dst_reg)]);
   // stats.clock_cycles += COL_ACCESS_DELAY;
   // busy_until = stats.clock_cycles;
   return row_buff[point.second];
@@ -113,7 +116,8 @@ void Dram::set_mem_word(int addr, hd_t val, Stats& stats) {
   log.rowbuff_updates[addr] = val;
   stats.updated_memory[addr] = val;
 
-  log.remarks.push_back("DRAM: Writing to row buffer @ " + to_string(addr));
+  log.remarks.push_back("DRAM: Writing " + to_string(val) +
+                        " to row buffer @ " + to_string(addr));
   // stats.clock_cycles += COL_ACCESS_DELAY;
   stats.rowbuff_update_count += 1;
   stats.logs.push_back(log);
