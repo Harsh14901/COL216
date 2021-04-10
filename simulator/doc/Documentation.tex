@@ -44,7 +44,7 @@
 
 \pagestyle{fancy}
 \fancyhf{}
-\chead{MIPS simulator with DRAM timing model}
+\chead{Memory Request Ordering}
 \rfoot{\thepage}
 
 \begin{document}
@@ -55,8 +55,8 @@
     \Large INDIAN INSTITUTE OF TECHNOLOGY DELHI\\[1.0 cm]
     \LARGE COL216\\[0.1cm]
     \Large \underline{Report}\\
-    \large \[Minor\]
-    \LARGE \textbf{MIPS simulator with DRAM timing model}
+    \large \[Assignment-4\]
+    \LARGE \textbf{Memory Request Ordering}
 
 
     \rule{\textwidth}{0.2 mm} \\[0.1cm]
@@ -70,7 +70,8 @@
     \begin{flushright}
 
         \begin{tabular}{c|c}
-            \small {Harsh Agrawal} & \small {2019CS10431} \\
+            \small {Harsh Agrawal}      & \small {2019CS10431} \\
+            \small {Saptarshi Dasgupta} & \small {2019CS50447} \\
         \end{tabular}
     \end{flushright}
 \end{titlepage}
@@ -78,7 +79,7 @@
 \newpage
 
 \section{Modules}
-We implemented a simulator in \verb|C++| for executing MIPS instructions from assembly code. The program was divided into \verb|compiler| ,\verb|hardware|, and a \verb|DRAM| module.
+We implemented a simulator in \verb|C++| for executing MIPS instructions from assembly code. The program was divided into \verb|compiler| ,\verb|hardware|, \verb|DRAM| and a \verb|DramDriver| module.
 These modules perform different functions as outlined below
 \subsection{Compiler}
 \begin{itemize}
@@ -100,89 +101,64 @@ These modules perform different functions as outlined below
     \item It contains a row buffer to simulate an actual \verb|DRAM|. A row is first copied into this row buffer and the module uses the buffer as a write-back cache for further read and write operations.
 \end{itemize}
 
+\subsection{DramDriver}
+\begin{itemize}
+    \item A \verb|DramDriver| module is implemented to capture all \verb|DRAM| requests and order them in a queue according to some pre determined heuristics.
+    \item The driver recieves the requests from hardware and issues them to \verb|DRAM| in a particular order to maximize clock cycle utilization.
+    \item The hardware can also send a blocking call to the driver instructing it to execute all requests until a certain condition is met.
+\end{itemize}
+
 \section{Approach}
 
-The approach used to simulate the DRAM timing model is described in this section
-
-\subsection{DRAM}
+The approach used to simulate the DRAM memory reordering is described in this section
 \begin{itemize}
-    \item The \verb|DRAM| maintains a \verb|2D| array to simulate the memory and stores a row buffer array to simulate the cache memory.
-    \item In case of a \verb|read| operation if the memory address belongs to the row stored in the row buffer, a column access can yield the result.
-          However in the other case, the row buffer needs to be written back to the actual memory consuming a time equal to the row delay of DRAM. The new row is loaded into the row buffer and the address is then served from row buffer using column access.
-    \item Similarly, the \verb|write| operation involves writing to the row buffer if the row of the address matches the row-buffer else a write back is required.
+    \item The \verb|DramDriver| orders the memory requests to minimize the number of row buffer reloads required. Our approach orders the requests of the same row together and another row is chosen only when there is no more request of a given row.
+    \item To ensure correctness we have not changed the order of requests of the same address. This ensures that requests of a particular address are always issued in the same order as they were executed by the processor.
+    \item The driver also supports blocking on a particular register value. This blocks the processor and instructs the driver to complete all requests pending for the blocking register.
+    \item The DRAM requests are issued asynchronously and the processor always executes in non blocking mode, since reordering of requests is not possible in blocking mode.
+    \item An optimization was introduced that allowed the driver to overwrite multiple requests for the same address. For example if there are two consecutive write requests to a particular memory address then the first request is deleted provided the same memory address was not used to load another register in between.
+    \item Similarly when two consecutive read requests are issued for the same register consecutively, the first request is delted provided the register was not used in between for any instruction.
+    \item Another optimization is introduced which selects the next batch of requests after all requests on a row are exhausted depending on the blocking registers involved in each batch. The batch with a blocking register is preferred and executed first.
 \end{itemize}
 
-\subsubsection{Advantages}
+\subsection{Advantages}
 \begin{itemize}
-    \item Abstracting out the \verb|DRAM| methods in a separate module helped modularise the code and an easier implementation of the \verb|lw, sw| instructions
-    \item The row buffer in \verb|DRAM| helps to reduce the access time of memory addresses by caching an entire row. This reduces the time taken to access nearby memory addresses consecutively.
-    \item Implementing \verb|DRAM| in the form of a \verb|2D| array helped implement a cache mechanism. Storing the data linearly increases the complexity by deciding on the appropriate data to be cached for better performance.
+    \item The approach ensures that the number of row buffer reloads required is minimized, to reduce the overhead of writing back and loading the row buffer.
+    \item The approach always ensures it is not slower than no reordering. We have also maintained correctness by preventing reordering in cases where reordering can yield incorrect results.
+    \item The asynchronous nature of DRAM requests allows us to exploit the non blocking functionality of the processor and DRAM thus reducing the clock cycle times required for execution of a program.
+    \item The optimizations to replace requests pertaining to the same addresses or registers eliminate redundant requests thus further reducing the runtime without affecting the correctness.
+    \item The optimization to select the next batch of request based on the blocking registers helps to reduce the delay of processor clock cycles when a blocking register is encountered.
 \end{itemize}
-\subsubsection{Disadvantages}
+\subsection{Disadvantages}
 \begin{itemize}
-    \item Access of several distant memory addresses consecutively leads to an additional overhead of writing back the memory buffer and reloading it with a fresh row.
-          Lots of cache misses can cause the implementation to be slower than a standard no-cache implementation.
-    \item Copying a row into a row buffer seems like an unnecessary overhead as \verb|C++| already provides constant time random access to any element of the \verb|2D| array.
-          Although random access in a \verb|2D| array could speed up our simulator significantly but it would foreshadow the actual hardware implementation of the \verb|DRAM|.
-    \item The row buffer implemented as a write back cache does not include a dirty bit for the cache. If the dirty bit is unset the DRAM can skip writing back the row buffer to memory.
+    \item The reordering can cause processor to block for certain requests that are irrelevant to the blocking instruction. This results in a tradeoff between the DRAM row buffer access time and processor blocked time.
+    \item While selecting the appropriate batch of requests for a given row we select it based on the blocking registers involved in each batch. However this may/may not result in an efficient execution workflow for every program as illustrated in one of our test cases.
 \end{itemize}
-
-\subsection{Non Blocking processor}
-A non blocking processor does not block on data that requires a bus read/write. In this case the \verb|lw, sw| instructions
-are responsible for storing and loading from the main memory(\verb|DRAM|). This involves a data transfer over the bus and the processor need not block on
-bus operation to execute instructions that only require register computations.
-\subsubsection{Specifications}
-\begin{itemize}
-    \item When data is loaded/stored from/to the main memory the processor always attempts to execute the next instruction in the cycle immediately following the issue of a DRAM request
-    \item If the next instruction does not involve any register used in the \verb|lw, sw| instructions, the instruction is safely executed.
-    \item If the next instruction is itself a \verb|lw, sw| instruction the processor blocks until the previous bus transfer is complete, irrespective of the registers and memory addresses involved.
-    \item If the next instruction involves a register that is to be loaded from the memory, the processor blocks, waiting for the bus transfer to complete.
-    \item However if the register was simply used to store a value into the main memory; it is not necessary to block, the processor continues execution.
-\end{itemize}
-
-\subsubsection{Advantages}
-\begin{itemize}
-    \item A non blocking processor reduces the number of clock cycles to execute a set of instructions, reducing the average \verb|CPI|.
-          Instructions invloving a bus transfer do not block enabling other instructions to be executed.
-    \item The non blocking processor is very efficient for programs that consist majorly of register computations and less frequent bus transfers. It allows execution of \verb|lw, sw| instructions in a single clock cycle which would otherwise consume large clock cycles in blocking mode.
-    \item The processor blocks on instructions that use registers to be loaded from a pending \verb|lw| call. This ensures that the program output matches with a program executed in blocking mode.
-    \item The optimization to not block on register used as the source of \verb|sw| instruction reduces unnecessary blocking of the processor.
-    \item The approach can never be slower than a blocking program, i.e. there are no additional overheads introduced in the implementation.
-\end{itemize}
-
-\subsubsection{Disadvantages}
-\begin{itemize}
-    \item The approach is equivalent to a blocking program in case several \verb|lw, sw| instructions are executed consecutively.
-    \item The approach does not group consecutive \verb|lw, sw| instructions that are unrelated to each other as a single parallel instruction, instead it waits for each one of them to complete before the next can be executed.
-    \item A further optimization could help in case a register is consecutively loaded from \verb|lw| instruction followed by a register operation. The \verb|lw| instruction could be eliminated completely as the next register operation overwrites any value loaded from the memory.
-    \item The memory accesses could be rearranged to always access the most nearby address thus reducing the additional overheads incurred by cache misses in \verb|DRAM|. This involves reordering of unrelated instructions.
-\end{itemize}
-
 \section{Testing}
 
 The testing method was completely manual. The test cases written manually are included in the \verb|./tests/input| directory. The test cases were run with different parameters
 of the program and the outcomes were compared.
 \begin{itemize}
-    \item \verb|load_and_store.in| : This test case includes consecutive load and store instructions with different offsets to test the correctness of the \verb|DRAM| implementation.
-    \item \verb|load_and_use.in| : This test case loads a value from the memory and uses it in the next instruction. This tests whether the program blocks for pending load instruction when a register is to be used.
-    \item \verb|load_continuous.in| : This test case was designed to execute \verb|lw| instructions in a single clock cycle. This test case invloves multiple unrlated arithmetic operations after a load instruction. This test cases whether the program does not block when not necessary.
-    \item \verb|store_and_use.in| : This test case stores value from a register to the main memory and then uses it in the next operation. Here no blocking is required and the register value is safe to use without blocking for \verb|sw| to complete.
-    \item \verb|store_continuous.in| : This test cases executes multiple arithmetic operations after each \verb|sw| instruction and checks wheter \verb|sw| are executed in a single clock cycle.
+    \item \verb|alternate_load_store.txt| : This test case includes alternate load and store instructions with different offsets to test the correctness of the \verb|DRAM| implementation.
+    \item \verb|lw_hell.txt| : This test case loads multiple values from the memory in the same register. This tests our optimization of deleting previous requests when same register is involved.
+    \item \verb|sw_hell.txt| : This test case stores multiple values into the memory in the same address. This tests our optimization of deleting previous requests when same address is involved.
+    \item \verb|multiple_sw.txt| : This file tests elimination of redundant instructions that involve the same address and the same register.
+    \item \verb|choosing_batch.txt| : This file tests our second optimization of choosing the batch of requests based on the blocking registers involved.
+    \item \verb|memory_skips.txt|: This test case issues multiple read/write requests to the driver with each successive request differing in the row of the address involved. This tests the reordering of the requests in the appropriate manner to reduce row buffer reloads.
 \end{itemize}
 
 \subsection{Result}
 The program output was observed and all the register, memory and row buffer values were inspected for correctness manually. In each of the test case the expected outputs matched. The program blocked when necessary and executed parallely when blocking was not required.\\[0.2cm]
-The output logs of the test cases are available in the \verb|./tests/output| directory. The test cases were run with different configuration options and each test case's blocking and non blocking version is included.
+The output logs of the test cases are available in the \verb|./tests/output| directory. The test cases were run with different configuration options.
 
 \section{Assumptions}
 \begin{itemize}
     \item We have assumed that the maximum memory available to any user program is $2^{20}$ bytes. This does not include the memory required for storing instructions.
-    \item We have assumed 32 registers for MIPS each of them storing 32 bits. We have hardwired the register \verb|$0| to the value $0$ as is the case in MIPS hardware. We have also restricted use of kernel reserved registers \verb|$26, $27|.
+    \item We have assumed 32 registers for MIPS each of them storing 32 bits. We have hardwired the register \verb|$zero| to the value $0$ as is the case in MIPS hardware. We have also restricted use of kernel reserved registers \verb|$26, $27|.
     \item We have assumed that exactly 1 clock cycle is required for each of the instructions except \verb|lw, sw| to display the execution statistics.
-    \item We have enforced tight syntax rules to enforce good coding practice. We disallow certain instructions like (a) \verb|lw $5, ($29)| and (b) \verb|lw $5, 40231|.
+    \item We have enforced tight syntax rules to enforce good coding practice. We disallow certain instructions like (a) \verb|lw $t1, ($sp)| and (b) \verb|lw $t1, 40231|.
           The first instruction skips supplying the offset to the register and the second one involves raw memory access.
-    \item Our implementation also enforces using numeric registers instead of their named counterparts. For example \verb|$5| is allowed but its named counterpart \verb|$a1| is disallowed
-    \item We have enforced the use of a whitespace between the operand and its arguments. For example \verb|add$4,$5,$6| is disallowed as there is no whitespace between \verb|add| and \verb|$4|
+    \item We have enforced the use of a whitespace between the operand and its arguments. For example \verb|add$t1,$t2,$t3| is disallowed as there is no whitespace between \verb|add| and \verb|$t1|
     \item We have implemented branching instructions like \verb|beq, bne, j| to take only labels and instruction numbers as the last argument.
 \end{itemize}
 

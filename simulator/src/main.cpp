@@ -26,7 +26,7 @@ int main(int argc, char* argv[]) {
     dram = Dram();
   }
   auto driver = DramDriver(dram);
-  auto mips = Hardware(dram, ins);
+  auto mips = Hardware(driver, ins);
 
   if (argc >= 5 && stoi(argv[4]) == 1) {
     cout << "[+] Executing in BLOCKING MODE" << endl;

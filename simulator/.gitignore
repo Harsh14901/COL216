@@ -2,7 +2,11 @@
 src/*.o
 output/
 input/
+!tests/input/
 log
 *.gz
 log
 *.zip
+doc/
+!doc/Documentation.pdf
+!doc/Documentation.tex

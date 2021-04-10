@@ -36,6 +36,7 @@ std::vector<UnprocessedInstruction> parseInstructions(std::string fileName) {
   file.open(fileName, std::ios::in);
   if (!file.is_open()) {
     std::cout << "[-] File not found... exiting" << std::endl;
+    exit(0);
     return instructions;
   }
 
