@@ -2,6 +2,7 @@
 src/*.o
 output/
 input/
+!tests/input/
 log
 *.gz
 log
