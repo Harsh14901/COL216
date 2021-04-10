@@ -1,9 +1,10 @@
 addi $s0, $zero, 1000
+addi $t0, $zero, 50
 sw $t0, 0($s0)
 lw $t1, 0($s0)
 sw $t0, 0($s0)
 lw $t2, 0($s0)
-sw $t0, 0($s0)
+sw $t0, 4($s0)
 lw $t3, 0($s0)
 sw $t0, 0($s0)
 
