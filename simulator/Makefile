@@ -94,4 +94,4 @@ run: all
 	./$(OUTPUTMAIN) ${args}
 	@echo Executing 'run: all' complete!
 zip:
-	zip 2019CS10431.zip -x ".git/" -x ".gitignore" -x ".vscode/*" -x "input/*" -x "src/*.o" -x "doc/*.gz" -x "*.zip" -r ./
+	zip 2019CS10431_2019CS50447.zip src/ doc/Documentation.pdf ./Makefile -r tests/

@@ -3,6 +3,7 @@ src/*.o
 output/
 input/
 !tests/input/
+!tests/output/
 log
 *.gz
 log

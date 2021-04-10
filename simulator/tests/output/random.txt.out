@@ -1,0 +1,1937 @@
+[+] Compiling file : tests/input/random.txt
+[+] Program compiled successfully !
+[+] Executing program ...
+[+] Executing in NON-BLOCKING MODE
+---------- Execution logs ----------
+[$] CYCLE 1-1 :
+[#] Executing current instruction -> sw $t2,2368($zero)
+[#] Register contents -
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+	DRAM request issued
+============================================================
+[$] CYCLE 2-2 :
+[#] Executing current instruction -> add $t0,$t2,$t2
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :          0		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :          0		   $t8 :          0
+	   $t1 :          0		   $t9 :          0
+	   $t2 :          0		   $k0 :          0
+	   $t3 :          0		   $k1 :          0
+	   $t4 :          0		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+============================================================
+[$] CYCLE 3-3 :
+[#] Executing current instruction -> add $t3,$t0,$t1
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :          0		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :          0		   $t8 :          0
+	   $t1 :          0		   $t9 :          0
+	   $t2 :          0		   $k0 :          0
+	   $t3 :          0		   $k1 :          0
+	   $t4 :          0		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+============================================================
+[$] CYCLE 4-4 :
+[#] Executing current instruction -> slt $t1,$t2,$t3
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :          0		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :          0		   $t8 :          0
+	   $t1 :          0		   $t9 :          0
+	   $t2 :          0		   $k0 :          0
+	   $t3 :          0		   $k1 :          0
+	   $t4 :          0		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+============================================================
+[$] CYCLE 5-5 :
+[#] Executing current instruction -> add $t3,$t4,$t0
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :          0		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :          0		   $t8 :          0
+	   $t1 :          0		   $t9 :          0
+	   $t2 :          0		   $k0 :          0
+	   $t3 :          0		   $k1 :          0
+	   $t4 :          0		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+============================================================
+[$] CYCLE 6-6 :
+[#] Executing current instruction -> sub $t3,$t2,$t0
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :          0		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :          0		   $t8 :          0
+	   $t1 :          0		   $t9 :          0
+	   $t2 :          0		   $k0 :          0
+	   $t3 :          0		   $k1 :          0
+	   $t4 :          0		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+============================================================
+[$] CYCLE 7-7 :
+[#] Executing current instruction -> lw $t1,3940($zero)
+[#] Register contents -
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+	DRAM request issued
+============================================================
+[$] CYCLE 2-11 :
+[#] Executing current instruction -> 
+[#] Register contents -
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+	DRAM: activating row 2
+============================================================
+[$] CYCLE 12-13 :
+[#] Executing current instruction -> 
+[#] Register contents -
+[#] Row buffer updates:
+	2368-2371 : 0
+[#] Memory updates:
+[#] Remarks: 
+	DRAM: Writing 0 to row buffer @ 2368
+============================================================
+[$] CYCLE 14-23 :
+[#] Executing current instruction -> 
+[#] Register contents -
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+	DRAM: flushing row buffer to memory for row: 2
+============================================================
+[$] CYCLE 24-33 :
+[#] Executing current instruction -> 
+[#] Register contents -
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+	DRAM: activating row 3
+============================================================
+[$] CYCLE 34-35 :
+[#] Executing current instruction -> 
+[#] Register contents -
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+	DRAM: Read 0 from row buffer @ 3940 to register: $t1
+============================================================
+[$] CYCLE 36-36 :
+[#] Executing current instruction -> sw $t1,1176($zero)
+[#] Register contents -
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+	DRAM request issued
+============================================================
+[$] CYCLE 37-37 :
+[#] Executing current instruction -> sw $t3,2460($zero)
+[#] Register contents -
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+	DRAM request issued
+============================================================
+[$] CYCLE 38-38 :
+[#] Executing current instruction -> add $t0,$t0,$t0
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :          0		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :          0		   $t8 :          0
+	   $t1 :          0		   $t9 :          0
+	   $t2 :          0		   $k0 :          0
+	   $t3 :          0		   $k1 :          0
+	   $t4 :          0		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+============================================================
+[$] CYCLE 39-39 :
+[#] Executing current instruction -> lw $t4,1564($zero)
+[#] Register contents -
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+	DRAM request issued
+============================================================
+[$] CYCLE 40-40 :
+[#] Executing current instruction -> sub $t3,$t0,$t1
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :          0		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :          0		   $t8 :          0
+	   $t1 :          0		   $t9 :          0
+	   $t2 :          0		   $k0 :          0
+	   $t3 :          0		   $k1 :          0
+	   $t4 :          0		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+============================================================
+[$] CYCLE 41-41 :
+[#] Executing current instruction -> addi $t3,$t3,3996
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :          0		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :          0		   $t8 :          0
+	   $t1 :          0		   $t9 :          0
+	   $t2 :          0		   $k0 :          0
+	   $t3 :       3996		   $k1 :          0
+	   $t4 :          0		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+============================================================
+[$] CYCLE 42-42 :
+[#] Executing current instruction -> add $t2,$t1,$t1
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :          0		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :          0		   $t8 :          0
+	   $t1 :          0		   $t9 :          0
+	   $t2 :          0		   $k0 :          0
+	   $t3 :       3996		   $k1 :          0
+	   $t4 :          0		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+============================================================
+[$] CYCLE 43-43 :
+[#] Executing current instruction -> mul $t0,$t3,$t3
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :          0		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :   15968016		   $t8 :          0
+	   $t1 :          0		   $t9 :          0
+	   $t2 :          0		   $k0 :          0
+	   $t3 :       3996		   $k1 :          0
+	   $t4 :          0		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+============================================================
+[$] CYCLE 44-44 :
+[#] Executing current instruction -> lw $t3,2316($zero)
+[#] Register contents -
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+	DRAM request issued
+============================================================
+[$] CYCLE 45-45 :
+[#] Executing current instruction -> lw $t0,3316($zero)
+[#] Register contents -
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+	DRAM request issued
+============================================================
+[$] CYCLE 46-46 :
+[#] Executing current instruction -> lw $t1,2620($zero)
+[#] Register contents -
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+	DRAM request issued
+============================================================
+[$] CYCLE 37-46 :
+[#] Executing current instruction -> 
+[#] Register contents -
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+	DRAM: flushing row buffer to memory for row: 3
+============================================================
+[$] CYCLE 47-56 :
+[#] Executing current instruction -> 
+[#] Register contents -
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+	DRAM: activating row 1
+============================================================
+[$] CYCLE 57-58 :
+[#] Executing current instruction -> 
+[#] Register contents -
+[#] Row buffer updates:
+	1176-1179 : 0
+[#] Memory updates:
+[#] Remarks: 
+	DRAM: Writing 0 to row buffer @ 1176
+============================================================
+[$] CYCLE 59-60 :
+[#] Executing current instruction -> 
+[#] Register contents -
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+	DRAM: Read 0 from row buffer @ 1564 to register: $t4
+============================================================
+[$] CYCLE 61-70 :
+[#] Executing current instruction -> 
+[#] Register contents -
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+	DRAM: flushing row buffer to memory for row: 1
+============================================================
+[$] CYCLE 71-80 :
+[#] Executing current instruction -> 
+[#] Register contents -
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+	DRAM: activating row 2
+============================================================
+[$] CYCLE 81-82 :
+[#] Executing current instruction -> 
+[#] Register contents -
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+	DRAM: Read 0 from row buffer @ 2316 to register: $t3
+============================================================
+[$] CYCLE 83-84 :
+[#] Executing current instruction -> 
+[#] Register contents -
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+	DRAM: Read 0 from row buffer @ 2620 to register: $t1
+============================================================
+[$] CYCLE 85-86 :
+[#] Executing current instruction -> 
+[#] Register contents -
+[#] Row buffer updates:
+	2460-2463 : 0
+[#] Memory updates:
+[#] Remarks: 
+	DRAM: Writing 0 to row buffer @ 2460
+============================================================
+[$] CYCLE 87-96 :
+[#] Executing current instruction -> 
+[#] Register contents -
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+	DRAM: flushing row buffer to memory for row: 2
+============================================================
+[$] CYCLE 97-106 :
+[#] Executing current instruction -> 
+[#] Register contents -
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+	DRAM: activating row 3
+============================================================
+[$] CYCLE 107-108 :
+[#] Executing current instruction -> 
+[#] Register contents -
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+	DRAM: Read 0 from row buffer @ 3316 to register: $t0
+============================================================
+[$] CYCLE 109-109 :
+[#] Executing current instruction -> sub $t1,$t0,$t3
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :          0		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :          0		   $t8 :          0
+	   $t1 :          0		   $t9 :          0
+	   $t2 :          0		   $k0 :          0
+	   $t3 :          0		   $k1 :          0
+	   $t4 :          0		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+============================================================
+[$] CYCLE 110-110 :
+[#] Executing current instruction -> lw $t0,2628($zero)
+[#] Register contents -
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+	DRAM request issued
+============================================================
+[$] CYCLE 111-111 :
+[#] Executing current instruction -> sw $t3,2088($zero)
+[#] Register contents -
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+	DRAM request issued
+============================================================
+[$] CYCLE 112-112 :
+[#] Executing current instruction -> lw $t2,332($zero)
+[#] Register contents -
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+	DRAM request issued
+============================================================
+[$] CYCLE 111-120 :
+[#] Executing current instruction -> 
+[#] Register contents -
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+	DRAM: flushing row buffer to memory for row: 3
+============================================================
+[$] CYCLE 121-130 :
+[#] Executing current instruction -> 
+[#] Register contents -
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+	DRAM: activating row 2
+============================================================
+[$] CYCLE 131-132 :
+[#] Executing current instruction -> 
+[#] Register contents -
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+	DRAM: Read 0 from row buffer @ 2628 to register: $t0
+============================================================
+[$] CYCLE 133-134 :
+[#] Executing current instruction -> 
+[#] Register contents -
+[#] Row buffer updates:
+	2088-2091 : 0
+[#] Memory updates:
+[#] Remarks: 
+	DRAM: Writing 0 to row buffer @ 2088
+============================================================
+[$] CYCLE 135-144 :
+[#] Executing current instruction -> 
+[#] Register contents -
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+	DRAM: flushing row buffer to memory for row: 2
+============================================================
+[$] CYCLE 145-154 :
+[#] Executing current instruction -> 
+[#] Register contents -
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+	DRAM: activating row 0
+============================================================
+[$] CYCLE 155-156 :
+[#] Executing current instruction -> 
+[#] Register contents -
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+	DRAM: Read 0 from row buffer @ 332 to register: $t2
+============================================================
+[$] CYCLE 157-157 :
+[#] Executing current instruction -> add $t4,$t2,$t1
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :          0		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :          0		   $t8 :          0
+	   $t1 :          0		   $t9 :          0
+	   $t2 :          0		   $k0 :          0
+	   $t3 :          0		   $k1 :          0
+	   $t4 :          0		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+============================================================
+[$] CYCLE 158-158 :
+[#] Executing current instruction -> mul $t0,$t2,$t4
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :          0		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :          0		   $t8 :          0
+	   $t1 :          0		   $t9 :          0
+	   $t2 :          0		   $k0 :          0
+	   $t3 :          0		   $k1 :          0
+	   $t4 :          0		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+============================================================
+[$] CYCLE 159-159 :
+[#] Executing current instruction -> sw $t2,1516($zero)
+[#] Register contents -
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+	DRAM request issued
+============================================================
+[$] CYCLE 160-160 :
+[#] Executing current instruction -> addi $t4,$t3,2936
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :          0		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :          0		   $t8 :          0
+	   $t1 :          0		   $t9 :          0
+	   $t2 :          0		   $k0 :          0
+	   $t3 :          0		   $k1 :          0
+	   $t4 :       2936		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+============================================================
+[$] CYCLE 161-161 :
+[#] Executing current instruction -> sub $t1,$t1,$t1
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :          0		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :          0		   $t8 :          0
+	   $t1 :          0		   $t9 :          0
+	   $t2 :          0		   $k0 :          0
+	   $t3 :          0		   $k1 :          0
+	   $t4 :       2936		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+============================================================
+[$] CYCLE 162-162 :
+[#] Executing current instruction -> mul $t0,$t4,$t4
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :          0		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :    8620096		   $t8 :          0
+	   $t1 :          0		   $t9 :          0
+	   $t2 :          0		   $k0 :          0
+	   $t3 :          0		   $k1 :          0
+	   $t4 :       2936		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+============================================================
+[$] CYCLE 163-163 :
+[#] Executing current instruction -> add $t3,$t4,$t0
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :          0		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :    8620096		   $t8 :          0
+	   $t1 :          0		   $t9 :          0
+	   $t2 :          0		   $k0 :          0
+	   $t3 :    8623032		   $k1 :          0
+	   $t4 :       2936		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+============================================================
+[$] CYCLE 164-164 :
+[#] Executing current instruction -> add $t1,$t4,$t3
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :          0		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :    8620096		   $t8 :          0
+	   $t1 :    8625968		   $t9 :          0
+	   $t2 :          0		   $k0 :          0
+	   $t3 :    8623032		   $k1 :          0
+	   $t4 :       2936		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+============================================================
+[$] CYCLE 165-165 :
+[#] Executing current instruction -> slt $t0,$t1,$t4
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :          0		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :          0		   $t8 :          0
+	   $t1 :    8625968		   $t9 :          0
+	   $t2 :          0		   $k0 :          0
+	   $t3 :    8623032		   $k1 :          0
+	   $t4 :       2936		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+============================================================
+[$] CYCLE 166-166 :
+[#] Executing current instruction -> add $t1,$t3,$t0
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :          0		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :          0		   $t8 :          0
+	   $t1 :    8623032		   $t9 :          0
+	   $t2 :          0		   $k0 :          0
+	   $t3 :    8623032		   $k1 :          0
+	   $t4 :       2936		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+============================================================
+[$] CYCLE 167-167 :
+[#] Executing current instruction -> sub $t1,$t3,$t2
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :          0		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :          0		   $t8 :          0
+	   $t1 :    8623032		   $t9 :          0
+	   $t2 :          0		   $k0 :          0
+	   $t3 :    8623032		   $k1 :          0
+	   $t4 :       2936		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+============================================================
+[$] CYCLE 168-168 :
+[#] Executing current instruction -> sub $t0,$t2,$t1
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :          0		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :   -8623032		   $t8 :          0
+	   $t1 :    8623032		   $t9 :          0
+	   $t2 :          0		   $k0 :          0
+	   $t3 :    8623032		   $k1 :          0
+	   $t4 :       2936		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+============================================================
+[$] CYCLE 169-169 :
+[#] Executing current instruction -> lw $t4,3980($zero)
+[#] Register contents -
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+	DRAM request issued
+============================================================
+[$] CYCLE 170-170 :
+[#] Executing current instruction -> addi $t1,$t3,2228
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :          0		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :   -8623032		   $t8 :          0
+	   $t1 :    8625260		   $t9 :          0
+	   $t2 :          0		   $k0 :          0
+	   $t3 :    8623032		   $k1 :          0
+	   $t4 :       2936		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+============================================================
+[$] CYCLE 171-171 :
+[#] Executing current instruction -> mul $t1,$t1,$t2
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :          0		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :   -8623032		   $t8 :          0
+	   $t1 :          0		   $t9 :          0
+	   $t2 :          0		   $k0 :          0
+	   $t3 :    8623032		   $k1 :          0
+	   $t4 :       2936		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+============================================================
+[$] CYCLE 172-172 :
+[#] Executing current instruction -> mul $t1,$t2,$t0
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :          0		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :   -8623032		   $t8 :          0
+	   $t1 :          0		   $t9 :          0
+	   $t2 :          0		   $k0 :          0
+	   $t3 :    8623032		   $k1 :          0
+	   $t4 :       2936		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+============================================================
+[$] CYCLE 173-173 :
+[#] Executing current instruction -> add $t2,$t0,$t1
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :          0		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :   -8623032		   $t8 :          0
+	   $t1 :          0		   $t9 :          0
+	   $t2 :   -8623032		   $k0 :          0
+	   $t3 :    8623032		   $k1 :          0
+	   $t4 :       2936		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+============================================================
+[$] CYCLE 174-174 :
+[#] Executing current instruction -> sub $t3,$t0,$t0
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :          0		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :   -8623032		   $t8 :          0
+	   $t1 :          0		   $t9 :          0
+	   $t2 :   -8623032		   $k0 :          0
+	   $t3 :          0		   $k1 :          0
+	   $t4 :       2936		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+============================================================
+[$] CYCLE 175-175 :
+[#] Executing current instruction -> addi $t1,$t0,72
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :          0		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :   -8623032		   $t8 :          0
+	   $t1 :   -8622960		   $t9 :          0
+	   $t2 :   -8623032		   $k0 :          0
+	   $t3 :          0		   $k1 :          0
+	   $t4 :       2936		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+============================================================
+[$] CYCLE 176-176 :
+[#] Executing current instruction -> slt $t3,$t1,$t3
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :          0		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :   -8623032		   $t8 :          0
+	   $t1 :   -8622960		   $t9 :          0
+	   $t2 :   -8623032		   $k0 :          0
+	   $t3 :          1		   $k1 :          0
+	   $t4 :       2936		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+============================================================
+[$] CYCLE 160-169 :
+[#] Executing current instruction -> 
+[#] Register contents -
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+	DRAM: flushing row buffer to memory for row: 0
+============================================================
+[$] CYCLE 170-179 :
+[#] Executing current instruction -> 
+[#] Register contents -
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+	DRAM: activating row 1
+============================================================
+[$] CYCLE 180-181 :
+[#] Executing current instruction -> 
+[#] Register contents -
+[#] Row buffer updates:
+	1516-1519 : 0
+[#] Memory updates:
+[#] Remarks: 
+	DRAM: Writing 0 to row buffer @ 1516
+============================================================
+[$] CYCLE 182-191 :
+[#] Executing current instruction -> 
+[#] Register contents -
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+	DRAM: flushing row buffer to memory for row: 1
+============================================================
+[$] CYCLE 192-201 :
+[#] Executing current instruction -> 
+[#] Register contents -
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+	DRAM: activating row 3
+============================================================
+[$] CYCLE 202-203 :
+[#] Executing current instruction -> 
+[#] Register contents -
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+	DRAM: Read 0 from row buffer @ 3980 to register: $t4
+============================================================
+[$] CYCLE 204-204 :
+[#] Executing current instruction -> mul $t1,$t4,$t1
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :          0		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :   -8623032		   $t8 :          0
+	   $t1 :          0		   $t9 :          0
+	   $t2 :   -8623032		   $k0 :          0
+	   $t3 :          1		   $k1 :          0
+	   $t4 :          0		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+============================================================
+[$] CYCLE 205-205 :
+[#] Executing current instruction -> slt $t4,$t3,$t1
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :          0		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :   -8623032		   $t8 :          0
+	   $t1 :          0		   $t9 :          0
+	   $t2 :   -8623032		   $k0 :          0
+	   $t3 :          1		   $k1 :          0
+	   $t4 :          0		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+============================================================
+[$] CYCLE 206-206 :
+[#] Executing current instruction -> addi $t1,$t4,3296
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :          0		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :   -8623032		   $t8 :          0
+	   $t1 :       3296		   $t9 :          0
+	   $t2 :   -8623032		   $k0 :          0
+	   $t3 :          1		   $k1 :          0
+	   $t4 :          0		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+============================================================
+[$] CYCLE 207-207 :
+[#] Executing current instruction -> lw $t3,476($zero)
+[#] Register contents -
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+	DRAM request issued
+============================================================
+[$] CYCLE 208-208 :
+[#] Executing current instruction -> addi $t1,$t0,1936
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :          0		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :   -8623032		   $t8 :          0
+	   $t1 :   -8621096		   $t9 :          0
+	   $t2 :   -8623032		   $k0 :          0
+	   $t3 :          1		   $k1 :          0
+	   $t4 :          0		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+============================================================
+[$] CYCLE 208-217 :
+[#] Executing current instruction -> 
+[#] Register contents -
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+	DRAM: flushing row buffer to memory for row: 3
+============================================================
+[$] CYCLE 218-227 :
+[#] Executing current instruction -> 
+[#] Register contents -
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+	DRAM: activating row 0
+============================================================
+[$] CYCLE 228-229 :
+[#] Executing current instruction -> 
+[#] Register contents -
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+	DRAM: Read 0 from row buffer @ 476 to register: $t3
+============================================================
+[$] CYCLE 230-230 :
+[#] Executing current instruction -> slt $t3,$t1,$t1
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :          0		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :   -8623032		   $t8 :          0
+	   $t1 :   -8621096		   $t9 :          0
+	   $t2 :   -8623032		   $k0 :          0
+	   $t3 :          0		   $k1 :          0
+	   $t4 :          0		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+============================================================
+[$] CYCLE 231-231 :
+[#] Executing current instruction -> add $t4,$t2,$t2
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :          0		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :   -8623032		   $t8 :          0
+	   $t1 :   -8621096		   $t9 :          0
+	   $t2 :   -8623032		   $k0 :          0
+	   $t3 :          0		   $k1 :          0
+	   $t4 :  -17246064		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+============================================================
+[$] CYCLE 232-232 :
+[#] Executing current instruction -> slt $t1,$t0,$t0
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :          0		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :   -8623032		   $t8 :          0
+	   $t1 :          0		   $t9 :          0
+	   $t2 :   -8623032		   $k0 :          0
+	   $t3 :          0		   $k1 :          0
+	   $t4 :  -17246064		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+============================================================
+[$] CYCLE 233-233 :
+[#] Executing current instruction -> add $t2,$t2,$t4
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :          0		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :   -8623032		   $t8 :          0
+	   $t1 :          0		   $t9 :          0
+	   $t2 :  -25869096		   $k0 :          0
+	   $t3 :          0		   $k1 :          0
+	   $t4 :  -17246064		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+============================================================
+[$] CYCLE 234-234 :
+[#] Executing current instruction -> sw $t3,3632($zero)
+[#] Register contents -
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+	DRAM request issued
+============================================================
+[$] CYCLE 235-235 :
+[#] Executing current instruction -> mul $t0,$t1,$t4
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :          0		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :          0		   $t8 :          0
+	   $t1 :          0		   $t9 :          0
+	   $t2 :  -25869096		   $k0 :          0
+	   $t3 :          0		   $k1 :          0
+	   $t4 :  -17246064		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+============================================================
+[$] CYCLE 236-236 :
+[#] Executing current instruction -> add $t0,$t3,$t4
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :          0		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :  -17246064		   $t8 :          0
+	   $t1 :          0		   $t9 :          0
+	   $t2 :  -25869096		   $k0 :          0
+	   $t3 :          0		   $k1 :          0
+	   $t4 :  -17246064		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+============================================================
+[$] CYCLE 237-237 :
+[#] Executing current instruction -> slt $t2,$t0,$t1
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :          0		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :  -17246064		   $t8 :          0
+	   $t1 :          0		   $t9 :          0
+	   $t2 :          1		   $k0 :          0
+	   $t3 :          0		   $k1 :          0
+	   $t4 :  -17246064		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+============================================================
+[$] CYCLE 238-238 :
+[#] Executing current instruction -> addi $t4,$t3,1028
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :          0		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :  -17246064		   $t8 :          0
+	   $t1 :          0		   $t9 :          0
+	   $t2 :          1		   $k0 :          0
+	   $t3 :          0		   $k1 :          0
+	   $t4 :       1028		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+============================================================
+[$] CYCLE 239-239 :
+[#] Executing current instruction -> add $t2,$t1,$t4
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :          0		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :  -17246064		   $t8 :          0
+	   $t1 :          0		   $t9 :          0
+	   $t2 :       1028		   $k0 :          0
+	   $t3 :          0		   $k1 :          0
+	   $t4 :       1028		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+============================================================
+[$] CYCLE 240-240 :
+[#] Executing current instruction -> sub $t1,$t0,$t2
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :          0		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :  -17246064		   $t8 :          0
+	   $t1 :  -17247092		   $t9 :          0
+	   $t2 :       1028		   $k0 :          0
+	   $t3 :          0		   $k1 :          0
+	   $t4 :       1028		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+============================================================
+[$] CYCLE 241-241 :
+[#] Executing current instruction -> slt $t3,$t2,$t3
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :          0		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :  -17246064		   $t8 :          0
+	   $t1 :  -17247092		   $t9 :          0
+	   $t2 :       1028		   $k0 :          0
+	   $t3 :          0		   $k1 :          0
+	   $t4 :       1028		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+============================================================
+[$] CYCLE 242-242 :
+[#] Executing current instruction -> mul $t1,$t0,$t0
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :          0		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :  -17246064		   $t8 :          0
+	   $t1 :  238244096		   $t9 :          0
+	   $t2 :       1028		   $k0 :          0
+	   $t3 :          0		   $k1 :          0
+	   $t4 :       1028		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+============================================================
+[$] CYCLE 243-243 :
+[#] Executing current instruction -> sub $t4,$t4,$t0
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :          0		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :  -17246064		   $t8 :          0
+	   $t1 :  238244096		   $t9 :          0
+	   $t2 :       1028		   $k0 :          0
+	   $t3 :          0		   $k1 :          0
+	   $t4 :   17247092		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+============================================================
+[$] CYCLE 244-244 :
+[#] Executing current instruction -> slt $t2,$t1,$t3
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :          0		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :  -17246064		   $t8 :          0
+	   $t1 :  238244096		   $t9 :          0
+	   $t2 :          0		   $k0 :          0
+	   $t3 :          0		   $k1 :          0
+	   $t4 :   17247092		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+============================================================
+[$] CYCLE 245-245 :
+[#] Executing current instruction -> slt $t3,$t2,$t1
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :          0		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :  -17246064		   $t8 :          0
+	   $t1 :  238244096		   $t9 :          0
+	   $t2 :          0		   $k0 :          0
+	   $t3 :          1		   $k1 :          0
+	   $t4 :   17247092		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+============================================================
+[$] CYCLE 246-246 :
+[#] Executing current instruction -> addi $t3,$t0,2784
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :          0		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :  -17246064		   $t8 :          0
+	   $t1 :  238244096		   $t9 :          0
+	   $t2 :          0		   $k0 :          0
+	   $t3 :  -17243280		   $k1 :          0
+	   $t4 :   17247092		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+============================================================
+[$] CYCLE 247-247 :
+[#] Executing current instruction -> sub $t3,$t0,$t2
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :          0		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :  -17246064		   $t8 :          0
+	   $t1 :  238244096		   $t9 :          0
+	   $t2 :          0		   $k0 :          0
+	   $t3 :  -17246064		   $k1 :          0
+	   $t4 :   17247092		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+============================================================
+[$] CYCLE 248-248 :
+[#] Executing current instruction -> sw $t1,2984($zero)
+[#] Register contents -
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+	DRAM request issued
+============================================================
+[$] CYCLE 249-249 :
+[#] Executing current instruction -> add $t2,$t0,$t2
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :          0		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :  -17246064		   $t8 :          0
+	   $t1 :  238244096		   $t9 :          0
+	   $t2 :  -17246064		   $k0 :          0
+	   $t3 :  -17246064		   $k1 :          0
+	   $t4 :   17247092		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+============================================================
+[$] CYCLE 250-250 :
+[#] Executing current instruction -> addi $t0,$t1,2200
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :          0		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :  238246296		   $t8 :          0
+	   $t1 :  238244096		   $t9 :          0
+	   $t2 :  -17246064		   $k0 :          0
+	   $t3 :  -17246064		   $k1 :          0
+	   $t4 :   17247092		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+============================================================
+[$] CYCLE 251-251 :
+[#] Executing current instruction -> sub $t1,$t4,$t3
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :          0		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :  238246296		   $t8 :          0
+	   $t1 :   34493156		   $t9 :          0
+	   $t2 :  -17246064		   $k0 :          0
+	   $t3 :  -17246064		   $k1 :          0
+	   $t4 :   17247092		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+============================================================
+[$] CYCLE 252-252 :
+[#] Executing current instruction -> mul $t0,$t1,$t0
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :          0		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :  784235360		   $t8 :          0
+	   $t1 :   34493156		   $t9 :          0
+	   $t2 :  -17246064		   $k0 :          0
+	   $t3 :  -17246064		   $k1 :          0
+	   $t4 :   17247092		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+============================================================
+[$] CYCLE 253-253 :
+[#] Executing current instruction -> sw $t2,3844($zero)
+[#] Register contents -
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+	DRAM request issued
+============================================================
+[$] CYCLE 254-254 :
+[#] Executing current instruction -> slt $t2,$t1,$t2
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :          0		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :  784235360		   $t8 :          0
+	   $t1 :   34493156		   $t9 :          0
+	   $t2 :          0		   $k0 :          0
+	   $t3 :  -17246064		   $k1 :          0
+	   $t4 :   17247092		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+============================================================
+[$] CYCLE 255-255 :
+[#] Executing current instruction -> sub $t0,$t0,$t1
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :          0		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :  749742204		   $t8 :          0
+	   $t1 :   34493156		   $t9 :          0
+	   $t2 :          0		   $k0 :          0
+	   $t3 :  -17246064		   $k1 :          0
+	   $t4 :   17247092		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+============================================================
+[$] CYCLE 256-256 :
+[#] Executing current instruction -> slt $t4,$t2,$t0
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :          0		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :  749742204		   $t8 :          0
+	   $t1 :   34493156		   $t9 :          0
+	   $t2 :          0		   $k0 :          0
+	   $t3 :  -17246064		   $k1 :          0
+	   $t4 :          1		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+============================================================
+[$] CYCLE 235-244 :
+[#] Executing current instruction -> 
+[#] Register contents -
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+	DRAM: flushing row buffer to memory for row: 0
+============================================================
+[$] CYCLE 245-254 :
+[#] Executing current instruction -> 
+[#] Register contents -
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+	DRAM: activating row 3
+============================================================
+[$] CYCLE 255-256 :
+[#] Executing current instruction -> 
+[#] Register contents -
+[#] Row buffer updates:
+	3632-3635 : 0
+[#] Memory updates:
+[#] Remarks: 
+	DRAM: Writing 0 to row buffer @ 3632
+============================================================
+[$] CYCLE 257-257 :
+[#] Executing current instruction -> mul $t0,$t1,$t2
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :          0		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :          0		   $t8 :          0
+	   $t1 :   34493156		   $t9 :          0
+	   $t2 :          0		   $k0 :          0
+	   $t3 :  -17246064		   $k1 :          0
+	   $t4 :          1		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+============================================================
+[$] CYCLE 258-258 :
+[#] Executing current instruction -> sub $t0,$t2,$t4
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :          0		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :         -1		   $t8 :          0
+	   $t1 :   34493156		   $t9 :          0
+	   $t2 :          0		   $k0 :          0
+	   $t3 :  -17246064		   $k1 :          0
+	   $t4 :          1		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+============================================================
+[$] CYCLE 257-258 :
+[#] Executing current instruction -> 
+[#] Register contents -
+[#] Row buffer updates:
+	3844-3847 : -17246064
+[#] Memory updates:
+[#] Remarks: 
+	DRAM: Writing -17246064 to row buffer @ 3844
+============================================================
+[$] CYCLE 259-259 :
+[#] Executing current instruction -> add $t2,$t3,$t2
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :          0		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :         -1		   $t8 :          0
+	   $t1 :   34493156		   $t9 :          0
+	   $t2 :  -17246064		   $k0 :          0
+	   $t3 :  -17246064		   $k1 :          0
+	   $t4 :          1		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+============================================================
+[$] CYCLE 260-260 :
+[#] Executing current instruction -> sw $t2,920($zero)
+[#] Register contents -
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+	DRAM request issued
+============================================================
+[$] CYCLE 261-261 :
+[#] Executing current instruction -> sub $t1,$t3,$t2
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :          0		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :         -1		   $t8 :          0
+	   $t1 :          0		   $t9 :          0
+	   $t2 :  -17246064		   $k0 :          0
+	   $t3 :  -17246064		   $k1 :          0
+	   $t4 :          1		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+============================================================
+[$] CYCLE 259-268 :
+[#] Executing current instruction -> 
+[#] Register contents -
+[#] Row buffer updates:
+[#] Memory updates:
+	3844-3847 : -17246064
+[#] Remarks: 
+	DRAM: flushing row buffer to memory for row: 3
+============================================================
+[$] CYCLE 269-278 :
+[#] Executing current instruction -> 
+[#] Register contents -
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+	DRAM: activating row 2
+============================================================
+[$] CYCLE 279-280 :
+[#] Executing current instruction -> 
+[#] Register contents -
+[#] Row buffer updates:
+	2984-2987 : 238244096
+[#] Memory updates:
+[#] Remarks: 
+	DRAM: Writing 238244096 to row buffer @ 2984
+============================================================
+[$] CYCLE 281-290 :
+[#] Executing current instruction -> 
+[#] Register contents -
+[#] Row buffer updates:
+[#] Memory updates:
+	2984-2987 : 238244096
+[#] Remarks: 
+	DRAM: flushing row buffer to memory for row: 2
+============================================================
+[$] CYCLE 291-300 :
+[#] Executing current instruction -> 
+[#] Register contents -
+[#] Row buffer updates:
+[#] Memory updates:
+[#] Remarks: 
+	DRAM: activating row 0
+============================================================
+[$] CYCLE 301-302 :
+[#] Executing current instruction -> 
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :          0		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :         -1		   $t8 :          0
+	   $t1 :          0		   $t9 :          0
+	   $t2 :  -17246064		   $k0 :          0
+	   $t3 :  -17246064		   $k1 :          0
+	   $t4 :          1		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Row buffer updates:
+	920-923 : -17246064
+[#] Memory updates:
+[#] Remarks: 
+	DRAM: Writing -17246064 to row buffer @ 920
+============================================================
+---------- Execution statistics ----------
+[#] Clock cycles: 302
+[#] Number of row buffer updates: 22
+[#] Updated memory : 
+	920-923 : -17246064
+	1176-1179 : 0
+	1516-1519 : 0
+	2088-2091 : 0
+	2368-2371 : 0
+	2460-2463 : 0
+	2984-2987 : 238244096
+	3632-3635 : 0
+	3844-3847 : -17246064
+[+] Program terminated
