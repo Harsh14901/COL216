@@ -117,8 +117,9 @@ The approach used to simulate the DRAM memory reordering is described in this se
     \item The driver also supports blocking on a particular register value. This blocks the processor and instructs the driver to complete all requests pending for the blocking register.
     \item The DRAM requests are issued asynchronously and the processor always executes in non blocking mode, since reordering of requests is not possible in blocking mode.
     \item An optimization was introduced that allowed the driver to overwrite multiple requests for the same address. For example if there are two consecutive write requests to a particular memory address then the first request is deleted provided the same memory address was not used to load another register in between.
-    \item Similarly when two consecutive read requests are issued for the same register consecutively, the first request is delted provided the register was not used in between for any instruction.
-    \item Another optimization is introduced which selects the next batch of requests after all requests on a row are exhausted depending on the blocking registers involved in each batch. The batch with a blocking register is preferred and executed first.
+    \item Also, when two consecutive read requests are issued for the same register consecutively, the first request is always deleted.
+    \item Another optimization is introduced which selects the next batch of requests after all requests on a row are exhausted depending on the blocking registers involved in each batch. The batch with a blocking register is preferred and executed first. This is illustrated in the testcase -\verb|tests/input/choosing_row.txt|
+    \item In addition to choosing optimal batches of rows to process, we also choose the requests to execute with the same row but with different addresses.The requests with a blocking register is preferred This is illustrated in the testcase - \verb| tests/input/choosing_address_in_row.txt |
 \end{itemize}
 
 \subsection{Advantages}
@@ -139,12 +140,15 @@ The approach used to simulate the DRAM memory reordering is described in this se
 The testing method was completely manual. The test cases written manually are included in the \verb|./tests/input| directory. The test cases were run with different parameters
 of the program and the outcomes were compared.
 \begin{itemize}
-    \item \verb|alternate_load_store.txt| : This test case includes alternate load and store instructions with different offsets to test the correctness of the \verb|DRAM| implementation.
-    \item \verb|lw_hell.txt| : This test case loads multiple values from the memory in the same register. This tests our optimization of deleting previous requests when same register is involved.
-    \item \verb|sw_hell.txt| : This test case stores multiple values into the memory in the same address. This tests our optimization of deleting previous requests when same address is involved.
+    \item \verb|continuous_lw.txt| : This test case loads multiple values from the memory in the same register. This tests our optimization of deleting previous requests when same register is involved.
+    \item \verb|continuous_sw.txt| : This test case stores multiple values into the memory in the same address. This tests our optimization of deleting previous requests when same address is involved.
+    \item \verb|alternate_load_store.txt| : This test case includes alternate load and store instructions with different offsets to test additional deletion of SW requests once the LW request between them is deleted.
     \item \verb|multiple_sw.txt| : This file tests elimination of redundant instructions that involve the same address and the same register.
-    \item \verb|choosing_batch.txt| : This file tests our second optimization of choosing the batch of requests based on the blocking registers involved.
+    \item \verb|choosing_row.txt| : This file tests our second optimization of choosing the batch of requests based on the blocking registers involved.
+    \item \verb|choosing_address_in_row.txt| : This file tests our third optimization of choosing the requests within the same row based on the blocking registers involved.
     \item \verb|memory_skips.txt|: This test case issues multiple read/write requests to the driver with each successive request differing in the row of the address involved. This tests the reordering of the requests in the appropriate manner to reduce row buffer reloads.
+    \item \verb|disadvantage.txt|: This test case demonstrates a situation in which our method takes more cycles as compared with an non-blocking implementation with a queue.
+    \item \verb|random.txt|: This test case is randomly generated.
 \end{itemize}
 
 \subsection{Result}
