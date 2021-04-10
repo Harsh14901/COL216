@@ -36,11 +36,13 @@ class DramDriver {
                           q_t::iterator helper_it);
 
  public:
+  const static int BUFF_SIZE = 64;
   DramDriver(Dram Dram);
   void issue_write(int addr, hd_t val, Stats& stats);
   void issue_read(int addr, hd_t* dst, Stats& stats, int dst_reg);
   void execute_current_in_queue(Stats& stats, vector<int> blocked_regs);
   bool req_queue_not_empty();
+  bool req_queue_full();
 
   bool is_blocking_reg(int reg);
 };

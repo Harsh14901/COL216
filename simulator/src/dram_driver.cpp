@@ -24,6 +24,7 @@ void DramDriver::issue_read(int addr, hd_t* dst, Stats& stats, int dst_reg) {
 }
 
 bool DramDriver::req_queue_not_empty() { return req_queue.size() > 0; }
+bool DramDriver::req_queue_full() { return req_queue.size() >= BUFF_SIZE; }
 
 void DramDriver::issue_queue_requests(Stats& stats) {
   if (req_queue.empty()) {
@@ -159,6 +160,10 @@ void DramDriver::enqueue_request(Request& request) {
   if (req_queue.empty()) {
     req_queue.push_back(request);
     curr = req_queue.begin();
+    return;
+  }
+
+  if (req_queue_full()) {
     return;
   }
 

@@ -19,6 +19,10 @@ static inline void rtrim(std::string &s) {
 
 static inline void trim(std::string &s) {
   ltrim(s);
+  auto found = s.find("#");
+  if(found != string::npos){
+    s = s.substr(0, found);
+  }
   rtrim(s);
 }
 

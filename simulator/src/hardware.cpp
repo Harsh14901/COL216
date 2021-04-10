@@ -140,12 +140,17 @@ void Hardware::start_execution(Stats& stats) {
     if (blocking_instr) continue;
 
     if (pc != program.end()) {
+      auto instr = pc->op;
+      
       stats.logs.push_back(Log{});
       auto& log = stats.logs.back();
       log.cycle_period = make_pair(stats.clock_cycles, stats.clock_cycles);
       log.instruction = pc->raw;
 
-      auto instr = pc->op;
+      if((instr == Operator::LW || instr == Operator::SW) && dram_driver.req_queue_full()){
+        log.remarks.push_back("DRAM full, processor stalling!");
+        continue;
+      }
 
       execute_current(stats);
       if (instr != Operator::LW && instr != Operator::SW) {
