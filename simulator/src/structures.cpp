@@ -65,7 +65,8 @@ void Log::print_registers() {
 }
 
 void Log::print_verbose() {
-  printf("[$] CYCLE %d-%d :\n", cycle_period.first, cycle_period.second);
+  printf("[$] Processor: %d | CYCLE %d-%d :\n", core, cycle_period.first,
+         cycle_period.second);
   printf("[#] Executing current instruction -> %s\n", instruction.c_str());
   print_registers();
 

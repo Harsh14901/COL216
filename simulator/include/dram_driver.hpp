@@ -1,0 +1,49 @@
+#ifndef DRAM_DRIVER_H
+#define DRAM_DRIVER_H
+
+#include <bits/stdc++.h>
+
+#include <dram.hpp>
+#include <structures.hpp>
+using namespace std;
+
+typedef int32_t hd_t;
+struct Request {
+  int addr;
+  hd_t val;
+  int timestamp;
+  int core = -1;
+
+  hd_t* dst = nullptr;
+  int dst_reg = -1;
+};
+typedef list<Request> q_t;
+
+class DramDriver {
+ private:
+  q_t req_queue;
+  q_t::iterator curr;
+  Dram dram;
+  int dram_row = -1;
+  // q_t::iterator execute_pending_for_register(Stats& stats,
+  //                                            hd_t blocked_register);
+  // q_t::iterator execute_pending(q_t::iterator start_it, q_t::iterator end_it,
+  //                               Stats& stats, bool exec_all = false);
+  // void execute_request(Request& req, Stats& stats);
+  void enqueue_request(Request& request);
+  // void issue_queue_requests(Stats& stats);
+  // void goto_blocking_request_row(vector<int> blocked_regs);
+  // void goto_blocking_request_address(vector<int> blocked_regs);
+  // void delete_stranded_SW(Request& request, q_t::reverse_iterator reverse_it,
+  //                         q_t::iterator helper_it);
+
+ public:
+  DramDriver(Dram Dram);
+  void issue_write(int core, int addr, hd_t val, Stats& stats);
+  void issue_read(int core, int addr, hd_t* dst, Stats& stats, int dst_reg);
+  void unblock_registers(Stats& stats,
+                         unordered_map<int, vector<int>> blocked_regs);
+  bool is_blocking_reg(int core, int reg);
+  bool req_queue_not_empty();
+};
+#endif

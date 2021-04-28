@@ -1,41 +1,13 @@
-#
-# 'make'        build executable file 'main'
-# 'make clean'  removes all .o and executable files
-#
-
-# define the Cpp compiler to use
 CXX = g++
-
-# define any compile-time flags
 CXXFLAGS	:= -g -std=c++17
-
-
-# define library paths in addition to /usr/lib
-#   if I wanted to include libraries not in /usr/lib I'd specify
-#   their path using -Lpath, something like:
 LFLAGS =
-
-# define output directory
 OUTPUT	:= output
-
-# define source directory
+BUILD 			:= build
 SRC		:= src
-
-# define include directory
-INCLUDE	:= src
-
-# define lib directory
+INCLUDE	:= include
 LIB		:= lib
 
-ifeq ($(OS),Windows_NT)
-MAIN	:= main.exe
-SOURCEDIRS	:= $(SRC)
-INCLUDEDIRS	:= $(INCLUDE)
-LIBDIRS		:= $(LIB)
-FIXPATH = $(subst /,\,$1)
-RM			:= del /q /f
-MD	:= mkdir
-else
+
 MAIN	:= main
 SOURCEDIRS	:= $(shell find $(SRC) -type d)
 INCLUDEDIRS	:= $(shell find $(INCLUDE) -type d)
@@ -43,46 +15,30 @@ LIBDIRS		:= $(shell find $(LIB) -type d)
 FIXPATH = $1
 RM = rm -f
 MD	:= mkdir -p
-endif
 
-# define any directories containing header files other than /usr/include
 INCLUDES	:= $(patsubst %,-I%, $(INCLUDEDIRS:%/=%))
-
-# define the C libs
 LIBS		:= $(patsubst %,-L%, $(LIBDIRS:%/=%))
-
-# define the C source files
 SOURCES		:= $(wildcard $(patsubst %,%/*.cpp, $(SOURCEDIRS)))
-
-# define the C object files 
-OBJECTS		:= $(SOURCES:.cpp=.o)
-
-#
-# The following part of the makefile is generic; it can be used to 
-# build any executable just by changing the definitions above and by
-# deleting dependencies appended to the file from 'make depend'
-#
+OBJECTS		:= $(addprefix $(BUILD)/, $(SOURCES:.cpp=.o))
 
 OUTPUTMAIN	:= $(call FIXPATH,$(OUTPUT)/$(MAIN))
 
 args := input/file
 
-all: clean $(OUTPUT) $(MAIN)
+all: $(OUTPUT) $(BUILD)/$(SOURCEDIRS) $(MAIN)
 	@echo Executing 'all' complete!
 
 $(OUTPUT):
 	$(MD) $(OUTPUT)
 
-$(MAIN): $(OBJECTS) 
-	$(CXX) $(CXXFLAGS) $(INCLUDES) -o $(OUTPUTMAIN) $(OBJECTS) $(LFLAGS) $(LIBS)
-	rm $(SRC)/*.o
+$(BUILD)/$(SOURCEDIRS):
+	$(MD) $(BUILD)/$(SOURCEDIRS)
 
-# this is a suffix replacement rule for building .o's from .c's
-# it uses automatic variables $<: the name of the prerequisite of
-# the rule(a .c file) and $@: the name of the target of the rule (a .o file) 
-# (see the gnu make manual section about automatic variables)
-.cpp.o:
-	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $<  -o $@
+$(MAIN): $(OBJECTS) 
+	$(CXX) $(CXXFLAGS) $(INCLUDES) $(LFLAGS) -o $(OUTPUTMAIN) $(OBJECTS)
+
+$(BUILD)/%.o: %.cpp 
+	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@ 
 
 .PHONY: clean
 clean:
@@ -93,5 +49,6 @@ clean:
 run: all
 	./$(OUTPUTMAIN) ${args}
 	@echo Executing 'run: all' complete!
+
 zip:
-	zip 2019CS10431_2019CS50447.zip src/ doc/Documentation.pdf ./Makefile -r tests/
+	zip 2019CS10431_2019CS50447.zip src/ include/ doc/Documentation.pdf ./Makefile -r tests/

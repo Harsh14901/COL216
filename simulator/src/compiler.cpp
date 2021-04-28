@@ -19,10 +19,6 @@ static inline void rtrim(std::string &s) {
 
 static inline void trim(std::string &s) {
   ltrim(s);
-  auto found = s.find("#");
-  if(found != string::npos){
-    s = s.substr(0, found);
-  }
   rtrim(s);
 }
 
@@ -39,7 +35,7 @@ std::vector<UnprocessedInstruction> parseInstructions(std::string fileName) {
   std::fstream file;
   file.open(fileName, std::ios::in);
   if (!file.is_open()) {
-    std::cout << "[-] File not found... exiting" << std::endl;
+    std::cout << "[-] File not found... exiting program" << std::endl;
     exit(0);
     return instructions;
   }
@@ -144,6 +140,7 @@ int get_label_addr(std::string label) {
 }
 
 std::vector<Instruction> compile(std::string fileName) {
+  cout << "[+] Compiling file : " << fileName << endl;
   auto instructions = parseInstructions(fileName);
   std::vector<Instruction> processedInstructions;
 
@@ -234,5 +231,6 @@ std::vector<Instruction> compile(std::string fileName) {
       }
     }
   }
+  cout << "[+] Program compiled successfully !" << endl;
   return processedInstructions;
 }

@@ -1,6 +1,7 @@
 ! .vscode/
 src/*.o
 output/
+build/
 input/
 !tests/input/
 !tests/output/
