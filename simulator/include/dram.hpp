@@ -29,6 +29,7 @@ class Dram {
   hd_t get_mem_word(int addr, int dst_reg, Stats& stats);
   void set_mem_word(int addr, hd_t val, Stats& stats);
   pair<int, int> addr2rowcol(int addr);
+  int get_num_rows();
   int get_active_row();
 
  protected:

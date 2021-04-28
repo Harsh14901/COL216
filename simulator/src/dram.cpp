@@ -20,6 +20,8 @@ void Dram::row2buffer(int row, Stats& stats) {
   active_row = row;
 }
 
+int Dram::get_num_rows() { return Dram::NUM_ROWS; }
+
 int Dram::get_active_row() { return active_row; }
 
 void Dram::buffer2row(int& row, Stats& stats) {

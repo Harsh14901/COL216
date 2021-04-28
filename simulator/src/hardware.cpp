@@ -157,7 +157,6 @@ void Hardware::start_execution(Stats& stats) {
   if (instr != Operator::LW && instr != Operator::SW) {
     log.registers = registers;
   }
-  stats.logs.back().registers = registers;
 }
 
 void Hardware::is_valid_reg(int id) {

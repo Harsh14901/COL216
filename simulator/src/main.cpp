@@ -56,13 +56,13 @@ int main(int argc, char* argv[]) {
   Stats stats;
 
   for (int i = 0; i < M; i++) {
-    stats.clock_cycles = i;
+    stats.clock_cycles = i + 1;
 
     unordered_map<int, vector<int>> blocked_regs;
     for (auto& core : cores) {
       blocked_regs[core.get_id()] = core.get_blocked_registers();
     }
-    driver.unblock_registers(stats, blocked_regs);
+    driver.perform_tasks(stats, blocked_regs);
 
     for (auto& core : cores) {
       try {
