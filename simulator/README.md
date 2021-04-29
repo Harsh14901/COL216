@@ -14,4 +14,4 @@ The executable `main` takes in 1 required parameter and 3 optional parameters as
 $ ./output/main /tmp/a.asm 10 2 0
 ```
 
-This will execute the file `/tmp/a.asm` with row access delay 10 and column access delay 2 for DRAM. The last argument 0 indicates non blocking mode. If the last argument is 1, it executes the processor in blocking mode.
+

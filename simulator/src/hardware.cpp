@@ -134,6 +134,7 @@ void Hardware::start_execution(Stats& stats) {
     return;
   }
   vector<int> blocked_regs = get_blocked_registers();
+  dram_driver->set_blocking_regs(CORE_ID, blocked_regs);
 
   bool blocking_instr = false;
   for (int reg : blocked_regs) {
@@ -144,6 +145,7 @@ void Hardware::start_execution(Stats& stats) {
   }
 
   if (blocking_instr) return;
+  auto instr = pc->op;
 
   stats.logs.push_back(Log{});
   auto& log = stats.logs.back();
@@ -151,9 +153,13 @@ void Hardware::start_execution(Stats& stats) {
   log.instruction = pc->raw;
   log.core = CORE_ID;
 
-  auto instr = pc->op;
+  try {
+    execute_current(stats);
 
-  execute_current(stats);
+  } catch (const DramDriver::QueueFull& e) {
+    log.remarks.push_back("DRAM queue unavailable!");
+  }
+
   if (instr != Operator::LW && instr != Operator::SW) {
     log.registers = registers;
   }
@@ -263,13 +269,9 @@ void Hardware::lw(int dst, int offset, int src, Stats& stats) {
   auto clock_time = stats.clock_cycles;
   stats.logs.back().remarks.push_back("DRAM request issued");
 
-  // blocking_reg = dst;
   blocking_registers[dst]++;
-  // pending_value = dram.get_mem_word(p, stats);
-
-  // stats.logs.back().registers = registers;
-  // stats.logs.back().registers[blocking_reg] = pending_value;
   dram_driver->issue_read(CORE_ID, p, &registers[dst], stats, dst);
+
   stats.clock_cycles = clock_time;
 }
 void Hardware::sw(int src, int offset, int dst, Stats& stats) {
@@ -281,6 +283,6 @@ void Hardware::sw(int src, int offset, int dst, Stats& stats) {
   stats.logs.back().remarks.push_back("DRAM request issued");
 
   dram_driver->issue_write(CORE_ID, p, registers[src], stats);
-  // dram.set_mem_word(p, registers[src], stats);
+
   stats.clock_cycles = clock_time;
 }

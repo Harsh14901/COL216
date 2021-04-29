@@ -1,0 +1,24 @@
+addi $a0, $a0, 40
+
+sw $a0, 4($zero)
+sw $a0, 8($zero)
+sw $a0, 12($zero)
+sw $a0, 16($zero)
+sw $a0, 20($zero)
+sw $a0, 24($zero)
+sw $a0, 28($zero)
+sw $a0, 32($zero)
+sw $a0, 36($zero)
+sw $a0, 40($zero)
+sw $a0, 44($zero)
+sw $a0, 48($zero)
+sw $a0, 52($zero)
+sw $a0, 56($zero)
+sw $a0, 60($zero)
+
+addi $t0, $t0, 5
+wait_loop:
+  addi $t1, $t1, 1
+  bne $t1, $t0, wait_loop
+
+exit:

@@ -1,0 +1,9 @@
+addi $a0, $a0, 5
+sw $a0, 100($zero)
+addi $a0, $a0, 5
+sw $a0, 100($zero)
+
+lw $t3, 100($zero)
+addi $t3, $t3, 1
+addi $t3, $t3, 1
+addi $t3, $t3, 1

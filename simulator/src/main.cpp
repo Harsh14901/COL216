@@ -35,7 +35,7 @@ int main(int argc, char* argv[]) {
     dram = Dram();
   }
 
-  auto driver = DramDriver(dram);
+  auto driver = DramDriver(dram, N);
   bool blocking = false;
   vector<Hardware> cores(N);
 
@@ -58,13 +58,12 @@ int main(int argc, char* argv[]) {
   for (int i = 0; i < M; i++) {
     stats.clock_cycles = i + 1;
 
-    unordered_map<int, vector<int>> blocked_regs;
-    for (auto& core : cores) {
-      blocked_regs[core.get_id()] = core.get_blocked_registers();
-    }
-    driver.perform_tasks(stats, blocked_regs);
+    int skip_core = driver.perform_tasks(stats);
 
     for (auto& core : cores) {
+      if (skip_core ==
+          core.get_id())  // if a writeback is performed to this core
+        continue;         // do not execute anything in this cycle
       try {
         core.start_execution(stats);
 
