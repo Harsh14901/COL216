@@ -188,9 +188,10 @@ void DramDriver::complete_request(Stats& stats) {
 }
 
 void DramDriver::set_blocking_regs(int core, vector<int>& regs) {
-  assert(int(regs.size()) <= 3);
+  assert(int(regs.size()) <= MAX_BLOCKED_REG);
 
-  memset(__core2blocked_reg_LUT, -1, sizeof(__core2blocked_reg_LUT));
+  memset(__core2blocked_reg_LUT[core], -1,
+         sizeof(__core2blocked_reg_LUT[core]));
 
   int i = 0;
   for (auto& r : regs) {
