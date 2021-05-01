@@ -28,6 +28,7 @@ void DramDriver::__init_LUT() {
   memset(__queue2row_LUT, -1, sizeof(__queue2row_LUT));
 
   memset(__core2freq_LUT, 0, sizeof(__core2freq_LUT));
+  memset(__core2instr_LUT, 0, sizeof(__core2instr_LUT));
 
   int total_mem = Dram::MAX_MEMORY;
   int partition_size = total_mem / cores;
@@ -44,6 +45,7 @@ void DramDriver::issue_write(int core, int addr, hd_t val, Stats& stats) {
   auto req = Request{addr + __core2PA_offsets_LUT[core], val,
                      stats.clock_cycles, core};
   enqueue_request(req);
+  __core2freq_LUT[core]++;
 }
 
 void DramDriver::issue_read(int core, int addr, hd_t* dst, Stats& stats,
@@ -55,6 +57,7 @@ void DramDriver::issue_read(int core, int addr, hd_t* dst, Stats& stats,
                      dst,
                      dst_reg};
   enqueue_request(req);
+  __core2freq_LUT[core]++;
 }
 
 // Executes request in an order determined by the blocked registers
@@ -237,10 +240,51 @@ Request* DramDriver::get_curr_request() {
   return &queues[curr_queue].front();
 }
 void DramDriver::choose_next_queue() {
-  // TODO: complete this
+  int q_offsets[NUM_QUEUES];  // metric denoting the importance of the blocked
+                              // requests in a queue
+  int core_req_freqs[MAX_CORES];  // ratio of Request frequency to total number
+                                  // of instructions
 
-  curr_queue = -1;
+  memset(q_offsets, 0, sizeof(q_offsets));
+  memset(core_req_freqs, 0, sizeof(core_req_freqs));
+
+  for (int core = 0; core < MAX_CORES; core++) {
+    auto& blocked_regs = __core2blocked_reg_LUT[core];
+
+    for (int j = 0; j < MAX_BLOCKED_REG; j++) {
+      int reg = blocked_regs[j];
+      if (reg == -1) continue;  // register not blocked
+      Request* rq = lookup_LW(core, reg);
+      auto [q_num, q_offset] = __core_reg2offsets_LUT[core][reg];
+      if (q_num != -1) {  // a blocking request of that register exists
+        q_offsets[q_num] +=
+            (QUEUE_SIZE - q_offset);  //  offset => importance of queue
+      }
+    }
+    // add 1 to prevent div by 0
+    core_req_freqs[core] = __core2freq_LUT[core] / (1 + __core2instr_LUT[core]);
+  }
+
+  int best_q = 0;
+  double freq_offset = 0.01;  // to prevent division by 0
+
+  for (int i = 1; i < NUM_QUEUES; i++) {
+    // offset +  , freq - , size +
+    double prev_metric = q_offsets[best_q] /
+                         (freq_offset + core_req_freqs[best_q]) *
+                         queues[best_q].size();
+    double new_metric =
+        q_offsets[i] / (freq_offset + core_req_freqs[i]) * queues[i].size();
+    if (new_metric > prev_metric) best_q = i;
+    cout << new_metric << endl;
+  }
+  cout << endl;
+
+  curr_queue = best_q;
+  round_counter = 0;
 }
+
+void DramDriver::update_instr_count(int core) { __core2instr_LUT[core]++; }
 
 DramDriver::~DramDriver() {
   for (auto& q : queues) {

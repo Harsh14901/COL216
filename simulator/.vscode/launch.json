@@ -5,7 +5,7 @@
     "name": "Debug",
     "type": "cppdbg",
     "request": "launch",
-    "args": ["1", "120", "tests/input/A5/forwarding"],
+    "args": ["1", "200", "tests/input/random.txt"],
     "stopAtEntry": false,
     "cwd": "${workspaceFolder}",
     "environment": [],

@@ -66,7 +66,6 @@ int main(int argc, char* argv[]) {
         continue;         // do not execute anything in this cycle
       try {
         core.start_execution(stats);
-
       } catch (const std::exception& e) {
         cerr << "[-] A runtime error occured in CORE : " << core.get_id()
              << " - " << e.what() << '\n';

@@ -49,6 +49,9 @@ class DramDriver {
   // An LUT indicating the frequency of DRAM accesses by a core
   int __core2freq_LUT[MAX_CORES];
 
+  // LUT indicating the total number of instructions executed by a core
+  int __core2instr_LUT[MAX_CORES];
+
   // An LUT indicating the VA to PA offsets of a core
   int __core2PA_offsets_LUT[MAX_CORES];
 
@@ -80,6 +83,7 @@ class DramDriver {
   int perform_tasks(Stats& stats);
   bool is_blocking_reg(int core, int reg);
   void set_blocking_regs(int core, vector<int>& regs);
+  void update_instr_count(int core);
   ~DramDriver();
   class QueueFull : public std::runtime_error {
    public:

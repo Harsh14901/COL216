@@ -155,6 +155,7 @@ void Hardware::start_execution(Stats& stats) {
 
   try {
     execute_current(stats);
+    dram_driver->update_instr_count(CORE_ID);
 
   } catch (const DramDriver::QueueFull& e) {
     log.remarks.push_back("DRAM queue unavailable!");
