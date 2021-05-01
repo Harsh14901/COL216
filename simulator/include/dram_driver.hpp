@@ -90,5 +90,11 @@ class DramDriver {
     QueueFull() : std::runtime_error("") {}
     QueueFull(const string& msg) : std::runtime_error(msg) {}
   };
+
+  class InvalidMemory : public std::runtime_error {
+   public:
+    InvalidMemory() : std::runtime_error("") {}
+    InvalidMemory(const string& msg) : std::runtime_error(msg) {}
+  };
 };
 #endif

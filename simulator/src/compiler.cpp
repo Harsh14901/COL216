@@ -116,7 +116,8 @@ bip isValidNum(std::string s, int max_bytes) {
 
   int limit = 1 << max_bytes - 1;
   int val = stoi(s);
-  return {is_num && (-limit <= val) && (val < limit), val};
+  // return {is_num && (-limit <= val) && (val < limit), val};
+  return {is_num, val};
 }
 
 bip getRegister(std::string original_register) {

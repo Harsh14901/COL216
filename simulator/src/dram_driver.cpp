@@ -50,6 +50,10 @@ void DramDriver::issue_write(int core, int addr, hd_t val, Stats& stats) {
 
 void DramDriver::issue_read(int core, int addr, hd_t* dst, Stats& stats,
                             int dst_reg) {
+  if (addr >= Dram::MAX_MEMORY / cores) {
+    throw InvalidMemory("received request with memory out of bounds : " +
+                        to_string(addr));
+  }
   auto req = Request{addr + __core2PA_offsets_LUT[core],
                      -1,
                      stats.clock_cycles,
