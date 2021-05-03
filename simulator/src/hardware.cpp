@@ -154,15 +154,18 @@ void Hardware::start_execution() {
   auto& log = stats->logs.back();
   log.cycle_period = make_pair(stats->clock_cycles, stats->clock_cycles);
   log.instruction = pc->raw;
-  log.core = CORE_ID;
+  log.device = "Core " + to_string(CORE_ID);
 
   try {
     execute_current();
     dram_driver->update_instr_count(CORE_ID);
     stats->instr_count++;
 
+  } catch (const DramDriver::ControllerBusy& e) {
+    log.remarks.push_back("DRAM Driver currently busy");
+
   } catch (const DramDriver::QueueFull& e) {
-    log.remarks.push_back("DRAM queue unavailable!");
+    log.remarks.push_back("DRAM Driver queue unavailable!");
   }
 
   if (instr != Operator::LW && instr != Operator::SW) {

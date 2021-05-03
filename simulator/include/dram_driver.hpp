@@ -30,6 +30,7 @@ class DramDriver {
   const static int REG_COUNT = 32;
   const static int MAX_CORES = 16;
   const static int MAX_BLOCKED_REG = 3;
+  static string DRIVER_ID;
 
   Dram dram;
   int cores;
@@ -70,6 +71,7 @@ class DramDriver {
   void insert_request(Request& request, int q_num);  // Throws QueueFull
   void choose_next_queue();
   void addr_V2P(int& addr, int core);
+  void add_delay(int delay, string remark = "");
   Request* lookup_SW(int q_num, int addr);
   Request* lookup_LW(int core, int reg);
   Request* lookup_request(int core, int reg);

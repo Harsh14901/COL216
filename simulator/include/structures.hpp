@@ -57,7 +57,7 @@ struct Log {
   map<int, hd_t> memory_updates;
   map<int, hd_t> rowbuff_updates;
   vector<string> remarks;
-  int core = -1;
+  string device = "";
 
   void print_verbose();
   void print_registers();

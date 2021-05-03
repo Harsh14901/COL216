@@ -11,6 +11,7 @@ class Dram {
  private:
   const static int NUM_ROWS = 1 << 10;
   const static int NUM_COLS = 1 << 8;
+  static string DRAM_ID;
 
   int active_row = -1;
   hd_t memory[Dram::NUM_ROWS][Dram::NUM_COLS] = {0};

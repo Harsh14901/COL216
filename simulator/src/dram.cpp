@@ -1,7 +1,7 @@
 #include "dram.hpp"
 
 using namespace std;
-
+string Dram::DRAM_ID = "DRAM";
 Dram::Dram(int row_ad, int col_ad)
     : ROW_ACCESS_DELAY(row_ad), COL_ACCESS_DELAY(col_ad) {}
 
@@ -9,6 +9,8 @@ void Dram::load_stats(Stats* stats) { this->stats = stats; }
 
 void Dram::row2buffer(int row) {
   auto log = Log{};
+
+  log.device = DRAM_ID;
   log.cycle_period = {busy_until - ROW_ACCESS_DELAY - COL_ACCESS_DELAY + 1,
                       busy_until - COL_ACCESS_DELAY};
 
@@ -32,6 +34,8 @@ void Dram::buffer2row(int& row) {
   }
 
   auto log = Log{};
+
+  log.device = DRAM_ID;
   log.cycle_period = {start_from, start_from + ROW_ACCESS_DELAY - 1};
   // make_pair(stats->clock_cycles + 1, stats->clock_cycles + ROW_ACCESS_DELAY);
   log.remarks.push_back("DRAM: flushing row buffer to memory for row: " +
@@ -94,6 +98,7 @@ hd_t Dram::get_mem_word(int addr, int dst_reg) {
   stats->logs.push_back(Log{});
   auto& log = stats->logs.back();
 
+  log.device = DRAM_ID;
   log.cycle_period = {busy_until - COL_ACCESS_DELAY + 1, busy_until};
   // make_pair(stats->clock_cycles + 1, stats->clock_cycles + COL_ACCESS_DELAY);
   log.remarks.push_back(
@@ -114,6 +119,7 @@ void Dram::set_mem_word(int addr, hd_t val) {
 
   auto log = Log{};
 
+  log.device = DRAM_ID;
   log.cycle_period = {busy_until - COL_ACCESS_DELAY + 1, busy_until};
   // make_pair(stats->clock_cycles + 1, stats->clock_cycles + COL_ACCESS_DELAY);
 

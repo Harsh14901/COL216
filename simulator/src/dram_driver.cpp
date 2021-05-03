@@ -12,12 +12,27 @@ void Request::nullify() {
   core = -1;
 }
 
+string DramDriver::DRIVER_ID = "DRAM DRIVER";
 DramDriver::DramDriver(Dram dram, int cores, int* reg_updates)
     : dram(dram), cores(cores), reg_updates(reg_updates), curr_queue(-1) {
   __init_LUT();
 }
 
 void DramDriver::load_stats(Stats* stats) { this->stats = stats; }
+
+void DramDriver::add_delay(int delay, string remark) {
+  auto start_time = max(this->busy_until, stats->clock_cycles) + 1;
+  this->busy_until = max(this->busy_until, stats->clock_cycles) + delay;
+  if (delay == 0) {
+    return;
+  }
+  auto log = Log{};
+  log.cycle_period = make_pair(start_time, this->busy_until);
+  log.device = DRIVER_ID;
+  log.remarks.push_back(remark);
+
+  stats->logs.push_back(log);
+}
 
 void DramDriver::__init_LUT() {
   for (int i = 0; i < cores; i++) {
@@ -53,9 +68,9 @@ void DramDriver::addr_V2P(int& addr, int core) {
 
 void DramDriver::issue_write(int core, int addr, hd_t val) {
   addr_V2P(addr, core);
-  // if (stats->clock_cycles < this->busy_until) {
-  //   throw ControllerBusy();
-  // }
+  if (stats->clock_cycles <= this->busy_until) {
+    throw ControllerBusy();
+  }
 
   auto req = Request{addr, val, stats->clock_cycles, core};
   enqueue_request(req);
@@ -64,9 +79,9 @@ void DramDriver::issue_write(int core, int addr, hd_t val) {
 
 void DramDriver::issue_read(int core, int addr, hd_t* dst, int dst_reg) {
   addr_V2P(addr, core);
-  // if (stats->clock_cycles < this->busy_until) {
-  //   throw ControllerBusy();
-  // }
+  if (stats->clock_cycles <= this->busy_until) {
+    throw ControllerBusy();
+  }
 
   auto req = Request{addr, -1, stats->clock_cycles, core, dst, dst_reg};
   enqueue_request(req);
@@ -77,7 +92,7 @@ void DramDriver::issue_read(int core, int addr, hd_t* dst, int dst_reg) {
 // The method assumes that it is called at every iteration of clock cycles.
 void DramDriver::perform_tasks() {
   auto curr_req = get_curr_request();
-  if (curr_req == nullptr) {
+  if (curr_req == nullptr || stats->clock_cycles <= this->busy_until) {
     return;
   }
   if (dram.busy_until == stats->clock_cycles) {
@@ -104,13 +119,15 @@ bool DramDriver::is_blocking_reg(int core, int reg) {
 }
 
 void DramDriver::enqueue_request(Request& request) {
-  int enqueue_delay = 3;
+  int enqueue_delay = 2;
+  string enqueue_remark = "Enqueuing request";
   auto row = dram.addr2rowcol(request.addr).first;
 
   int unallocated_q = -1;
   for (int i = 0; i < NUM_QUEUES; i++) {
     if (__queue2row_LUT[i] == row) {
       insert_request(request, i);
+      add_delay(enqueue_delay, enqueue_remark);
       return;
     } else if (__queue2row_LUT[i] == -1 && unallocated_q == -1) {
       unallocated_q = i;
@@ -123,6 +140,8 @@ void DramDriver::enqueue_request(Request& request) {
     __queue2row_LUT[unallocated_q] = row;
     insert_request(request, unallocated_q);
   }
+
+  add_delay(enqueue_delay, enqueue_remark);
 }
 
 void DramDriver::insert_request(Request& request, int q_num) {
@@ -148,14 +167,16 @@ void DramDriver::insert_request(Request& request, int q_num) {
 
       if (existing_sw != nullptr) {
         *request.dst = existing_sw->val;
-        stats->logs.push_back(Log{});
-        auto& log = stats->logs.back();
+        auto log = Log{};
 
+        log.device = DRIVER_ID;
         log.cycle_period =
             make_pair(stats->clock_cycles + 1, stats->clock_cycles + 1);
         log.remarks.push_back("Forwarding values from DRAM driver");
+        stats->logs.push_back(log);
 
         reg_updates[core] = stats->clock_cycles + 1;
+
         return;
       }
 
@@ -179,8 +200,13 @@ void DramDriver::insert_request(Request& request, int q_num) {
 void DramDriver::complete_request() {
   auto& req = queues[curr_queue].front();
   auto core = req.core;
+
+  int completion_delay = 1;
+  string completion_remark = "Completing request, returning result to register";
+
   if (req.is_SW()) {
     dram.set_mem_word(req.addr, req.val);
+    completion_delay = 0;
   } else if (req.is_LW()) {
     auto val = dram.get_mem_word(req.addr, req.dst_reg);
     *req.dst = val;
@@ -204,6 +230,7 @@ void DramDriver::complete_request() {
   }
   if (!req.is_NULL()) {
     round_counter++;
+    add_delay(completion_delay, completion_remark);
   }
 }
 
@@ -257,6 +284,9 @@ Request* DramDriver::get_curr_request() {
   return &queues[curr_queue].front();
 }
 void DramDriver::choose_next_queue() {
+  int scheduling_delay = 5;
+  string scheduling_remark = "Scheduling next queue";
+
   int q_offsets[NUM_QUEUES];  // metric denoting the importance of the blocked
                               // requests in a queue
   int core_req_freqs[MAX_CORES];  // ratio of Request frequency to total number
@@ -297,10 +327,11 @@ void DramDriver::choose_next_queue() {
     }
     // cout << new_metric << endl;
   }
-  cout << endl;
 
   curr_queue = best_q;
   round_counter = 0;
+
+  add_delay(scheduling_delay, scheduling_remark);
 }
 
 void DramDriver::update_instr_count(int core) { __core2instr_LUT[core]++; }
