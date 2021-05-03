@@ -61,10 +61,14 @@ class DramDriver {
   int curr_queue = -1;
   int round_counter = 0;
 
+  int* reg_updates;
+
   void complete_request(Stats& stats);
-  void enqueue_request(Request& request);            // Throws QueueFull
-  void insert_request(Request& request, int q_num);  // Throws QueueFull
+  void enqueue_request(Request& request, Stats& stats);  // Throws QueueFull
+  void insert_request(Request& request, int q_num,
+                      Stats& stats);  // Throws QueueFull
   void choose_next_queue();
+  void addr_V2P(int& addr, int core);
   Request* lookup_SW(int q_num, int addr);
   Request* lookup_LW(int core, int reg);
   Request* lookup_request(int core, int reg);
@@ -73,17 +77,18 @@ class DramDriver {
   void __init_LUT();
 
  public:
-  DramDriver(Dram Dram, int cores);
+  DramDriver(Dram Dram, int cores, int* reg_updates);
   void issue_write(int core, int addr, hd_t val,
                    Stats& stats);  // Throws QueueFull
   void issue_read(int core, int addr, hd_t* dst, Stats& stats,
                   int dst_reg);  // Throws QueueFull
 
   // Call at every clock cycle
-  int perform_tasks(Stats& stats);
+  void perform_tasks(Stats& stats);
   bool is_blocking_reg(int core, int reg);
   void set_blocking_regs(int core, vector<int>& regs);
   void update_instr_count(int core);
+  bool is_idle();
   ~DramDriver();
   class QueueFull : public std::runtime_error {
    public:

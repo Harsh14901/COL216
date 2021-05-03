@@ -35,7 +35,10 @@ int main(int argc, char* argv[]) {
     dram = Dram();
   }
 
-  auto driver = DramDriver(dram, N);
+  int register_write_times[N];
+  memset(register_write_times, -1, sizeof(register_write_times));
+
+  auto driver = DramDriver(dram, N, register_write_times);
   bool blocking = false;
   vector<Hardware> cores(N);
 
@@ -55,21 +58,32 @@ int main(int argc, char* argv[]) {
 
   Stats stats;
 
+  unordered_set<int> fault_cores;
+
   for (int i = 0; i < M; i++) {
     stats.clock_cycles = i + 1;
 
-    int skip_core = driver.perform_tasks(stats);
+    driver.perform_tasks(stats);
 
     for (auto& core : cores) {
-      if (skip_core ==
-          core.get_id())  // if a writeback is performed to this core
-        continue;         // do not execute anything in this cycle
+      int id = core.get_id();
+      if (stats.clock_cycles == register_write_times[id] ||
+          fault_cores.find(id) != fault_cores.end())
+        continue;  // if a writeback is performed to this core or it is a core
+                   // that has undergone a fault do not execute in this cycle
+
       try {
         core.start_execution(stats);
+      } catch (Hardware::Terminated& e) {
+        fault_cores.insert(id);
       } catch (const std::exception& e) {
-        cerr << "[-] A runtime error occured in CORE : " << core.get_id()
-             << " - " << e.what() << '\n';
+        fault_cores.insert(id);
+        cerr << "[-] A runtime error occured in CORE : " << id << " - "
+             << e.what() << '\n';
       }
+    }
+    if (fault_cores.size() == N && driver.is_idle()) {
+      break;
     }
   }
   stats.print_verbose();

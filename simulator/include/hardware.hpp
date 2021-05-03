@@ -34,6 +34,12 @@ class Hardware {
   void load_program(vector<Instruction> program);
   vector<int> get_blocked_registers();
 
+  class Terminated : public std::runtime_error {
+   public:
+    Terminated() : std::runtime_error("") {}
+    Terminated(const string& msg) : std::runtime_error(msg) {}
+  };
+
  private:
   vector<hd_t> registers;
 

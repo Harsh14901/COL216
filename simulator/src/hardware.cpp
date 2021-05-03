@@ -131,7 +131,7 @@ void Hardware::terminate() { pc = program.end(); }
 
 void Hardware::start_execution(Stats& stats) {
   if (pc == program.end()) {
-    return;
+    throw Terminated();
   }
   vector<int> blocked_regs = get_blocked_registers();
   dram_driver->set_blocking_regs(CORE_ID, blocked_regs);
@@ -156,6 +156,7 @@ void Hardware::start_execution(Stats& stats) {
   try {
     execute_current(stats);
     dram_driver->update_instr_count(CORE_ID);
+    stats.instr_count++;
 
   } catch (const DramDriver::QueueFull& e) {
     log.remarks.push_back("DRAM queue unavailable!");

@@ -93,6 +93,9 @@ void Stats::print_verbose() {
   }
   cout << "---------- Execution statistics ----------" << endl;
   cout << "[#] Clock cycles: " << clock_cycles << endl;
+  cout << "[#] Total instructions executed: " << instr_count << endl;
+  cout << "[#] Average throughput: " << float(instr_count) / float(clock_cycles)
+       << endl;
   cout << "[#] Number of row buffer updates: " << rowbuff_update_count << endl;
   cout << "[#] Updated memory : " << endl;
   for (auto& v : updated_memory) {

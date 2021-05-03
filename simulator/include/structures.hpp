@@ -66,6 +66,7 @@ struct Log {
 struct Stats {
   int clock_cycles = 0;
   int rowbuff_update_count = 0;
+  int instr_count = 0;
   map<int, hd_t> updated_memory;
   vector<Log> logs;
   void print_verbose();

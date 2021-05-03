@@ -11,4 +11,7 @@ addi $s0, $t0, 0
 addi $s0, $t0, 0
 addi $s0, $t0, 0
 addi $s0, $t0, 0
-
+addi $s0, $t0, 0
+addi $s0, $t0, 0
+addi $s0, $t0, 0
+addi $s0, $t0, 0
