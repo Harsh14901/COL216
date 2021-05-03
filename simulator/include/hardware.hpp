@@ -23,16 +23,17 @@ class Hardware {
 
   Hardware();
 
-  void execute_current(Stats& stats);
+  void execute_current();
   void advance_pc();
   void terminate();
-  void start_execution(Stats& stats);
+  void start_execution();
   void set_blocking_mode(bool block);
   void set_id(int id);
   int get_id();
   void load_dram_driver(DramDriver* driver);
   void load_program(vector<Instruction> program);
   vector<int> get_blocked_registers();
+  void load_stats(Stats* stats);
 
   class Terminated : public std::runtime_error {
    public:
@@ -47,6 +48,7 @@ class Hardware {
   vector<Instruction>::iterator pc;
 
   DramDriver* dram_driver;
+  Stats* stats;
 
   int blocked_register = -1;
   map<int, int> blocking_registers;
@@ -65,8 +67,8 @@ class Hardware {
   void beq(int src1, int src2, int jump);
   void bne(int src1, int src2, int jump);
   void j(int jump);
-  void lw(int dst, int src, int offset, Stats& stats);
-  void sw(int src, int dst, int offset, Stats& stats);
+  void lw(int dst, int src, int offset);
+  void sw(int src, int dst, int offset);
   void initialize_registers();
   void set_register(int dst, hd_t value);
 };

@@ -16,6 +16,8 @@ class Dram {
   hd_t memory[Dram::NUM_ROWS][Dram::NUM_COLS] = {0};
   hd_t row_buff[Dram::NUM_COLS] = {0};
 
+  Stats* stats;
+
  public:
   const static int MAX_MEMORY = sizeof(memory);  // In bytes
   int ROW_ACCESS_DELAY;
@@ -25,16 +27,17 @@ class Dram {
 
   Dram(int row_access_delay = 10, int col_access_delay = 2);
 
-  void issue_request(int addr, Stats& stats);
-  hd_t get_mem_word(int addr, int dst_reg, Stats& stats);
-  void set_mem_word(int addr, hd_t val, Stats& stats);
+  void issue_request(int addr);
+  hd_t get_mem_word(int addr, int dst_reg);
+  void set_mem_word(int addr, hd_t val);
   pair<int, int> addr2rowcol(int addr);
   int get_num_rows();
   int get_active_row();
+  void load_stats(Stats* stats);
 
  protected:
   void check_word_aligned(int addr);
-  void row2buffer(int row, Stats& stats);
-  void buffer2row(int& row, Stats& stats);
+  void row2buffer(int row);
+  void buffer2row(int& row);
 };
 #endif

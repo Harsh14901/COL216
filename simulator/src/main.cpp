@@ -21,7 +21,9 @@ int main(int argc, char* argv[]) {
     string name = argv[i + 3];
     programs[i] = compile(name);
   }
-
+  int register_write_times[N];
+  memset(register_write_times, -1, sizeof(register_write_times));
+  Stats stats;
   Dram dram;
 
   if (argc >= N + 5) {
@@ -35,10 +37,10 @@ int main(int argc, char* argv[]) {
     dram = Dram();
   }
 
-  int register_write_times[N];
-  memset(register_write_times, -1, sizeof(register_write_times));
+  dram.load_stats(&stats);
 
   auto driver = DramDriver(dram, N, register_write_times);
+  driver.load_stats(&stats);
   bool blocking = false;
   vector<Hardware> cores(N);
 
@@ -52,18 +54,17 @@ int main(int argc, char* argv[]) {
   for (int i = 0; i < N; i++) {
     cores[i].load_dram_driver(&driver);
     cores[i].load_program(programs[i]);
+    cores[i].load_stats(&stats);
     cores[i].set_blocking_mode(blocking);
     cores[i].set_id(i);
   }
-
-  Stats stats;
 
   unordered_set<int> fault_cores;
 
   for (int i = 0; i < M; i++) {
     stats.clock_cycles = i + 1;
 
-    driver.perform_tasks(stats);
+    driver.perform_tasks();
 
     for (auto& core : cores) {
       int id = core.get_id();
@@ -73,7 +74,7 @@ int main(int argc, char* argv[]) {
                    // that has undergone a fault do not execute in this cycle
 
       try {
-        core.start_execution(stats);
+        core.start_execution();
       } catch (Hardware::Terminated& e) {
         fault_cores.insert(id);
       } catch (const std::exception& e) {

@@ -5,16 +5,18 @@ using namespace std;
 Dram::Dram(int row_ad, int col_ad)
     : ROW_ACCESS_DELAY(row_ad), COL_ACCESS_DELAY(col_ad) {}
 
-void Dram::row2buffer(int row, Stats& stats) {
+void Dram::load_stats(Stats* stats) { this->stats = stats; }
+
+void Dram::row2buffer(int row) {
   auto log = Log{};
   log.cycle_period = {busy_until - ROW_ACCESS_DELAY - COL_ACCESS_DELAY + 1,
                       busy_until - COL_ACCESS_DELAY};
 
-  // make_pair(stats.clock_cycles + 1, stats.clock_cycles + ROW_ACCESS_DELAY);
+  // make_pair(stats->clock_cycles + 1, stats->clock_cycles + ROW_ACCESS_DELAY);
   log.remarks.push_back("DRAM: activating row " + to_string(row));
-  // stats.clock_cycles += ROW_ACCESS_DELAY;
-  stats.rowbuff_update_count++;
-  stats.logs.push_back(log);
+  // stats->clock_cycles += ROW_ACCESS_DELAY;
+  stats->rowbuff_update_count++;
+  stats->logs.push_back(log);
 
   copy(memory[row], memory[row] + Dram::NUM_COLS, row_buff);
   active_row = row;
@@ -24,17 +26,17 @@ int Dram::get_num_rows() { return Dram::NUM_ROWS; }
 
 int Dram::get_active_row() { return active_row; }
 
-void Dram::buffer2row(int& row, Stats& stats) {
+void Dram::buffer2row(int& row) {
   if (row == -1) {
     return;
   }
 
   auto log = Log{};
   log.cycle_period = {start_from, start_from + ROW_ACCESS_DELAY - 1};
-  // make_pair(stats.clock_cycles + 1, stats.clock_cycles + ROW_ACCESS_DELAY);
+  // make_pair(stats->clock_cycles + 1, stats->clock_cycles + ROW_ACCESS_DELAY);
   log.remarks.push_back("DRAM: flushing row buffer to memory for row: " +
                         to_string(row));
-  // stats.clock_cycles += ROW_ACCESS_DELAY;
+  // stats->clock_cycles += ROW_ACCESS_DELAY;
 
   for (int i = 0; i < Dram::NUM_COLS; i++) {
     if (memory[row][i] != row_buff[i]) {
@@ -43,7 +45,7 @@ void Dram::buffer2row(int& row, Stats& stats) {
     }
     memory[row][i] = row_buff[i];
   }
-  stats.logs.push_back(log);
+  stats->logs.push_back(log);
   // active_row = row;
 
   // row = -1;
@@ -67,9 +69,9 @@ pair<int, int> Dram::addr2rowcol(int addr) {
   return make_pair(row, col);
 }
 
-void Dram::issue_request(int addr, Stats& stats) {
+void Dram::issue_request(int addr) {
   int new_active_row = addr2rowcol(addr).first;
-  start_from = stats.clock_cycles;
+  start_from = stats->clock_cycles;
   busy_until = start_from + COL_ACCESS_DELAY - 1;
   if (active_row != new_active_row) {
     busy_until += ROW_ACCESS_DELAY;
@@ -81,48 +83,48 @@ void Dram::issue_request(int addr, Stats& stats) {
   // active_row = new_active_row;
 }
 
-hd_t Dram::get_mem_word(int addr, int dst_reg, Stats& stats) {
+hd_t Dram::get_mem_word(int addr, int dst_reg) {
   auto point = addr2rowcol(addr);
 
   if (active_row != point.first) {
-    buffer2row(active_row, stats);
-    row2buffer(point.first, stats);
+    buffer2row(active_row);
+    row2buffer(point.first);
   }
 
-  stats.logs.push_back(Log{});
-  auto& log = stats.logs.back();
+  stats->logs.push_back(Log{});
+  auto& log = stats->logs.back();
 
   log.cycle_period = {busy_until - COL_ACCESS_DELAY + 1, busy_until};
-  // make_pair(stats.clock_cycles + 1, stats.clock_cycles + COL_ACCESS_DELAY);
+  // make_pair(stats->clock_cycles + 1, stats->clock_cycles + COL_ACCESS_DELAY);
   log.remarks.push_back(
       "DRAM: Read " + to_string(row_buff[point.second]) +
       " from row buffer @ " + to_string(addr) +
       " to register: " + reverse_register_map["$" + to_string(dst_reg)]);
-  // stats.clock_cycles += COL_ACCESS_DELAY;
-  // busy_until = stats.clock_cycles;
+  // stats->clock_cycles += COL_ACCESS_DELAY;
+  // busy_until = stats->clock_cycles;
   return row_buff[point.second];
 }
 
-void Dram::set_mem_word(int addr, hd_t val, Stats& stats) {
+void Dram::set_mem_word(int addr, hd_t val) {
   auto point = addr2rowcol(addr);
   if (active_row != point.first) {
-    buffer2row(active_row, stats);
-    row2buffer(point.first, stats);
+    buffer2row(active_row);
+    row2buffer(point.first);
   }
 
   auto log = Log{};
 
   log.cycle_period = {busy_until - COL_ACCESS_DELAY + 1, busy_until};
-  // make_pair(stats.clock_cycles + 1, stats.clock_cycles + COL_ACCESS_DELAY);
+  // make_pair(stats->clock_cycles + 1, stats->clock_cycles + COL_ACCESS_DELAY);
 
   log.rowbuff_updates[addr] = val;
-  stats.updated_memory[addr] = val;
+  stats->updated_memory[addr] = val;
 
   log.remarks.push_back("DRAM: Writing " + to_string(val) +
                         " to row buffer @ " + to_string(addr));
-  // stats.clock_cycles += COL_ACCESS_DELAY;
-  stats.rowbuff_update_count += 1;
-  stats.logs.push_back(log);
-  // busy_until = stats.clock_cycles;
+  // stats->clock_cycles += COL_ACCESS_DELAY;
+  stats->rowbuff_update_count += 1;
+  stats->logs.push_back(log);
+  // busy_until = stats->clock_cycles;
   row_buff[point.second] = val;
 }
