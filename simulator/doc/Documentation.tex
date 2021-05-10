@@ -44,7 +44,7 @@
 
 \pagestyle{fancy}
 \fancyhf{}
-\chead{Memory Request Ordering}
+\chead{DRAM Request Manager for Multicore Processors}
 \rfoot{\thepage}
 
 \begin{document}
@@ -55,8 +55,8 @@
     \Large INDIAN INSTITUTE OF TECHNOLOGY DELHI\\[1.0 cm]
     \LARGE COL216\\[0.1cm]
     \Large \underline{Report}\\
-    \large \[Assignment-4\]
-    \LARGE \textbf{Memory Request Ordering}
+    \large \[Assignment-5\]
+    \LARGE \textbf{DRAM Request Manager for Multicore Processors}
 
 
     \rule{\textwidth}{0.2 mm} \\[0.1cm]
@@ -77,6 +77,10 @@
 \end{titlepage}
 \tableofcontents
 \newpage
+\section{Overview}
+This assignment extends the earlier DRAM Driver to the multicore CPU
+case. The architecture now consists of $N$ CPU cores, each running a different MIPS program,
+and sending DRAM requests to a DRAM Driver which interfaces with the DRAM
 
 \section{Modules}
 We implemented a simulator in \verb|C++| for executing MIPS instructions from assembly code. The program was divided into \verb|compiler| ,\verb|hardware|, \verb|DRAM| and a \verb|DramDriver| module.
@@ -103,60 +107,113 @@ These modules perform different functions as outlined below
 
 \subsection{DramDriver}
 \begin{itemize}
-    \item A \verb|DramDriver| module is implemented to capture all \verb|DRAM| requests and order them in a queue according to some pre determined heuristics.
-    \item The driver recieves the requests from hardware and issues them to \verb|DRAM| in a particular order to maximize clock cycle utilization.
-    \item The hardware can also send a blocking call to the driver instructing it to execute all requests until a certain condition is met.
+    \item A \verb|DramDriver| module is implemented to capture all \verb|DRAM| requests from all cores and reorder them according to some pre determined heuristics.
+    \item It is equipped with all optimizations to give the best performance. It includes forwarding, eliminating redundant \verb|LW| and \verb|SW| instructions.
+    \item It also protects against starvation by appropriately context switching out DRAM requests of a core.
+    \item It automaticaly converts the Virtual address space to the physical address space before queuing in a memory request.
 \end{itemize}
 
 \section{Approach}
 
-The approach used to simulate the DRAM memory reordering is described in this section
+The approach used to implement the \verb|DramDriver| for multicore processors is described in this section.
+\subsection{Data}
+We propose to implement the \verb|DramDriver| in hardware using a few lookup tables and some queues for storing the pending requests.
+The data modules required by our implementation are described in detail below.
+\subsubsection{Queues}
+$8$ queues, each with a size of $8$ requests. This gives us a space for exactly $64$ requests at a time.
+Queues need to be of finite size since we would have hardware supporting only a finite size and any implementation with an infinite size assumption is infeasible to implement.
+
+Keeping in mind the design principle \textit{Simplicity favours regularity}, we have supported only push and pop operations on the queue,
+which can be easily implemented using a shift register. Each queue can be indexed using a multiplexor as done in a cache.
+We have also assumed random access of any of the 8 elements of the queue which is easy to implement.
+A queue holds all the requests of the same row. Hence every queue deals with a different row of the DRAM and this makes it easier to schedule requests.\\
+
+The decision for the size of each queue and the number of queues was taken keeping in mind the hardware constraints and design principle \textit{Smaller is faster}
+However, our implementation is completely modular, and by changing just one value we can simulate the Driver with some other values to
+test which one seems to give the best throughput.
+
+\subsubsection{Look-up Tables}
+
+The state of the queues is maintained using several lookup tables which can be easily implemented in the hardware using multiplexors and is also used in many practical hardware implementations.
+The description of each look up table along with its corresponding name in our simulator code is given below.
+Assume $N$ is the number of cores in the processor.
+\begin{table}[H]
+    \begin{tabular}[]{|c|c|p{0.2\linewidth}|p{0.5\linewidth}|}
+        \hline
+        LUT name                & Size          & Index                    & Stored value                                                                                                                   \\  \hline
+        \verb|__core2freq_LUT| & $N $          & core number              & Frequency of DRAM accesses (\verb|lw|/ \verb|sw|)                                                  \\ \hline
+        \verb|__core2instr_LUT| & $N $          & core number              & Number of instructions executed.                                                                                               \\ \hline
+        \verb|__core2PA_offsets_LUT| & $N $          & core number              & Virtual to physical address offset.                                                                                            \\ \hline
+        \verb|__core2blocked_reg_LUT| & $N \times 3$  & core number              & The set of blocked registers.                                                                                                  \\ \hline
+        \verb|__queue2row_LUT| & $8 $          & queue number             & row of requests in the queue.                                                                                                  \\ \hline
+        \verb|__queue2offset_LUT| & $8 $          & queue number             & Used internally to store the change in size of queue since it was emptied.                                                     \\ \hline
+        \verb|__core_reg2offsets_LUT| & $N \times 32$ & (core num, register num) & Returns the (queue number, index in queue) pair of a \verb|lw| request involving the given register of the core. \\ \hline
+    \end{tabular}
+    \caption{Description of LUTs}
+\end{table}
+
+\subsection{Control}
+This section specifies how the data modules are used to implement the queuing model for DRAM requests.
+The following points briefly illustrate the working of our model. Assume that the relevant lookup tables are updated
+at each operation, the exact details of which are skipped here for simplicity.
 \begin{itemize}
-    \item The \verb|DramDriver| orders the memory requests to minimize the number of row buffer reloads required. Our approach orders the requests of the same row together and another row is chosen only when there is no more request of a given row.
-    \item To ensure correctness we have not changed the order of requests of the same address. This ensures that requests of a particular address are always issued in the same order as they were executed by the processor.
-    \item The driver also supports blocking on a particular register value. This blocks the processor and instructs the driver to complete all requests pending for the blocking register.
-    \item The DRAM requests are issued asynchronously and the processor always executes in non blocking mode, since reordering of requests is not possible in blocking mode.
-    \item An optimization was introduced that allowed the driver to overwrite multiple requests for the same address. For example if there are two consecutive write requests to a particular memory address then the first request is deleted provided the same memory address was not used to load another register in between.
-    \item Also, when two consecutive read requests are issued for the same register consecutively, the first request is always deleted.
-    \item Another optimization is introduced which selects the next batch of requests after all requests on a row are exhausted depending on the blocking registers involved in each batch. The batch with a blocking register is preferred and executed first. This is illustrated in the testcase -\verb|tests/input/choosing_row.txt|
-    \item In addition to choosing optimal batches of rows to process, we also choose the requests to execute with the same row but with different addresses.The requests with a blocking register is preferred This is illustrated in the testcase - \verb| tests/input/choosing_address_in_row.txt |
+    \item When a request is received, the row number is checked and a queue is searched with the given row, this can be done parallely in hardware using
+          8 comparators attached to the \verb|__queue2row_LUT|. If a queue is found with the row, a push operation is attempted in the queue, if the queue is full then
+          an exception is thrown which signals the processor that it should retry the request once the queue has some space.
+    \item When a request is completed it is removed from the queue (pop), updating the relevant lookup up tables to ensure correctness.
+    \item The queue switching logic takes into account the blocked registers of each core (\verb|__core2blocked_reg_LUT|), the number of instructions executed by a core (\verb|__core2instr_LUT|), the frequency of DRAM accesses by a core (\verb|__core2freq_LUT|)
+          and creates a combined metric to decide the next queue. All this logic can be handled by a combinational circuit and is feasible to implement in hardware.
+    \item The switching logic first tries to schedule the queue that has a blocking request. However, if multiple queues with such requests exist then the core with the lowest frequency of DRAM accesses and largest number of instructions is chosen (to increase the throughput).
+    \item The circuits also incur a delay of some clock cycles and a busy bit is maintained inside the controller. When the controller is busy, it does not accept any more requests, and generates an exception.
 \end{itemize}
+\newpage
+\subsection{Optimizations}
+
+We have also implemented several optimizations to eliminate redundant work for increasing the throughput.
+
+\begin{itemize}
+    \item \verb|Forwarding:| Whenever we recieve a \verb|lw| for an address such that a \verb|sw| for it already exists in our queue, we do not enqueue the \verb|lw| request in the queue and instead forward the value directly to the corresponding register
+          from the value stored in the \verb|sw| request in the queue.
+    \item \verb|Redundant sw:| Before inserting a \verb|sw| request in the queue we lookup for a matching \verb|sw| request in the queue and nullify the searched request.
+    \item \verb|Redundant lw:| Before inserting a \verb|lw| request in a queue, a matching \verb|lw| request is obtained using the \verb|__core_reg2offsets_LUT| lookup table.
+          If the lookup table contains valid entries the request corresponding to the matching request is nullified.
+    \item \verb|Starvation:| The driver executes all requests in the current queue. However to prevent starvation a counter is maintained each time a request is completed,
+          if this counter exceeds the queue size then the queue is switched out and some other queue is chosen to execute requests.
+\end{itemize}
+
+\textbf{Note:} Since the queue size is finite ($8$) looking up a request in a queue can be implemented using $8$ comparators which would operate parallely to check for the required conditions.
 
 \subsection{Advantages}
 \begin{itemize}
-    \item The approach ensures that the number of row buffer reloads required is minimized, to reduce the overhead of writing back and loading the row buffer.
-    \item The approach always ensures it is not slower than no reordering. We have also maintained correctness by preventing reordering in cases where reordering can yield incorrect results.
-    \item The asynchronous nature of DRAM requests allows us to exploit the non blocking functionality of the processor and DRAM thus reducing the clock cycle times required for execution of a program.
+    \item The approach ensures that the overall throughput is maximized.
     \item The optimizations to replace requests pertaining to the same addresses or registers eliminate redundant requests thus further reducing the runtime without affecting the correctness.
-    \item The optimization to select the next batch of request based on the blocking registers helps to reduce the delay of processor clock cycles when a blocking register is encountered.
+    \item Forwarding enables us to entirely skip going to the DRAM and fetching the value directly in a short period of time.
+    \item Eliminating starvation ensures that a single core does not eat up all the resources on a DRAM driver.
+    \item The sophisticated scheduling logic incorporates all parameters (instruction access count, frequency of DRAM accesses, presence of blocking requests) and combines them to generate a measure that is compared to decide the next queue in schedule. This metric plays an essential role in determining the throughput.
 \end{itemize}
 \subsection{Disadvantages}
 \begin{itemize}
-    \item The reordering can cause processor to block for certain requests that are irrelevant to the blocking instruction. This results in a tradeoff between the DRAM row buffer access time and processor blocked time.
-    \item While selecting the appropriate batch of requests for a given row we select it based on the blocking registers involved in each batch. However this may/may not result in an efficient execution workflow for every program as illustrated in one of our test cases.
+    \item Our approach will be useful for programs with large number of instructions and comparing the throughput on small programs could give incorrect interpretations.
+    \item Since the queue supports only push and pop, we can execute requests starting from the front only. However when a queue is scheduled it may be possible that a blocking request is
+          present at the end of the queue, and it would have to wait for all the requests to its front.
 \end{itemize}
 \section{Testing}
 
 The testing method was completely manual. The test cases written manually are included in the \verb|./tests/input| directory. The test cases were run with different parameters
 of the program and the outcomes were compared.
 \begin{itemize}
-    \item \verb|continuous_lw.txt| : This test case loads multiple values from the memory in the same register. This tests our optimization of deleting previous requests when same register is involved.
-    \item \verb|continuous_sw.txt| : This test case stores multiple values into the memory in the same address. This tests our optimization of deleting previous requests when same address is involved.
-    \item \verb|alternate_load_store.txt| : This test case includes alternate load and store instructions with different offsets to test additional deletion of SW requests once the LW request between them is deleted.
-    \item \verb|multiple_sw.txt| : This file tests elimination of redundant instructions that involve the same address and the same register.
-    \item \verb|choosing_row.txt| : This file tests our second optimization of choosing the batch of requests based on the blocking registers involved.
-    \item \verb|choosing_address_in_row.txt| : This file tests our third optimization of choosing the requests within the same row based on the blocking registers involved.
-    \item \verb|memory_skips.txt|: This test case issues multiple read/write requests to the driver with each successive request differing in the row of the address involved. This tests the reordering of the requests in the appropriate manner to reduce row buffer reloads.
-    \item \verb|disadvantage.txt|: This test case demonstrates a situation in which our method takes more cycles as compared with an non-blocking implementation with a queue.
-    \item \verb|random.txt|: This test case is randomly generated.
+    \item \verb|test1.txt:| description here.
+    \item \verb|test2.txt:| description here.
+    \item \verb|test3.txt:| description here.
 \end{itemize}
 
 \subsection{Result}
-The program output was observed and all the register, memory and row buffer values were inspected for correctness manually. In each of the test case the expected outputs matched. The program blocked when necessary and executed parallely when blocking was not required.\\[0.2cm]
+The program output was observed and all the register, memory and row buffer values were inspected for correctness manually. In each of the test case the expected outputs matched.\\[0.2cm]
 The output logs of the test cases are available in the \verb|./tests/output| directory. The test cases were run with different configuration options.
 
 \section{Assumptions}
 \begin{itemize}
+    \item We have assumed private physical spaces for each core, and this is achieved by dividing the total available memory into equal parts between each core. Although, in real implementations this would be done using a page table and the memory allocation is handled by the OS, but for simulation purposes our assumption is quite reasonable and shouldn't affect simlulation of ordinary programs.
     \item We have assumed that the maximum memory available to any user program is $2^{20}$ bytes. This does not include the memory required for storing instructions.
     \item We have assumed 32 registers for MIPS each of them storing 32 bits. We have hardwired the register \verb|$zero| to the value $0$ as is the case in MIPS hardware. We have also restricted use of kernel reserved registers \verb|$26, $27|.
     \item We have assumed that exactly 1 clock cycle is required for each of the instructions except \verb|lw, sw| to display the execution statistics.
