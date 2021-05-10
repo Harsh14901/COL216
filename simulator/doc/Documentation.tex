@@ -123,8 +123,8 @@ The data modules required by our implementation are described in detail below.
 $8$ queues, each with a size of $8$ requests. This gives us a space for exactly $64$ requests at a time.
 Queues need to be of finite size since we would have hardware supporting only a finite size and any implementation with an infinite size assumption is infeasible to implement.
 
-Keeping in mind the design principle \textit{Simplicity favours regularity}, we have supported only push and pop operations on the queue,
-which can be easily implemented using a shift register. Each queue can be indexed using a multiplexor as done in a cache.
+We have supported random access to queued requests and a request can be enqueued at any index. This just invoves changing the stored register value from a register file.
+Each queue can be indexed using a multiplexor as done in a cache.
 We have also assumed random access of any of the 8 elements of the queue which is easy to implement.
 A queue holds all the requests of the same row. Hence every queue deals with a different row of the DRAM and this makes it easier to schedule requests.\\
 
@@ -146,7 +146,7 @@ Assume $N$ is the number of cores in the processor.
         \verb|__core2PA_offsets_LUT| & $N $          & core number              & Virtual to physical address offset.                                                                                            \\ \hline
         \verb|__core2blocked_reg_LUT| & $N \times 3$  & core number              & The set of blocked registers.                                                                                                  \\ \hline
         \verb|__queue2row_LUT| & $8 $          & queue number             & row of requests in the queue.                                                                                                  \\ \hline
-        \verb|__queue2offset_LUT| & $8 $          & queue number             & Used internally to store the change in size of queue since it was emptied.                                                     \\ \hline
+        \verb|__queue2size_LUT| & $8 $          & queue number             & Number of active requests in the queue                                                                                         \\ \hline
         \verb|__core_reg2offsets_LUT| & $N \times 32$ & (core num, register num) & Returns the (queue number, index in queue) pair of a \verb|lw| request involving the given register of the core. \\ \hline
     \end{tabular}
     \caption{Description of LUTs}
@@ -164,9 +164,9 @@ at each operation, the exact details of which are skipped here for simplicity.
     \item The queue switching logic takes into account the blocked registers of each core (\verb|__core2blocked_reg_LUT|), the number of instructions executed by a core (\verb|__core2instr_LUT|), the frequency of DRAM accesses by a core (\verb|__core2freq_LUT|)
           and creates a combined metric to decide the next queue. All this logic can be handled by a combinational circuit and is feasible to implement in hardware.
     \item The switching logic first tries to schedule the queue that has a blocking request. However, if multiple queues with such requests exist then the core with the lowest frequency of DRAM accesses and largest number of instructions is chosen (to increase the throughput).
+          When scheduling a queue we try to execute the requests that are blocking a processor over other requests. However, if there is a dependency conflict then a compromise has to be made and other requests have to be executed.
     \item The circuits also incur a delay of some clock cycles and a busy bit is maintained inside the controller. When the controller is busy, it does not accept any more requests, and generates an exception.
 \end{itemize}
-\newpage
 \subsection{Optimizations}
 
 We have also implemented several optimizations to eliminate redundant work for increasing the throughput.
@@ -190,12 +190,11 @@ We have also implemented several optimizations to eliminate redundant work for i
     \item Forwarding enables us to entirely skip going to the DRAM and fetching the value directly in a short period of time.
     \item Eliminating starvation ensures that a single core does not eat up all the resources on a DRAM driver.
     \item The sophisticated scheduling logic incorporates all parameters (instruction access count, frequency of DRAM accesses, presence of blocking requests) and combines them to generate a measure that is compared to decide the next queue in schedule. This metric plays an essential role in determining the throughput.
+    \item We always try to unblock a core first and in order to do that we start executing from the blocked requests in a queue while scheduling rows. This allows a processor to unblock as fast as possible and give the maximum throughput possible.
 \end{itemize}
 \subsection{Disadvantages}
 \begin{itemize}
     \item Our approach will be useful for programs with large number of instructions and comparing the throughput on small programs could give incorrect interpretations.
-    \item Since the queue supports only push and pop, we can execute requests starting from the front only. However when a queue is scheduled it may be possible that a blocking request is
-          present at the end of the queue, and it would have to wait for all the requests to its front.
 \end{itemize}
 \section{Testing}
 
