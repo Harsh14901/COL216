@@ -5,7 +5,7 @@
     "name": "Debug",
     "type": "cppdbg",
     "request": "launch",
-    "args": ["2", "20", "tests/input/A5/invalid_memory", "tests/input/A5/invalid_memory"],
+    "args": ["1", "40", "tests/input/A5/p1"],
     "stopAtEntry": false,
     "cwd": "${workspaceFolder}",
     "environment": [],

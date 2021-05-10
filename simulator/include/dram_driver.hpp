@@ -22,7 +22,6 @@ struct Request {
   bool is_NULL();
   void nullify();
 };
-typedef deque<Request> q_t;
 class DramDriver {
  private:
   const static int NUM_QUEUES = 8;
@@ -34,18 +33,16 @@ class DramDriver {
 
   Dram dram;
   int cores;
-  vector<q_t> queues = vector<q_t>(NUM_QUEUES);
+  Request queues[NUM_QUEUES][QUEUE_SIZE];
 
-  // A 2-D LUT of core, reg -> {queue_num, queue_offset} pair
+  // A 2-D LUT of core, reg -> {queue_num, queue_index} pair
   pair<int, int> __core_reg2offsets_LUT[MAX_CORES][REG_COUNT];
-
-  // An LUT indicating the change in size of queue since the
-  // __core_reg2offsets_LUT was updated with the indices
-  // Always positive
-  int __queue2offset_LUT[NUM_QUEUES];
 
   // An LUT indicating the row that a queue represents
   int __queue2row_LUT[NUM_QUEUES];
+
+  // An LUT storing the number of active requests in each queue
+  int __queue2size_LUT[NUM_QUEUES];
 
   // An LUT indicating the frequency of DRAM accesses by a core
   int __core2freq_LUT[MAX_CORES];
@@ -60,6 +57,8 @@ class DramDriver {
   int __core2blocked_reg_LUT[MAX_CORES][MAX_BLOCKED_REG];
 
   int curr_queue = -1;
+  int curr_index = 0;
+
   int round_counter = 0;
   int busy_until = -1;
 
@@ -72,6 +71,8 @@ class DramDriver {
   void choose_next_queue();
   void addr_V2P(int& addr, int core);
   void add_delay(int delay, string remark = "");
+  int get_empty_slot(int q_num);
+  bool is_empty_queue(int q_num);
   Request* lookup_SW(int q_num, int addr);
   Request* lookup_LW(int core, int reg);
   Request* lookup_request(int core, int reg);

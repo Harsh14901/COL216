@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS	:= -g -std=c++17
+CXXFLAGS	:= -g -std=c++17  -fno-stack-protector
 LFLAGS =
 OUTPUT	:= output
 BUILD 			:= build
