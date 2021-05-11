@@ -5,7 +5,7 @@
     "name": "Debug",
     "type": "cppdbg",
     "request": "launch",
-    "args": ["3", "40", "tests/input/deletion_sw"],
+    "args": ["3", "200", "tests/input/deletion_lw"],
     "stopAtEntry": false,
     "cwd": "${workspaceFolder}",
     "environment": [],

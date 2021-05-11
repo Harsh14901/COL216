@@ -16,7 +16,10 @@ void Request::nullify() {
 
 string Request::to_string() {
   ostringstream ss;
-  ss << "( c:" << core << " r:" << dst_reg << " a:" << addr << " )";
+  if (core == -1)
+    ss << "NULL";
+  else
+    ss << "( c:" << core << " r:" << dst_reg << " a:" << addr << " )";
   return ss.str();
 }
 
@@ -257,6 +260,20 @@ void DramDriver::insert_request(Request& request, int q_num) {
   }
 }
 
+void DramDriver::move_index() {
+  if (curr_queue == -1) {
+    return;
+  }
+  int i = 0;
+  while (queues[curr_queue][curr_index].is_NULL() && i != QUEUE_SIZE) {
+    curr_index = (curr_index + 1) % QUEUE_SIZE;
+    i++;
+  }
+  if (i == QUEUE_SIZE) {
+    curr_index = 0;
+  }
+}
+
 void DramDriver::complete_request() {
   auto req = get_curr_request();
   auto core = req->core;
@@ -280,18 +297,19 @@ void DramDriver::complete_request() {
       __core_reg2offsets_LUT[req->core][req->dst_reg] = make_pair(-1, -1);
     }
   }
-
+  if (!req->is_NULL()) {
+    __queue2size_LUT[curr_queue]--;
+  }
   queues[curr_queue][curr_index].nullify();
-  __queue2size_LUT[curr_queue]--;
-  curr_index = (curr_index + 1) % QUEUE_SIZE;
+  move_index();
 
   if (is_empty_queue(curr_queue)) {
     __queue2row_LUT[curr_queue] = -1;
     curr_queue = -1;
-    curr_index = 0;
   }
   if (!req->is_NULL()) {
     round_counter++;
+
     // add_delay(completion_delay, completion_remark);
     add_delay(0, completion_remark);
   }
@@ -401,12 +419,12 @@ void DramDriver::choose_next_queue() {
   }
 
   curr_queue = best_q;
-  // TODO: change this
-  curr_index = lw_pos_in_queue[best_q];
+  curr_index = std::max(0, lw_pos_in_queue[best_q]);
+
   round_counter = 0;
 
   // add_delay(scheduling_delay, scheduling_remark);
-  add_delay(0, scheduling_remark);
+  add_delay(1, scheduling_remark);
 }
 
 void DramDriver::update_instr_count(int core) { __core2instr_LUT[core]++; }

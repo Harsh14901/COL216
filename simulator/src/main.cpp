@@ -98,7 +98,9 @@ int main(int argc, char* argv[]) {
       try {
         core.start_execution();
       } catch (Hardware::Terminated& e) {
-        fault_cores.insert(id);
+        if (driver.is_idle()) {
+          fault_cores.insert(id);
+        }
       } catch (const std::exception& e) {
         fault_cores.insert(id);
         cerr << "[-] A runtime error occured in CORE : " << id << " - "

@@ -141,6 +141,7 @@ int get_label_addr(std::string label) {
 }
 
 std::vector<Instruction> compile(std::string fileName) {
+  branches.clear();
   cout << "[+] Compiling file : " << fileName << endl;
   auto instructions = parseInstructions(fileName);
   std::vector<Instruction> processedInstructions;
