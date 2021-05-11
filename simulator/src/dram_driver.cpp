@@ -1,4 +1,6 @@
 #include <dram_driver.hpp>
+#include <sstream>
+
 using namespace std;
 
 bool Request::is_LW() { return dst != nullptr && dst_reg != -1 && !is_NULL(); }
@@ -10,6 +12,12 @@ bool Request::is_NULL() { return timestamp == -1 && core == -1; }
 void Request::nullify() {
   timestamp = -1;
   core = -1;
+}
+
+string Request::to_string() {
+  ostringstream ss;
+  ss << "( c:" << core << " r:" << dst_reg << " a:" << addr << " )";
+  return ss.str();
 }
 
 string DramDriver::DRIVER_ID = "DRAM DRIVER";
@@ -24,6 +32,20 @@ DramDriver::DramDriver(Dram dram, int cores, int* reg_updates)
   }
 }
 
+string DramDriver::queueToStr() {
+  int i = 0;
+  ostringstream ss;
+  for (auto& row : queues) {
+    ss << "row" << i++ << "  --   ";
+    for (auto& req : row) {
+      ss << setw(25) << left << req.to_string();
+    }
+    ss << "\n";
+  }
+  ss << "\n\n";
+  return ss.str();
+}
+
 void DramDriver::load_stats(Stats* stats) { this->stats = stats; }
 
 void DramDriver::add_delay(int delay, string remark) {
@@ -36,6 +58,7 @@ void DramDriver::add_delay(int delay, string remark) {
   log.cycle_period = make_pair(start_time, this->busy_until);
   log.device = DRIVER_ID;
   log.remarks.push_back(remark);
+  log.queue_details = queueToStr();
 
   stats->logs.push_back(log);
 }
@@ -200,6 +223,8 @@ void DramDriver::insert_request(Request& request, int q_num) {
       log.cycle_period =
           make_pair(stats->clock_cycles + 1, stats->clock_cycles + 1);
       log.remarks.push_back("Forwarding values from DRAM driver");
+      log.queue_details = queueToStr();
+
       stats->logs.push_back(log);
 
       reg_updates[core] = stats->clock_cycles + 1;

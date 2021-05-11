@@ -58,6 +58,7 @@ struct Log {
   map<int, hd_t> rowbuff_updates;
   vector<string> remarks;
   string device = "";
+  string queue_details = "";
 
   void print_verbose();
   void print_registers();

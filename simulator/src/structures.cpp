@@ -82,6 +82,9 @@ void Log::print_verbose() {
   for (auto& v : remarks) {
     cout << "\t" << v << endl;
   }
+  if (queue_details != "") {
+    cout << "[#] Queue Details:\n" << queue_details << endl;
+  }
   cout << "============================================================"
        << endl;
 }

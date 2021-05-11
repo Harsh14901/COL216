@@ -23,6 +23,7 @@ struct Request {
   bool is_SW();
   bool is_NULL();
   void nullify();
+  string to_string();
 };
 class DramDriver {
  private:
@@ -99,6 +100,7 @@ class DramDriver {
   void update_instr_count(int core);
   bool is_idle();
   void load_stats(Stats* stats);
+  string queueToStr();
   ~DramDriver();
   class QueueFull : public std::runtime_error {
    public:

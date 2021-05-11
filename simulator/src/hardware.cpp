@@ -154,6 +154,7 @@ void Hardware::start_execution() {
   auto& log = stats->logs.back();
   log.cycle_period = make_pair(stats->clock_cycles, stats->clock_cycles);
   log.instruction = pc->raw;
+  log.queue_details = dram_driver->queueToStr();
   log.device = "Core " + to_string(CORE_ID);
 
   try {
