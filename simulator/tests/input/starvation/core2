@@ -1,0 +1,7 @@
+addi $a0, $zero, 1208
+addi $s0, $zero, 1290
+addi $t0, $zero, 1220
+addi $a1, $zero, 5120
+
+lw $a1, 1020($zero)
+

@@ -1,0 +1,3 @@
+lw $s1, 500($zero)
+sw $s1, 1000($zero)
+sw $s1, 1000($zero)

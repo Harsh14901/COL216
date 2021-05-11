@@ -1,0 +1,21 @@
+lw $a0, 1000($zero)
+
+addi $a1, $zero, 12 
+addi $a1, $zero, 12 
+addi $a1, $zero, 12 
+addi $a1, $zero, 12 
+addi $a1, $zero, 12 
+addi $a1, $zero, 12 
+addi $a1, $zero, 12 
+addi $a1, $zero, 12 
+addi $a1, $zero, 12 
+addi $a1, $zero, 12 
+addi $a1, $zero, 12 
+addi $a1, $zero, 12 
+addi $a1, $zero, 12 
+addi $a1, $zero, 12 
+addi $a1, $zero, 12 
+addi $a1, $zero, 12 
+addi $a1, $zero, 12 
+addi $a1, $zero, 12 
+addi $a1, $zero, 12 

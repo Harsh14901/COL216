@@ -40,6 +40,8 @@ void DramDriver::add_delay(int delay, string remark) {
   stats->logs.push_back(log);
 }
 
+int getNextPow2(int n) { return pow(ceil(log2(n)), 2); }
+
 void DramDriver::__init_LUT() {
   for (int i = 0; i < cores; i++) {
     for (int j = 0; j < REG_COUNT; j++) {
@@ -54,7 +56,7 @@ void DramDriver::__init_LUT() {
   memset(__queue2size_LUT, 0, sizeof(__queue2size_LUT));
 
   int total_mem = Dram::MAX_MEMORY;
-  int partition_size = total_mem / cores;
+  int partition_size = total_mem / getNextPow2(cores);
 
   __core2PA_offsets_LUT[0] = 0;
   for (int i = 1; i < cores; i++) {
@@ -65,7 +67,7 @@ void DramDriver::__init_LUT() {
 }
 
 void DramDriver::addr_V2P(int& addr, int core) {
-  if (addr >= Dram::MAX_MEMORY / cores) {
+  if (addr >= Dram::MAX_MEMORY / getNextPow2(cores)) {
     throw InvalidMemory("received request with memory out of bounds : " +
                         to_string(addr));
   }
@@ -335,12 +337,12 @@ void DramDriver::choose_next_queue() {
   int scheduling_delay = 5;
   string scheduling_remark = "Scheduling next queue";
 
-  int q_offsets[NUM_QUEUES];  // metric denoting the importance of the blocked
-                              // requests in a queue
+  int lw_pos_in_queue[NUM_QUEUES];  // metric denoting the importance of the
+                                    // blocked requests in a queue
   int core_req_freqs[MAX_CORES];  // ratio of Request frequency to total number
                                   // of instructions
 
-  memset(q_offsets, 0, sizeof(q_offsets));
+  memset(lw_pos_in_queue, -1, sizeof(lw_pos_in_queue));
   memset(core_req_freqs, 0, sizeof(core_req_freqs));
 
   for (int core = 0; core < MAX_CORES; core++) {
@@ -352,8 +354,7 @@ void DramDriver::choose_next_queue() {
       Request* rq = lookup_LW(core, reg);
       auto [q_num, q_offset] = __core_reg2offsets_LUT[core][reg];
       if (q_num != -1) {  // a blocking request of that register exists
-        q_offsets[q_num] +=
-            (QUEUE_SIZE - q_offset);  //  offset => importance of queue
+        lw_pos_in_queue[q_num] = q_offset;
       }
     }
     // add 1 to prevent div by 0
@@ -364,12 +365,10 @@ void DramDriver::choose_next_queue() {
   double freq_offset = 0.01;  // to prevent division by 0
 
   for (int i = 1; i < NUM_QUEUES; i++) {
-    // offset +  , freq - , size +
-    double prev_metric = q_offsets[best_q] /
-                         (freq_offset + core_req_freqs[best_q]) *
-                         __queue2size_LUT[best_q];
-    double new_metric =
-        q_offsets[i] / (freq_offset + core_req_freqs[i]) * __queue2size_LUT[i];
+    // freq - , size +
+    double prev_metric =
+        __queue2size_LUT[best_q] / (freq_offset + core_req_freqs[best_q]);
+    double new_metric = __queue2size_LUT[i] / (freq_offset + core_req_freqs[i]);
     if (new_metric > prev_metric) {
       best_q = i;
     }
@@ -378,7 +377,7 @@ void DramDriver::choose_next_queue() {
 
   curr_queue = best_q;
   // TODO: change this
-  curr_index = 0;
+  curr_index = lw_pos_in_queue[best_q];
   round_counter = 0;
 
   // add_delay(scheduling_delay, scheduling_remark);

@@ -1,9 +1,12 @@
+#include <filesystem>
 #include <iostream>
 
 #include "compiler.hpp"
 #include "hardware.hpp"
 
 using namespace std;
+namespace fs = std::filesystem;
+
 void print_usage();
 int main(int argc, char* argv[]) {
   if (argc < 3) {
@@ -12,15 +15,34 @@ int main(int argc, char* argv[]) {
   }
   int N = stoi(argv[1]);
   int M = stoi(argv[2]);
-  if (argc < N + 3) {
-    print_usage();
-    return -1;
+
+  vector<vector<Instruction>> programs;
+
+  const fs::path path(argv[3]);
+  std::error_code ec;
+  std::cout << "Current path is " << fs::current_path() << '\n';  // (1)
+  if (fs::is_directory(path, ec)) {
+    set<fs::path> sorted_by_name;
+
+    for (auto& entry : fs::directory_iterator(path))
+      sorted_by_name.insert(entry.path());
+
+    for (auto& filename : sorted_by_name) {
+      cout << filename.c_str() << endl;
+      programs.push_back(compile(filename));
+    }
+
+  } else {
+    if (argc < N + 3) {
+      print_usage();
+      return -1;
+    }
+    for (int i = 0; i < N; i++) {
+      string name = argv[i + 3];
+      programs.push_back(compile(name));
+    }
   }
-  vector<vector<Instruction>> programs(N);
-  for (int i = 0; i < N; i++) {
-    string name = argv[i + 3];
-    programs[i] = compile(name);
-  }
+
   int register_write_times[N];
   memset(register_write_times, -1, sizeof(register_write_times));
   Stats stats;
