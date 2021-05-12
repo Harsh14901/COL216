@@ -19,7 +19,7 @@ string Request::to_string() {
   if (core == -1)
     ss << "NULL";
   else
-    ss << "( c:" << core << " r:" << dst_reg << " a:" << addr << " )";
+    ss << "(c:" << core << ",a:" << addr << ",LW:" << is_LW() << ")";
   return ss.str();
 }
 
@@ -39,12 +39,14 @@ string DramDriver::queueToStr() {
   int i = 0;
   ostringstream ss;
   for (auto& row : queues) {
-    ss << "row" << i++ << "  --   ";
+    ss << "queue " << i++ << "  --   ";
     for (auto& req : row) {
       ss << setw(25) << left << req.to_string();
     }
     ss << "\n";
   }
+  ss << "\tCurrent queue: " << curr_queue << endl;
+  ss << "\tCurrent index: " << curr_index << endl;
   ss << "\n\n";
   return ss.str();
 }
@@ -53,7 +55,7 @@ void DramDriver::load_stats(Stats* stats) { this->stats = stats; }
 
 void DramDriver::add_delay(int delay, string remark) {
   auto start_time = max(this->busy_until, stats->clock_cycles) + 1;
-  this->busy_until = max(this->busy_until, stats->clock_cycles) + delay;
+  this->busy_until = start_time - 1 + delay;
   if (delay == 0) {
     return;
   }
@@ -66,7 +68,7 @@ void DramDriver::add_delay(int delay, string remark) {
   stats->logs.push_back(log);
 }
 
-int getNextPow2(int n) { return pow(ceil(log2(n)), 2); }
+int getNextPow2(int n) { return 1 << int(ceil(log2(n))); }
 
 void DramDriver::__init_LUT() {
   for (int i = 0; i < cores; i++) {
@@ -144,10 +146,9 @@ bool DramDriver::is_empty_queue(int q_num) {
 // The method assumes that it is called at every iteration of clock cycles.
 void DramDriver::perform_tasks() {
   auto curr_req = get_curr_request();
-  if (curr_req == nullptr || stats->clock_cycles <= this->busy_until) {
+  if (curr_req == nullptr || stats->clock_cycles < this->busy_until) {
     return;
   }
-  // TODO skip null requests at each clock cycle when dram is busy
   if (dram.busy_until == stats->clock_cycles) {
     complete_request();
 
@@ -167,17 +168,18 @@ void DramDriver::perform_tasks() {
 }
 
 void DramDriver::enqueue_request(Request& request) {
-  int enqueue_delay = 2;
-  string enqueue_remark = "Enqueuing request";
+  int enqueue_delay = 1;
+  string enqueue_remark = "Selecting queue";
 
   auto row = dram.addr2rowcol(request.addr).first;
 
   int unallocated_q = -1;
   for (int i = 0; i < NUM_QUEUES; i++) {
     if (__queue2row_LUT[i] == row) {
+      add_delay(enqueue_delay, enqueue_remark);
+      // add_delay(0, enqueue_remark);
       insert_request(request, i);
-      // add_delay(enqueue_delay, enqueue_remark);
-      add_delay(0, enqueue_remark);
+
       return;
     } else if (__queue2row_LUT[i] == -1 && unallocated_q == -1) {
       unallocated_q = i;
@@ -188,17 +190,20 @@ void DramDriver::enqueue_request(Request& request) {
     throw QueueFull();
   } else {
     __queue2row_LUT[unallocated_q] = row;
+
+    add_delay(enqueue_delay, enqueue_remark);
+    // add_delay(0, enqueue_remark);
     insert_request(request, unallocated_q);
   }
-
-  // add_delay(enqueue_delay, enqueue_remark);
-  add_delay(0, enqueue_remark);
 }
 
 void DramDriver::insert_request(Request& request, int q_num) {
+  int insertion_delay = 1;
+  string insertion_remark = "Inserting into queue";
   if (request.is_NULL()) {
     return;
   }
+  bool lw_eliminated = false;
   auto slot = get_empty_slot(q_num);
 
   if (request.is_LW()) {
@@ -213,6 +218,8 @@ void DramDriver::insert_request(Request& request, int q_num) {
       redundant_lw_ptr->nullify();
       __queue2size_LUT[red_q]--;
       __core_reg2offsets_LUT[core][reg] = make_pair(-1, -1);
+
+      lw_eliminated = true;
     }
 
     // Forwarding
@@ -232,11 +239,19 @@ void DramDriver::insert_request(Request& request, int q_num) {
 
       reg_updates[core] = stats->clock_cycles + 1;
 
+      add_delay(insertion_delay, insertion_remark);
       return;
     }
 
     // Update LUT
     __core_reg2offsets_LUT[core][reg] = make_pair(q_num, slot);
+
+    if (lw_eliminated) {
+      // If a redundant LW was removed then a write must occur to
+      // __core_reg2offsets_LUT in this cycle.
+      // The above write will occur on next cycle.
+      insertion_delay++;
+    }
   } else {
     // check for redundant SW
     auto existing_sw = lookup_SW(q_num, request.addr);
@@ -244,6 +259,7 @@ void DramDriver::insert_request(Request& request, int q_num) {
       request.dependency_lw_index = existing_sw->dependency_lw_index;
       *existing_sw = request;
 
+      add_delay(insertion_delay, insertion_remark);
       return;
     }
 
@@ -258,6 +274,8 @@ void DramDriver::insert_request(Request& request, int q_num) {
     curr_queue = q_num;
     curr_index = slot;
   }
+
+  add_delay(insertion_delay, insertion_remark);
 }
 
 void DramDriver::move_index() {
@@ -279,11 +297,10 @@ void DramDriver::complete_request() {
   auto core = req->core;
 
   int completion_delay = 1;
-  string completion_remark = "Completing request, returning result to register";
+  string completion_remark = "Completing request";
 
   if (req->is_SW()) {
     dram.set_mem_word(req->addr, req->val);
-    completion_delay = 0;
   } else if (req->is_LW()) {
     auto val = dram.get_mem_word(req->addr, req->dst_reg);
     *(req->dst) = val;
@@ -299,8 +316,11 @@ void DramDriver::complete_request() {
   }
   if (!req->is_NULL()) {
     __queue2size_LUT[curr_queue]--;
+    queues[curr_queue][curr_index].nullify();
+
+    completion_delay++;
   }
-  queues[curr_queue][curr_index].nullify();
+
   move_index();
 
   if (is_empty_queue(curr_queue)) {
@@ -309,10 +329,9 @@ void DramDriver::complete_request() {
   }
   if (!req->is_NULL()) {
     round_counter++;
-
-    // add_delay(completion_delay, completion_remark);
-    add_delay(0, completion_remark);
   }
+  add_delay(completion_delay, completion_remark);
+  // add_delay(0, completion_remark);
 }
 
 void DramDriver::set_blocking_regs(int core, vector<int>& regs) {
@@ -377,7 +396,7 @@ Request* DramDriver::get_curr_request() {
   return &queues[curr_queue][curr_index];
 }
 void DramDriver::choose_next_queue() {
-  int scheduling_delay = 5;
+  int scheduling_delay = 1;
   string scheduling_remark = "Scheduling next queue";
 
   int lw_pos_in_queue[NUM_QUEUES];  // metric denoting the importance of the
@@ -418,13 +437,15 @@ void DramDriver::choose_next_queue() {
     // cout << new_metric << endl;
   }
 
+  // Floating point operations
+  scheduling_delay += 4;
+
   curr_queue = best_q;
   curr_index = std::max(0, lw_pos_in_queue[best_q]);
 
   round_counter = 0;
 
-  // add_delay(scheduling_delay, scheduling_remark);
-  add_delay(1, scheduling_remark);
+  add_delay(scheduling_delay, scheduling_remark);
 }
 
 void DramDriver::update_instr_count(int core) { __core2instr_LUT[core]++; }

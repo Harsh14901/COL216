@@ -82,6 +82,7 @@ int main(int argc, char* argv[]) {
   }
 
   unordered_set<int> fault_cores;
+  vector<int> remaining_cores;
 
   for (int i = 0; i < M; i++) {
     stats.clock_cycles = i + 1;
@@ -89,6 +90,15 @@ int main(int argc, char* argv[]) {
     driver.perform_tasks();
 
     for (auto& core : cores) {
+      remaining_cores.push_back(core.get_id());
+    }
+
+    int idx = 0;
+    while (!remaining_cores.empty()) {
+      idx = rand() % remaining_cores.size();
+      auto& core = cores[remaining_cores[idx]];
+      remaining_cores.erase(remaining_cores.begin() + idx);
+
       int id = core.get_id();
       if (stats.clock_cycles == register_write_times[id] ||
           fault_cores.find(id) != fault_cores.end())
@@ -107,6 +117,7 @@ int main(int argc, char* argv[]) {
              << e.what() << '\n';
       }
     }
+    remaining_cores.clear();
     if (fault_cores.size() == N && driver.is_idle()) {
       break;
     }

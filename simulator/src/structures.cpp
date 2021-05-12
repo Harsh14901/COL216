@@ -67,21 +67,30 @@ void Log::print_registers() {
 void Log::print_verbose() {
   printf("[$] Device: %s | CYCLE %d-%d :\n", device.c_str(), cycle_period.first,
          cycle_period.second);
-  printf("[#] Executing current instruction -> %s\n", instruction.c_str());
-  print_registers();
+  if (instruction != "") {
+    printf("[#] Executing current instruction -> %s\n", instruction.c_str());
+    print_registers();
+  }
+  if (rowbuff_updates.size() != 0) {
+    cout << "[#] Row buffer updates:" << endl;
+    for (auto& v : rowbuff_updates) {
+      printf("\t%d-%ld : %d\n", v.first, v.first + sizeof(hd_t) - 1, v.second);
+    }
+  }
 
-  cout << "[#] Row buffer updates:" << endl;
-  for (auto& v : rowbuff_updates) {
-    printf("\t%d-%ld : %d\n", v.first, v.first + sizeof(hd_t) - 1, v.second);
+  if (memory_updates.size() != 0) {
+    cout << "[#] Memory updates:" << endl;
+    for (auto& v : memory_updates) {
+      printf("\t%d-%ld : %d\n", v.first, v.first + sizeof(hd_t) - 1, v.second);
+    }
   }
-  cout << "[#] Memory updates:" << endl;
-  for (auto& v : memory_updates) {
-    printf("\t%d-%ld : %d\n", v.first, v.first + sizeof(hd_t) - 1, v.second);
+  if (remarks.size() != 0) {
+    cout << "[#] Remarks: " << endl;
+    for (auto& v : remarks) {
+      cout << "\t" << v << endl;
+    }
   }
-  cout << "[#] Remarks: " << endl;
-  for (auto& v : remarks) {
-    cout << "\t" << v << endl;
-  }
+
   if (queue_details != "") {
     cout << "[#] Queue Details:\n" << queue_details << endl;
   }
