@@ -256,7 +256,6 @@ void DramDriver::insert_request(Request& request, int q_num) {
     // check for redundant SW
     auto existing_sw = lookup_SW(q_num, request.addr);
     if (existing_sw != nullptr) {
-      request.dependency_lw_index = existing_sw->dependency_lw_index;
       *existing_sw = request;
 
       add_delay(insertion_delay, insertion_remark);
@@ -264,7 +263,6 @@ void DramDriver::insert_request(Request& request, int q_num) {
     }
 
     // check for a LW on which this SW request depends
-    request.dependency_lw_index = get_LW_index(q_num, request.addr);
   }
 
   queues[q_num][slot] = request;
@@ -289,6 +287,11 @@ void DramDriver::move_index() {
   }
   if (i == QUEUE_SIZE) {
     curr_index = 0;
+  }
+  auto curr_req = get_curr_request();
+  int lw_index = get_pending_lw_index(curr_queue, *curr_req);
+  if (lw_index != -1 && curr_req->is_SW()) {
+    curr_index = lw_index;
   }
 }
 
@@ -378,10 +381,10 @@ Request* DramDriver::lookup_LW(int core, int reg) {
   return &queues[q_num][q_index];
 }
 
-int DramDriver::get_LW_index(int q_num, int addr) {
+int DramDriver::get_pending_lw_index(int q_num, Request& req) {
   for (int i = 0; i < QUEUE_SIZE; i++) {
-    auto& req = queues[q_num][i];
-    if (req.is_LW() && req.addr == addr &&
+    auto& r = queues[q_num][i];
+    if (r.is_LW() && r.timestamp < req.timestamp && r.addr == req.addr &&
         !(q_num == curr_queue && i == curr_index)) {
       return i;
     }

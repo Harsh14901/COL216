@@ -17,8 +17,6 @@ struct Request {
   hd_t* dst = nullptr;
   int dst_reg = -1;
 
-  int dependency_lw_index = -1;
-
   bool is_LW();
   bool is_SW();
   bool is_NULL();
@@ -75,13 +73,11 @@ class DramDriver {
   void addr_V2P(int& addr, int core);
   void add_delay(int delay, string remark = "");
   int get_empty_slot(int q_num);
+  int get_pending_lw_index(int q_num, Request& req);
   bool is_empty_queue(int q_num);
   void move_index();
   Request* lookup_SW(int q_num, int addr);
   Request* lookup_LW(int core, int reg);
-
-  // Returns the index in the queue q_num of a LW request for the address addr
-  int get_LW_index(int q_num, int addr);
 
   Request* lookup_request(int core, int reg);
   Request* get_curr_request();
