@@ -9,6 +9,7 @@ log
 *.gz
 log
 *.zip
-doc/
+doc/*.*
 !doc/Documentation.pdf
 !doc/Documentation.tex
+!doc/img/

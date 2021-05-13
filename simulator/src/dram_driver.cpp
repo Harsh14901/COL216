@@ -438,7 +438,7 @@ void DramDriver::choose_next_queue() {
   }
 
   // Floating point operations
-  scheduling_delay += 4;
+  scheduling_delay += 2;
 
   curr_queue = best_q;
   curr_index = std::max(0, lw_pos_in_queue[best_q]);

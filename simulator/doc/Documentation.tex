@@ -110,7 +110,7 @@ These modules perform different functions as outlined below
     \item A \verb|DramDriver| module is implemented to capture all \verb|DRAM| requests from all cores and reorder them according to some pre determined heuristics.
     \item It is equipped with all optimizations to give the best performance. It includes forwarding, eliminating redundant \verb|LW| and \verb|SW| instructions.
     \item It also protects against starvation by appropriately context switching out DRAM requests of a core.
-    \item It automaticaly converts the Virtual address space to the physical address space before queuing in a memory request.
+    \item It automaticaly converts the virtual address space to the physical address space before queuing in a memory request.
 \end{itemize}
 
 \section{Approach}
@@ -126,7 +126,7 @@ Queues need to be of finite size since we would have hardware supporting only a 
 We have supported random access to queued requests and a request can be enqueued at any index. This just invoves changing the stored register value from a register file.
 Each queue can be indexed using a multiplexor as done in a cache.
 We have also assumed random access of any of the 8 elements of the queue which is easy to implement.
-A queue holds all the requests of the same row. Hence every queue deals with a different row of the DRAM and this makes it easier to schedule requests.\\
+A queue holds all the requests of the same row. Hence every queue deals with a different row of the DRAM and this makes it easier to schedule requests.
 
 The decision for the size of each queue and the number of queues was taken keeping in mind the hardware constraints and design principle \textit{Smaller is faster}
 However, our implementation is completely modular, and by changing just one value we can simulate the Driver with some other values to
@@ -138,9 +138,9 @@ The state of the queues is maintained using several lookup tables which can be e
 The description of each look up table along with its corresponding name in our simulator code is given below.
 Assume $N$ is the number of cores in the processor.
 \begin{table}[H]
-    \begin{tabular}[]{|c|c|p{0.2\linewidth}|p{0.5\linewidth}|}
+    \begin{tabular}[]{|c|c|p{0.2\linewidth}|p{0.4\linewidth}|}
         \hline
-        LUT name                & Size          & Index                    & Stored value                                                                                                                   \\  \hline
+        LUT name                & Size          & Index                    & Stored value                                                                                                                   \\  \hline \hline
         \verb|__core2freq_LUT| & $N $          & core number              & Frequency of DRAM accesses (\verb|lw|/ \verb|sw|)                                                  \\ \hline
         \verb|__core2instr_LUT| & $N $          & core number              & Number of instructions executed.                                                                                               \\ \hline
         \verb|__core2PA_offsets_LUT| & $N $          & core number              & Virtual to physical address offset.                                                                                            \\ \hline
@@ -167,6 +167,7 @@ at each operation, the exact details of which are skipped here for simplicity.
           When scheduling a queue we try to execute the requests that are blocking a processor over other requests. However, if there is a dependency conflict then a compromise has to be made and other requests have to be executed.
     \item The circuits also incur a delay of some clock cycles and a busy bit is maintained inside the controller. When the controller is busy, it does not accept any more requests, and generates an exception.
 \end{itemize}
+\newpage
 \subsection{Optimizations}
 
 We have also implemented several optimizations to eliminate redundant work for increasing the throughput.
@@ -182,6 +183,110 @@ We have also implemented several optimizations to eliminate redundant work for i
 \end{itemize}
 
 \textbf{Note:} Since the queue size is finite ($8$) looking up a request in a queue can be implemented using $8$ comparators which would operate parallely to check for the required conditions.
+
+\subsection{Hardware implementation model}
+This section illustrates the circuit models that can be used to implement the driver on real hardware.
+
+We have shown several modules as black boxes but we believe most of them can be implemented using simple combinational circuits,
+and the exact details have been skipped for clarity.
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[h]{\textwidth}
+        \begin{center}
+            \includegraphics[scale=0.4]{img/decoder.png}
+            \caption{\textbf{Decoder}: Recieves the encoded request and extracts the parameters that can be used by other modules}
+
+        \end{center}
+
+    \end{subfigure}
+
+    \begin{subfigure}[h]{\textwidth}
+        \begin{center}
+            \includegraphics[scale=0.4]{img/core_reg_LUT.png}
+            \caption{\textbf{LW index store LUT}: Stores the queue numbers and queue indices of LW requests. It can be indexed by core and register number. }
+
+        \end{center}
+
+    \end{subfigure}
+
+\end{figure}
+\begin{figure}[H]
+    \ContinuedFloat
+    \centering
+
+    \begin{subfigure}[h]{\textwidth}
+        \begin{center}
+            \includegraphics[scale=0.4]{img/scheduler.png}
+            \caption{\textbf{Scheduler}: Takes as input the current queue and index and schedules the next queue and index based on some LUTs and the requests in queue.}
+
+        \end{center}
+
+    \end{subfigure}
+    \begin{subfigure}[h]{\textwidth}
+        \begin{center}
+            \includegraphics[scale=0.3, trim = 0 0 10 0]{img/dram_recv.png}
+            \caption{\textbf{Dram recieve}: Recieves data from DRAM and takes appropriate action}
+
+        \end{center}
+
+    \end{subfigure}
+
+\end{figure}
+
+\begin{figure}[H]
+    \ContinuedFloat
+    \centering
+
+    \begin{subfigure}[h]{\textwidth}
+        \begin{center}
+            \includegraphics[scale=0.65]{img/queue_selector.png}
+            \caption{\textbf{Queue selector}: Selects the queue to insert the incoming request into. Raises exception if no queue is empty.}
+
+        \end{center}
+
+    \end{subfigure}
+\end{figure}
+
+\begin{figure}[H]
+    \ContinuedFloat
+    \centering
+
+    \begin{subfigure}[h]{\textwidth}
+        \begin{center}
+            \includegraphics[scale=0.5]{img/enqueue.png}
+            \caption{\textbf{Enqueue}: Enqueue the request into the appropriate queue. Implements forwarding and elimination of redundant SW requests.}
+
+        \end{center}
+
+    \end{subfigure}
+    \begin{subfigure}[h]{\textwidth}
+        \begin{center}
+            \includegraphics[scale=0.23]{img/lw_redundancy.png}
+            \caption{\textbf{Redundant LW}: eliminates redundant LW instructions.}
+
+        \end{center}
+
+    \end{subfigure}
+\end{figure}
+\subsection{Delay estimation}
+In this section we try to estimate the delay incurred by each stage of the DRAM driver. We have attempted to decrease the delay times as far as possible.
+However, due to these delays, the DRAM driver will remain busy for some clock cycles and until then it won't be able to accept any requests.
+
+\begin{enumerate}
+    \item \textbf{Queue selection:} The circuit selects a queue from the available queues to enqueue the incoming request.
+          This process just requires reading the \verb|__queue2row_LUT| and writing to it at the end of the clock cycle if a new row has to be allocated. The estimated delay is \textbf{1 clock cycle}.
+    \item \textbf{Enqueue:} The enqueue operation determines the appropirate index in the queue by reading the entire queue and passing it through comparator circuits.
+          It searches for a redundant SW request, and if found then forwards the values to the register file. If a redundant SW request is found, its contents are replaced by the incoming request.
+          Once the index is determined, the request is written to the queue block at the end of the clock cycle. The estimated delay is \textbf{1 clock cycle} each.
+          However, if a redundant LW request is eliminated, the existing request needs to be nullified before the new request can be written to the queue.
+          This constitutes two writes to the same data structure and hence incurs a delay of \textbf{2 clock cycles}.
+    \item \textbf{Request completion:} The driver recieves data from the DRAM and completes the request. It involves writing to the queues, updating several registers and LUTs.
+          The controller can set the control signals appropriately and all data would be updated in \textbf{1 clock cycle}.
+    \item \textbf{Scheduler:} The scheduler reads the values of current queue and index and resets them to prevent \textit{starvation}.
+          It also analyses the data from each queue and combines them with data stored in the LUTs, to produce a priority measure. This is done by a logical arithmetic circuit which requires several floating point operations and hence cannot be completed in a single clock cycle.
+          The delay will depend on the implementation of floating point operations and hence is dependent on the hardware implementation of arithmetic operations.
+          A rough estimate is 2 clock cycles and along with one clock cycle for writing to the registers, the estimated delay is \textbf{3 clock cycles}.
+\end{enumerate}
 
 \subsection{Advantages}
 \begin{itemize}
