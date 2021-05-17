@@ -1,0 +1,684 @@
+Current path is "/home/ubuntu-home/saptarshi/dev/COL216/new_A5/simulator"
+tests/input/forwarding/core1
+[+] Compiling file : tests/input/forwarding/core1
+[+] Program compiled successfully !
+tests/input/forwarding/core2
+[+] Compiling file : tests/input/forwarding/core2
+[+] Program compiled successfully !
+tests/input/forwarding/core3
+[+] Compiling file : tests/input/forwarding/core3
+[+] Program compiled successfully !
+[+] Executing in NON-BLOCKING MODE
+---------- Execution logs ----------
+[$] Device: Core 0 | CYCLE 1-1 :
+[#] Executing current instruction -> addi $s1, $zero, 12
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :         12
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :          0		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :          0		   $t8 :          0
+	   $t1 :          0		   $t9 :          0
+	   $t2 :          0		   $k0 :          0
+	   $t3 :          0		   $k1 :          0
+	   $t4 :          0		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Queue Details:
+queue 0  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 1  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 2  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 3  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 4  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 5  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 6  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 7  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+	Current queue: -1
+	Current index: 0
+
+
+
+============================================================
+[$] Device: Core 1 | CYCLE 1-1 :
+[#] Executing current instruction -> lw $s1, 1000($zero)
+[#] Register contents -
+[#] Remarks: 
+	DRAM request issued
+[#] Queue Details:
+queue 0  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 1  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 2  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 3  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 4  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 5  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 6  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 7  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+	Current queue: -1
+	Current index: 0
+
+
+
+============================================================
+[$] Device: DRAM DRIVER | CYCLE 2-2 :
+[#] Remarks: 
+	Inserting into queue
+[#] Queue Details:
+queue 0  --   (c:1,a:263144,LW:1)      NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 1  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 2  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 3  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 4  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 5  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 6  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 7  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+	Current queue: 0
+	Current index: 0
+
+
+
+============================================================
+[$] Device: Core 2 | CYCLE 1-1 :
+[#] Executing current instruction -> lw $s1, 1000($zero)
+[#] Register contents -
+[#] Remarks: 
+	DRAM request issued
+	DRAM Driver currently busy
+[#] Queue Details:
+queue 0  --   (c:1,a:263144,LW:1)      NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 1  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 2  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 3  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 4  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 5  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 6  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 7  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+	Current queue: 0
+	Current index: 0
+
+
+
+============================================================
+[$] Device: Core 0 | CYCLE 2-2 :
+[#] Executing current instruction -> sw $s1, 1000($zero)
+[#] Register contents -
+[#] Remarks: 
+	DRAM request issued
+	DRAM Driver currently busy
+[#] Queue Details:
+queue 0  --   (c:1,a:263144,LW:1)      NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 1  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 2  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 3  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 4  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 5  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 6  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 7  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+	Current queue: 0
+	Current index: 0
+
+
+
+============================================================
+[$] Device: Core 2 | CYCLE 2-2 :
+[#] Executing current instruction -> lw $s1, 1000($zero)
+[#] Register contents -
+[#] Remarks: 
+	DRAM request issued
+	DRAM Driver currently busy
+[#] Queue Details:
+queue 0  --   (c:1,a:263144,LW:1)      NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 1  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 2  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 3  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 4  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 5  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 6  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 7  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+	Current queue: 0
+	Current index: 0
+
+
+
+============================================================
+[$] Device: Core 0 | CYCLE 3-3 :
+[#] Executing current instruction -> sw $s1, 1000($zero)
+[#] Register contents -
+[#] Remarks: 
+	DRAM request issued
+[#] Queue Details:
+queue 0  --   (c:1,a:263144,LW:1)      NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 1  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 2  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 3  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 4  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 5  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 6  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 7  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+	Current queue: 0
+	Current index: 0
+
+
+
+============================================================
+[$] Device: DRAM DRIVER | CYCLE 4-4 :
+[#] Remarks: 
+	Inserting into queue
+[#] Queue Details:
+queue 0  --   (c:1,a:263144,LW:1)      NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 1  --   (c:0,a:1000,LW:0)        NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 2  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 3  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 4  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 5  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 6  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 7  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+	Current queue: 0
+	Current index: 0
+
+
+
+============================================================
+[$] Device: Core 2 | CYCLE 3-3 :
+[#] Executing current instruction -> lw $s1, 1000($zero)
+[#] Register contents -
+[#] Remarks: 
+	DRAM request issued
+	DRAM Driver currently busy
+[#] Queue Details:
+queue 0  --   (c:1,a:263144,LW:1)      NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 1  --   (c:0,a:1000,LW:0)        NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 2  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 3  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 4  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 5  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 6  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 7  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+	Current queue: 0
+	Current index: 0
+
+
+
+============================================================
+[$] Device: Core 0 | CYCLE 4-4 :
+[#] Executing current instruction -> lw $s1, 1000($zero)
+[#] Register contents -
+[#] Remarks: 
+	DRAM request issued
+	DRAM Driver currently busy
+[#] Queue Details:
+queue 0  --   (c:1,a:263144,LW:1)      NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 1  --   (c:0,a:1000,LW:0)        NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 2  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 3  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 4  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 5  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 6  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 7  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+	Current queue: 0
+	Current index: 0
+
+
+
+============================================================
+[$] Device: Core 2 | CYCLE 4-4 :
+[#] Executing current instruction -> lw $s1, 1000($zero)
+[#] Register contents -
+[#] Remarks: 
+	DRAM request issued
+	DRAM Driver currently busy
+[#] Queue Details:
+queue 0  --   (c:1,a:263144,LW:1)      NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 1  --   (c:0,a:1000,LW:0)        NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 2  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 3  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 4  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 5  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 6  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 7  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+	Current queue: 0
+	Current index: 0
+
+
+
+============================================================
+[$] Device: Core 0 | CYCLE 5-5 :
+[#] Executing current instruction -> lw $s1, 1000($zero)
+[#] Register contents -
+[#] Remarks: 
+	DRAM request issued
+[#] Queue Details:
+queue 0  --   (c:1,a:263144,LW:1)      NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 1  --   (c:0,a:1000,LW:0)        NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 2  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 3  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 4  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 5  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 6  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 7  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+	Current queue: 0
+	Current index: 0
+
+
+
+============================================================
+[$] Device: DRAM DRIVER | CYCLE 6-6 :
+[#] Remarks: 
+	Forwarding values from DRAM driver
+[#] Queue Details:
+queue 0  --   (c:1,a:263144,LW:1)      NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 1  --   (c:0,a:1000,LW:0)        NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 2  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 3  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 4  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 5  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 6  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 7  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+	Current queue: 0
+	Current index: 0
+
+
+
+============================================================
+[$] Device: DRAM DRIVER | CYCLE 6-6 :
+[#] Remarks: 
+	Inserting into queue
+[#] Queue Details:
+queue 0  --   (c:1,a:263144,LW:1)      NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 1  --   (c:0,a:1000,LW:0)        NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 2  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 3  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 4  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 5  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 6  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 7  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+	Current queue: 0
+	Current index: 0
+
+
+
+============================================================
+[$] Device: Core 2 | CYCLE 5-5 :
+[#] Executing current instruction -> lw $s1, 1000($zero)
+[#] Register contents -
+[#] Remarks: 
+	DRAM request issued
+	DRAM Driver currently busy
+[#] Queue Details:
+queue 0  --   (c:1,a:263144,LW:1)      NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 1  --   (c:0,a:1000,LW:0)        NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 2  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 3  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 4  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 5  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 6  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 7  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+	Current queue: 0
+	Current index: 0
+
+
+
+============================================================
+[$] Device: Core 2 | CYCLE 6-6 :
+[#] Executing current instruction -> lw $s1, 1000($zero)
+[#] Register contents -
+[#] Remarks: 
+	DRAM request issued
+	DRAM Driver currently busy
+[#] Queue Details:
+queue 0  --   (c:1,a:263144,LW:1)      NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 1  --   (c:0,a:1000,LW:0)        NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 2  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 3  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 4  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 5  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 6  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 7  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+	Current queue: 0
+	Current index: 0
+
+
+
+============================================================
+[$] Device: Core 0 | CYCLE 7-7 :
+[#] Executing current instruction -> lw $s1, 1000($zero)
+[#] Register contents -
+[#] Remarks: 
+	DRAM request issued
+[#] Queue Details:
+queue 0  --   (c:1,a:263144,LW:1)      NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 1  --   (c:0,a:1000,LW:0)        NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 2  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 3  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 4  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 5  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 6  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 7  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+	Current queue: 0
+	Current index: 0
+
+
+
+============================================================
+[$] Device: DRAM DRIVER | CYCLE 8-8 :
+[#] Remarks: 
+	Forwarding values from DRAM driver
+[#] Queue Details:
+queue 0  --   (c:1,a:263144,LW:1)      NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 1  --   (c:0,a:1000,LW:0)        NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 2  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 3  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 4  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 5  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 6  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 7  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+	Current queue: 0
+	Current index: 0
+
+
+
+============================================================
+[$] Device: DRAM DRIVER | CYCLE 8-8 :
+[#] Remarks: 
+	Inserting into queue
+[#] Queue Details:
+queue 0  --   (c:1,a:263144,LW:1)      NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 1  --   (c:0,a:1000,LW:0)        NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 2  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 3  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 4  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 5  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 6  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 7  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+	Current queue: 0
+	Current index: 0
+
+
+
+============================================================
+[$] Device: Core 2 | CYCLE 7-7 :
+[#] Executing current instruction -> lw $s1, 1000($zero)
+[#] Register contents -
+[#] Remarks: 
+	DRAM request issued
+	DRAM Driver currently busy
+[#] Queue Details:
+queue 0  --   (c:1,a:263144,LW:1)      NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 1  --   (c:0,a:1000,LW:0)        NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 2  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 3  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 4  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 5  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 6  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 7  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+	Current queue: 0
+	Current index: 0
+
+
+
+============================================================
+[$] Device: Core 2 | CYCLE 8-8 :
+[#] Executing current instruction -> lw $s1, 1000($zero)
+[#] Register contents -
+[#] Remarks: 
+	DRAM request issued
+	DRAM Driver currently busy
+[#] Queue Details:
+queue 0  --   (c:1,a:263144,LW:1)      NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 1  --   (c:0,a:1000,LW:0)        NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 2  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 3  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 4  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 5  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 6  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 7  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+	Current queue: 0
+	Current index: 0
+
+
+
+============================================================
+[$] Device: Core 2 | CYCLE 9-9 :
+[#] Executing current instruction -> lw $s1, 1000($zero)
+[#] Register contents -
+[#] Remarks: 
+	DRAM request issued
+[#] Queue Details:
+queue 0  --   (c:1,a:263144,LW:1)      NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 1  --   (c:0,a:1000,LW:0)        NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 2  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 3  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 4  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 5  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 6  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 7  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+	Current queue: 0
+	Current index: 0
+
+
+
+============================================================
+[$] Device: DRAM DRIVER | CYCLE 10-10 :
+[#] Remarks: 
+	Inserting into queue
+[#] Queue Details:
+queue 0  --   (c:1,a:263144,LW:1)      NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 1  --   (c:0,a:1000,LW:0)        NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 2  --   (c:2,a:525288,LW:1)      NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 3  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 4  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 5  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 6  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 7  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+	Current queue: 0
+	Current index: 0
+
+
+
+============================================================
+[$] Device: DRAM | CYCLE 2-11 :
+[#] Remarks: 
+	DRAM: activating row 256
+============================================================
+[$] Device: DRAM | CYCLE 12-13 :
+[#] Remarks: 
+	DRAM: Read 0 from row buffer @ 263144 to register: $s1
+============================================================
+[$] Device: DRAM DRIVER | CYCLE 14-14 :
+[#] Remarks: 
+	Completing request
+[#] Queue Details:
+queue 0  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 1  --   (c:0,a:1000,LW:0)        NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 2  --   (c:2,a:525288,LW:1)      NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 3  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 4  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 5  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 6  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 7  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+	Current queue: -1
+	Current index: 0
+
+
+
+============================================================
+[$] Device: DRAM DRIVER | CYCLE 15-17 :
+[#] Remarks: 
+	Scheduling next queue
+[#] Queue Details:
+queue 0  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 1  --   (c:0,a:1000,LW:0)        NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 2  --   (c:2,a:525288,LW:1)      NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 3  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 4  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 5  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 6  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 7  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+	Current queue: 1
+	Current index: 0
+
+
+
+============================================================
+[$] Device: DRAM | CYCLE 17-26 :
+[#] Remarks: 
+	DRAM: flushing row buffer to memory for row: 256
+============================================================
+[$] Device: DRAM | CYCLE 27-36 :
+[#] Remarks: 
+	DRAM: activating row 0
+============================================================
+[$] Device: DRAM | CYCLE 37-38 :
+[#] Row buffer updates:
+	1000-1003 : 12
+[#] Remarks: 
+	DRAM: Writing 12 to row buffer @ 1000
+============================================================
+[$] Device: DRAM DRIVER | CYCLE 39-39 :
+[#] Remarks: 
+	Completing request
+[#] Queue Details:
+queue 0  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 1  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 2  --   (c:2,a:525288,LW:1)      NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 3  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 4  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 5  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 6  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 7  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+	Current queue: -1
+	Current index: 0
+
+
+
+============================================================
+[$] Device: DRAM DRIVER | CYCLE 40-42 :
+[#] Remarks: 
+	Scheduling next queue
+[#] Queue Details:
+queue 0  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 1  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 2  --   (c:2,a:525288,LW:1)      NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 3  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 4  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 5  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 6  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 7  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+	Current queue: 2
+	Current index: 0
+
+
+
+============================================================
+[$] Device: DRAM | CYCLE 42-51 :
+[#] Memory updates:
+	1000-1003 : 12
+[#] Remarks: 
+	DRAM: flushing row buffer to memory for row: 0
+============================================================
+[$] Device: DRAM | CYCLE 52-61 :
+[#] Remarks: 
+	DRAM: activating row 512
+============================================================
+[$] Device: DRAM | CYCLE 62-63 :
+[#] Remarks: 
+	DRAM: Read 0 from row buffer @ 525288 to register: $s1
+============================================================
+[$] Device: DRAM DRIVER | CYCLE 64-64 :
+[#] Remarks: 
+	Completing request
+[#] Queue Details:
+queue 0  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 1  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 2  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 3  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 4  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 5  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 6  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 7  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+	Current queue: -1
+	Current index: 0
+
+
+
+============================================================
+[$] Device: DRAM DRIVER | CYCLE 65-67 :
+[#] Remarks: 
+	Scheduling next queue
+[#] Queue Details:
+queue 0  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 1  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 2  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 3  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 4  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 5  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 6  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 7  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+	Current queue: 0
+	Current index: 0
+
+
+
+============================================================
+---------- Execution statistics ----------
+[#] Clock cycles: 64
+[#] Total instructions executed: 6
+[#] Average throughput: 0.09375
+[#] Number of row buffer updates: 4
+[#] Updated memory : 
+	1000-1003 : 12
+[#] Register contents of core - 0
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :         12
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :          0		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :          0		   $t8 :          0
+	   $t1 :          0		   $t9 :          0
+	   $t2 :          0		   $k0 :          0
+	   $t3 :          0		   $k1 :          0
+	   $t4 :          0		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Register contents of core - 1
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :          0		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :          0		   $t8 :          0
+	   $t1 :          0		   $t9 :          0
+	   $t2 :          0		   $k0 :          0
+	   $t3 :          0		   $k1 :          0
+	   $t4 :          0		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Register contents of core - 2
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :          0		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :          0		   $t8 :          0
+	   $t1 :          0		   $t9 :          0
+	   $t2 :          0		   $k0 :          0
+	   $t3 :          0		   $k1 :          0
+	   $t4 :          0		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0

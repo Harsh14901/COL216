@@ -1,0 +1,4 @@
+lw $a1, 2000($zero)
+lw $a2, 2004($zero)
+lw $a3, 2008($zero)
+lw $t1, 2000($zero)

@@ -1,0 +1,757 @@
+Current path is "/home/ubuntu-home/saptarshi/dev/COL216/new_A5/simulator"
+tests/input/single_write_port/core1
+[+] Compiling file : tests/input/single_write_port/core1
+[+] Program compiled successfully !
+[+] Executing in NON-BLOCKING MODE
+---------- Execution logs ----------
+[$] Device: Core 0 | CYCLE 1-1 :
+[#] Executing current instruction -> lw $a0, 1000($zero)
+[#] Register contents -
+[#] Remarks: 
+	DRAM request issued
+[#] Queue Details:
+queue 0  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 1  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 2  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 3  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 4  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 5  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 6  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 7  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+	Current queue: -1
+	Current index: 0
+
+
+
+============================================================
+[$] Device: DRAM DRIVER | CYCLE 2-2 :
+[#] Remarks: 
+	Inserting into queue
+[#] Queue Details:
+queue 0  --   (c:0,a:1000,LW:1)        NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 1  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 2  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 3  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 4  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 5  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 6  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 7  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+	Current queue: 0
+	Current index: 0
+
+
+
+============================================================
+[$] Device: Core 0 | CYCLE 2-2 :
+[#] Executing current instruction -> addi $a1, $zero, 12
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :         12		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :          0		   $t8 :          0
+	   $t1 :          0		   $t9 :          0
+	   $t2 :          0		   $k0 :          0
+	   $t3 :          0		   $k1 :          0
+	   $t4 :          0		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Queue Details:
+queue 0  --   (c:0,a:1000,LW:1)        NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 1  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 2  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 3  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 4  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 5  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 6  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 7  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+	Current queue: 0
+	Current index: 0
+
+
+
+============================================================
+[$] Device: Core 0 | CYCLE 3-3 :
+[#] Executing current instruction -> addi $a1, $zero, 12
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :         12		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :          0		   $t8 :          0
+	   $t1 :          0		   $t9 :          0
+	   $t2 :          0		   $k0 :          0
+	   $t3 :          0		   $k1 :          0
+	   $t4 :          0		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Queue Details:
+queue 0  --   (c:0,a:1000,LW:1)        NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 1  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 2  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 3  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 4  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 5  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 6  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 7  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+	Current queue: 0
+	Current index: 0
+
+
+
+============================================================
+[$] Device: Core 0 | CYCLE 4-4 :
+[#] Executing current instruction -> addi $a1, $zero, 12
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :         12		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :          0		   $t8 :          0
+	   $t1 :          0		   $t9 :          0
+	   $t2 :          0		   $k0 :          0
+	   $t3 :          0		   $k1 :          0
+	   $t4 :          0		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Queue Details:
+queue 0  --   (c:0,a:1000,LW:1)        NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 1  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 2  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 3  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 4  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 5  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 6  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 7  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+	Current queue: 0
+	Current index: 0
+
+
+
+============================================================
+[$] Device: Core 0 | CYCLE 5-5 :
+[#] Executing current instruction -> addi $a1, $zero, 12
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :         12		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :          0		   $t8 :          0
+	   $t1 :          0		   $t9 :          0
+	   $t2 :          0		   $k0 :          0
+	   $t3 :          0		   $k1 :          0
+	   $t4 :          0		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Queue Details:
+queue 0  --   (c:0,a:1000,LW:1)        NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 1  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 2  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 3  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 4  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 5  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 6  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 7  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+	Current queue: 0
+	Current index: 0
+
+
+
+============================================================
+[$] Device: Core 0 | CYCLE 6-6 :
+[#] Executing current instruction -> addi $a1, $zero, 12
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :         12		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :          0		   $t8 :          0
+	   $t1 :          0		   $t9 :          0
+	   $t2 :          0		   $k0 :          0
+	   $t3 :          0		   $k1 :          0
+	   $t4 :          0		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Queue Details:
+queue 0  --   (c:0,a:1000,LW:1)        NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 1  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 2  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 3  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 4  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 5  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 6  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 7  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+	Current queue: 0
+	Current index: 0
+
+
+
+============================================================
+[$] Device: Core 0 | CYCLE 7-7 :
+[#] Executing current instruction -> addi $a1, $zero, 12
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :         12		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :          0		   $t8 :          0
+	   $t1 :          0		   $t9 :          0
+	   $t2 :          0		   $k0 :          0
+	   $t3 :          0		   $k1 :          0
+	   $t4 :          0		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Queue Details:
+queue 0  --   (c:0,a:1000,LW:1)        NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 1  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 2  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 3  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 4  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 5  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 6  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 7  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+	Current queue: 0
+	Current index: 0
+
+
+
+============================================================
+[$] Device: Core 0 | CYCLE 8-8 :
+[#] Executing current instruction -> addi $a1, $zero, 12
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :         12		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :          0		   $t8 :          0
+	   $t1 :          0		   $t9 :          0
+	   $t2 :          0		   $k0 :          0
+	   $t3 :          0		   $k1 :          0
+	   $t4 :          0		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Queue Details:
+queue 0  --   (c:0,a:1000,LW:1)        NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 1  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 2  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 3  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 4  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 5  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 6  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 7  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+	Current queue: 0
+	Current index: 0
+
+
+
+============================================================
+[$] Device: Core 0 | CYCLE 9-9 :
+[#] Executing current instruction -> addi $a1, $zero, 12
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :         12		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :          0		   $t8 :          0
+	   $t1 :          0		   $t9 :          0
+	   $t2 :          0		   $k0 :          0
+	   $t3 :          0		   $k1 :          0
+	   $t4 :          0		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Queue Details:
+queue 0  --   (c:0,a:1000,LW:1)        NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 1  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 2  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 3  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 4  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 5  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 6  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 7  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+	Current queue: 0
+	Current index: 0
+
+
+
+============================================================
+[$] Device: Core 0 | CYCLE 10-10 :
+[#] Executing current instruction -> addi $a1, $zero, 12
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :         12		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :          0		   $t8 :          0
+	   $t1 :          0		   $t9 :          0
+	   $t2 :          0		   $k0 :          0
+	   $t3 :          0		   $k1 :          0
+	   $t4 :          0		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Queue Details:
+queue 0  --   (c:0,a:1000,LW:1)        NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 1  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 2  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 3  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 4  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 5  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 6  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 7  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+	Current queue: 0
+	Current index: 0
+
+
+
+============================================================
+[$] Device: Core 0 | CYCLE 11-11 :
+[#] Executing current instruction -> addi $a1, $zero, 12
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :         12		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :          0		   $t8 :          0
+	   $t1 :          0		   $t9 :          0
+	   $t2 :          0		   $k0 :          0
+	   $t3 :          0		   $k1 :          0
+	   $t4 :          0		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Queue Details:
+queue 0  --   (c:0,a:1000,LW:1)        NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 1  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 2  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 3  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 4  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 5  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 6  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 7  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+	Current queue: 0
+	Current index: 0
+
+
+
+============================================================
+[$] Device: Core 0 | CYCLE 12-12 :
+[#] Executing current instruction -> addi $a1, $zero, 12
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :         12		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :          0		   $t8 :          0
+	   $t1 :          0		   $t9 :          0
+	   $t2 :          0		   $k0 :          0
+	   $t3 :          0		   $k1 :          0
+	   $t4 :          0		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Queue Details:
+queue 0  --   (c:0,a:1000,LW:1)        NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 1  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 2  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 3  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 4  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 5  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 6  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 7  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+	Current queue: 0
+	Current index: 0
+
+
+
+============================================================
+[$] Device: DRAM | CYCLE 2-11 :
+[#] Remarks: 
+	DRAM: activating row 0
+============================================================
+[$] Device: DRAM | CYCLE 12-13 :
+[#] Remarks: 
+	DRAM: Read 0 from row buffer @ 1000 to register: $a0
+============================================================
+[$] Device: DRAM DRIVER | CYCLE 14-14 :
+[#] Remarks: 
+	Completing request
+[#] Queue Details:
+queue 0  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 1  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 2  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 3  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 4  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 5  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 6  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 7  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+	Current queue: -1
+	Current index: 0
+
+
+
+============================================================
+[$] Device: DRAM DRIVER | CYCLE 15-17 :
+[#] Remarks: 
+	Scheduling next queue
+[#] Queue Details:
+queue 0  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 1  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 2  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 3  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 4  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 5  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 6  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 7  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+	Current queue: 0
+	Current index: 0
+
+
+
+============================================================
+[$] Device: Core 0 | CYCLE 14-14 :
+[#] Executing current instruction -> addi $a1, $zero, 12
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :         12		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :          0		   $t8 :          0
+	   $t1 :          0		   $t9 :          0
+	   $t2 :          0		   $k0 :          0
+	   $t3 :          0		   $k1 :          0
+	   $t4 :          0		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Queue Details:
+queue 0  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 1  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 2  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 3  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 4  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 5  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 6  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 7  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+	Current queue: 0
+	Current index: 0
+
+
+
+============================================================
+[$] Device: Core 0 | CYCLE 15-15 :
+[#] Executing current instruction -> addi $a1, $zero, 12
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :         12		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :          0		   $t8 :          0
+	   $t1 :          0		   $t9 :          0
+	   $t2 :          0		   $k0 :          0
+	   $t3 :          0		   $k1 :          0
+	   $t4 :          0		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Queue Details:
+queue 0  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 1  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 2  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 3  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 4  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 5  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 6  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 7  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+	Current queue: 0
+	Current index: 0
+
+
+
+============================================================
+[$] Device: Core 0 | CYCLE 16-16 :
+[#] Executing current instruction -> addi $a1, $zero, 12
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :         12		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :          0		   $t8 :          0
+	   $t1 :          0		   $t9 :          0
+	   $t2 :          0		   $k0 :          0
+	   $t3 :          0		   $k1 :          0
+	   $t4 :          0		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Queue Details:
+queue 0  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 1  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 2  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 3  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 4  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 5  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 6  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 7  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+	Current queue: 0
+	Current index: 0
+
+
+
+============================================================
+[$] Device: Core 0 | CYCLE 17-17 :
+[#] Executing current instruction -> addi $a1, $zero, 12
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :         12		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :          0		   $t8 :          0
+	   $t1 :          0		   $t9 :          0
+	   $t2 :          0		   $k0 :          0
+	   $t3 :          0		   $k1 :          0
+	   $t4 :          0		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Queue Details:
+queue 0  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 1  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 2  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 3  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 4  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 5  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 6  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 7  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+	Current queue: 0
+	Current index: 0
+
+
+
+============================================================
+[$] Device: Core 0 | CYCLE 18-18 :
+[#] Executing current instruction -> addi $a1, $zero, 12
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :         12		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :          0		   $t8 :          0
+	   $t1 :          0		   $t9 :          0
+	   $t2 :          0		   $k0 :          0
+	   $t3 :          0		   $k1 :          0
+	   $t4 :          0		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Queue Details:
+queue 0  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 1  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 2  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 3  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 4  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 5  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 6  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 7  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+	Current queue: 0
+	Current index: 0
+
+
+
+============================================================
+[$] Device: Core 0 | CYCLE 19-19 :
+[#] Executing current instruction -> addi $a1, $zero, 12
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :         12		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :          0		   $t8 :          0
+	   $t1 :          0		   $t9 :          0
+	   $t2 :          0		   $k0 :          0
+	   $t3 :          0		   $k1 :          0
+	   $t4 :          0		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Queue Details:
+queue 0  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 1  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 2  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 3  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 4  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 5  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 6  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 7  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+	Current queue: 0
+	Current index: 0
+
+
+
+============================================================
+[$] Device: Core 0 | CYCLE 20-20 :
+[#] Executing current instruction -> addi $a1, $zero, 12
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :         12		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :          0		   $t8 :          0
+	   $t1 :          0		   $t9 :          0
+	   $t2 :          0		   $k0 :          0
+	   $t3 :          0		   $k1 :          0
+	   $t4 :          0		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Queue Details:
+queue 0  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 1  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 2  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 3  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 4  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 5  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 6  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 7  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+	Current queue: 0
+	Current index: 0
+
+
+
+============================================================
+[$] Device: Core 0 | CYCLE 21-21 :
+[#] Executing current instruction -> addi $a1, $zero, 12
+[#] Register contents -
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :         12		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :          0		   $t8 :          0
+	   $t1 :          0		   $t9 :          0
+	   $t2 :          0		   $k0 :          0
+	   $t3 :          0		   $k1 :          0
+	   $t4 :          0		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
+[#] Queue Details:
+queue 0  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 1  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 2  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 3  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 4  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 5  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 6  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+queue 7  --   NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     NULL                     
+	Current queue: 0
+	Current index: 0
+
+
+
+============================================================
+---------- Execution statistics ----------
+[#] Clock cycles: 22
+[#] Total instructions executed: 20
+[#] Average throughput: 0.909091
+[#] Number of row buffer updates: 1
+[#] Updated memory : 
+[#] Register contents of core - 0
+	 $zero :          0		   $s0 :          0
+	   $at :          0		   $s1 :          0
+	   $v0 :          0		   $s2 :          0
+	   $v1 :          0		   $s3 :          0
+	   $a0 :          0		   $s4 :          0
+	   $a1 :         12		   $s5 :          0
+	   $a2 :          0		   $s6 :          0
+	   $a3 :          0		   $s7 :          0
+	   $t0 :          0		   $t8 :          0
+	   $t1 :          0		   $t9 :          0
+	   $t2 :          0		   $k0 :          0
+	   $t3 :          0		   $k1 :          0
+	   $t4 :          0		   $gp :          0
+	   $t5 :          0		   $sp :    1048576
+	   $t6 :          0		   $fp :          0
+	   $t7 :          0		   $ra :          0
