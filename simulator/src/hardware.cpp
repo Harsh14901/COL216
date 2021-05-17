@@ -163,12 +163,14 @@ void Hardware::start_execution() {
     execute_current();
     dram_driver->update_instr_count(CORE_ID);
     stats->instr_count++;
+    last_blocked = false;
 
   } catch (const DramDriver::ControllerBusy& e) {
     log.remarks.push_back("DRAM Driver currently busy");
-
+    last_blocked = true;
   } catch (const DramDriver::QueueFull& e) {
     log.remarks.push_back("DRAM Driver queue unavailable!");
+    last_blocked = true;
   }
 
   if (instr != Operator::LW && instr != Operator::SW) {

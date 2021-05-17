@@ -41,6 +41,7 @@ class Hardware {
     Terminated() : std::runtime_error("") {}
     Terminated(const string& msg) : std::runtime_error(msg) {}
   };
+  bool last_blocked = false;
 
  private:
   vector<hd_t> registers;

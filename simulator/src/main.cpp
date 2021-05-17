@@ -91,7 +91,14 @@ int main(int argc, char* argv[]) {
     driver.perform_tasks();
 
     for (auto& core : cores) {
-      remaining_cores.push_back(core.get_id());
+      if (core.last_blocked) {
+        remaining_cores.push_back(core.get_id());
+      }
+    }
+    for (auto& core : cores) {
+      if (!core.last_blocked) {
+        remaining_cores.push_back(core.get_id());
+      }
     }
 
     int idx = 0;
