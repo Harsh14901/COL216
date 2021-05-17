@@ -6,6 +6,9 @@
 #include <string>
 #include <vector>
 
+// #include "hardware.hpp"
+class Hardware;
+
 using namespace std;
 typedef int32_t hd_t;
 
@@ -70,7 +73,7 @@ struct Stats {
   int instr_count = 0;
   map<int, hd_t> updated_memory;
   vector<Log> logs;
-  void print_verbose();
+  void print_verbose(vector<vector<hd_t>> reg_list);
 };
 
 extern map<string, string> reverse_register_map;

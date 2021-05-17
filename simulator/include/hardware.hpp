@@ -30,6 +30,7 @@ class Hardware {
   void set_blocking_mode(bool block);
   void set_id(int id);
   int get_id();
+  vector<hd_t> getRegisters();
   void load_dram_driver(DramDriver* driver);
   void load_program(vector<Instruction> program);
   vector<int> get_blocked_registers();

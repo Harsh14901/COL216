@@ -98,7 +98,7 @@ void Log::print_verbose() {
        << endl;
 }
 
-void Stats::print_verbose() {
+void Stats::print_verbose(vector<vector<hd_t>> reg_list) {
   cout << "---------- Execution logs ----------" << endl;
   for (auto& log : logs) {
     log.print_verbose();
@@ -112,5 +112,20 @@ void Stats::print_verbose() {
   cout << "[#] Updated memory : " << endl;
   for (auto& v : updated_memory) {
     printf("\t%d-%ld : %d\n", v.first, v.first + sizeof(hd_t) - 1, v.second);
+  }
+
+  int index = 0;
+  for (auto& registers : reg_list) {
+    cout << "[#] Register contents of core - " << index++ << endl;
+
+    auto n = registers.size() / 2;
+    for (int i = 0; i < n; i++) {
+      // printf("\t%2d : %#010x\t\t%ld : %#010x\n", i, registers[i], i + n,
+      //        registers[i + n]);
+      printf("\t%6s : %10d\t\t%6s : %10d\n",
+             reverse_register_map["$" + to_string(i)].c_str(), registers[i],
+             reverse_register_map["$" + to_string(i + n)].c_str(),
+             registers[i + n]);
+    }
   }
 }

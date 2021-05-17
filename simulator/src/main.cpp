@@ -124,7 +124,11 @@ int main(int argc, char* argv[]) {
       break;
     }
   }
-  stats.print_verbose();
+  vector<vector<hd_t>> reg_list;
+  for (auto& core : cores) {
+    reg_list.push_back(core.getRegisters());
+  }
+  stats.print_verbose(reg_list);
 
   return 0;
 }

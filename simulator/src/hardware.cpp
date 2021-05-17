@@ -32,6 +32,8 @@ void Hardware::load_program(vector<Instruction> program) {
   pc = this->program.begin();
 }
 
+vector<hd_t> Hardware::getRegisters() { return registers; }
+
 void Hardware::set_blocking_mode(bool block) { blocking = block; }
 
 void Hardware::set_id(int id) { CORE_ID = id; }
