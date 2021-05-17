@@ -83,7 +83,7 @@ int main(int argc, char* argv[]) {
   }
 
   unordered_set<int> fault_cores;
-  vector<int> remaining_cores;
+  vector<int> block_count(N, 0);
 
   for (int i = 0; i < M; i++) {
     stats.clock_cycles = i + 1;
@@ -92,21 +92,23 @@ int main(int argc, char* argv[]) {
 
     for (auto& core : cores) {
       if (core.last_blocked) {
-        remaining_cores.push_back(core.get_id());
+        block_count[core.get_id()]++;
       }
     }
-    for (auto& core : cores) {
-      if (!core.last_blocked) {
-        remaining_cores.push_back(core.get_id());
-      }
+    vector<pair<int, int>> core_heap;
+    for (int i = 0; i < N; i++) {
+      core_heap.push_back(make_pair(block_count[i], cores[i].get_id()));
     }
 
-    int idx = 0;
-    while (!remaining_cores.empty()) {
-      // idx = rand() % remaining_cores.size();
-      idx = 0;
-      auto& core = cores[remaining_cores[idx]];
-      remaining_cores.erase(remaining_cores.begin() + idx);
+    make_heap(core_heap.begin(), core_heap.end(),
+              [&](const pair<int, int>& a, const pair<int, int>& b) {
+                return a.first <= b.first;
+              });
+
+    for (int j = 0; j < N; j++) {
+      auto& core = cores[core_heap.front().second];
+      pop_heap(core_heap.begin(), core_heap.end());
+      core_heap.pop_back();
 
       int id = core.get_id();
       if (stats.clock_cycles == register_write_times[id] ||
@@ -126,7 +128,6 @@ int main(int argc, char* argv[]) {
              << e.what() << '\n';
       }
     }
-    remaining_cores.clear();
     if (fault_cores.size() == N && driver.is_idle()) {
       break;
     }
