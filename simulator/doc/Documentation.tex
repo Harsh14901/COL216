@@ -306,9 +306,15 @@ However, due to these delays, the DRAM driver will remain busy for some clock cy
 The testing method was completely manual. The test cases written manually are included in the \verb|./tests/input| directory. The test cases were run with different parameters
 of the program and the outcomes were compared.
 \begin{itemize}
-    \item \verb|test1.txt:| description here.
-    \item \verb|test2.txt:| description here.
-    \item \verb|test3.txt:| description here.
+    \item \verb|deletion_sw:| this contains 3 test files to check for the optimization of deleting redundant LW instructions to the same register (by the same CORE) .
+    \item \verb|deletion_lw:| this contains 3 test files to check for the optimization of deleting redundant SW instructions to the same memory address (by the same CORE).
+    \item \verb|forwarding:| this contains 3 test files to check for forwarding LW instructions from previous SW instruction to the same address is present in the MRM.
+    \item \verb|manycores:| this contains 8 test files to demonstrate how our MRM handles requests from large number of cores.
+    \item \verb|optimal_switch_blocking:| this contains 2 test files to show how our MRM switches queues when some queues contain blocking registers.
+    \item \verb|optimal_switch_non_blocking:| this contains 2 test files to show how our MRM switches queues when no queue contains blocking registers.
+    \item \verb|single_write_port:| this demonstrates that only one of DRAM, MRM and Processor can write to the register file at a particular clock cycle.
+    \item \verb|starvation:| this demonstrates how our MRM behaves when only requests from a single core are being processed for some time  .
+    \item \verb|switch_with_loops:| this demonstrates a scenario with multiple LW and SW instructions inside loops.
 \end{itemize}
 
 \subsection{Result}

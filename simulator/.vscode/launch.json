@@ -5,7 +5,11 @@
     "name": "Debug",
     "type": "cppdbg",
     "request": "launch",
-    "args": ["1", "200", "tests/input/switch_with_loops/core1"],
+    "args": [
+      "4",
+      "1000",
+      "/home/sp/Documents/akshat_test/"
+    ],
     "stopAtEntry": false,
     "cwd": "${workspaceFolder}",
     "environment": [],
