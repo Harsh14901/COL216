@@ -1,7 +1,0 @@
-lw $t0, 2000($zero)
-lw $t1, 2004($zero)
-lw $t1, 2008($zero)
-addi $s1, $s1, 50
-sw $s1, 2008($zero)
-lw $t2, 2008($zero)
-addi $t2, $t2, 1

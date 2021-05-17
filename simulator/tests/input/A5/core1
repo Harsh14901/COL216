@@ -1,4 +1,0 @@
-addi $s1, $zero, 12
-sw $s1, 500($zero)
-lw $s1, 1000($zero)
-lw $s1, 1000($zero)

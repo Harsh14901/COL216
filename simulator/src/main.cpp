@@ -96,8 +96,8 @@ int main(int argc, char* argv[]) {
 
     int idx = 0;
     while (!remaining_cores.empty()) {
-      idx = rand() % remaining_cores.size();
-      // idx = 0;
+      // idx = rand() % remaining_cores.size();
+      idx = 0;
       auto& core = cores[remaining_cores[idx]];
       remaining_cores.erase(remaining_cores.begin() + idx);
 

@@ -1,1 +1,0 @@
-sw $zero, 1000($zero)

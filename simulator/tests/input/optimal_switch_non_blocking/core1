@@ -1,1 +1,3 @@
 lw $a0, 1000($zero)
+addi $t0, $t0, 0
+lw $a1, 1024($zero)

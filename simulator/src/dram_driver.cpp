@@ -280,13 +280,25 @@ void DramDriver::move_index() {
   if (curr_queue == -1) {
     return;
   }
-  int i = 0;
-  while (queues[curr_queue][curr_index].is_NULL() && i != QUEUE_SIZE) {
-    curr_index = (curr_index + 1) % QUEUE_SIZE;
-    i++;
+  int first_lw = -1, first_sw = -1;
+  for (int i = 0; i < QUEUE_SIZE; i++) {
+    if (queues[curr_queue][i].is_NULL()) {
+      continue;
+    }
+    if (queues[curr_queue][i].is_LW() && first_lw == -1) {
+      first_lw = i;
+    } else if (queues[curr_queue][i].is_SW() && first_sw == -1) {
+      first_sw = i;
+    }
   }
-  if (i == QUEUE_SIZE) {
+
+  if (first_lw == -1 && first_sw == -1) {
     curr_index = 0;
+    return;
+  } else if (first_lw != -1) {
+    curr_index = first_lw;
+  } else if (first_sw != -1) {
+    curr_index = first_sw;
   }
   auto curr_req = get_curr_request();
   int lw_index = get_pending_lw_index(curr_queue, *curr_req);
@@ -402,10 +414,10 @@ void DramDriver::choose_next_queue() {
   int scheduling_delay = 1;
   string scheduling_remark = "Scheduling next queue";
 
-  int lw_pos_in_queue[NUM_QUEUES];  // metric denoting the importance of the
-                                    // blocked requests in a queue
-  int core_req_freqs[MAX_CORES];  // ratio of Request frequency to total number
-                                  // of instructions
+  int lw_pos_in_queue[NUM_QUEUES];   // metric denoting the importance of the
+                                     // blocked requests in a queue
+  double core_req_freqs[MAX_CORES];  // ratio of Request frequency to total
+                                     // number of instructions
 
   memset(lw_pos_in_queue, -1, sizeof(lw_pos_in_queue));
   memset(core_req_freqs, 0, sizeof(core_req_freqs));
@@ -423,21 +435,38 @@ void DramDriver::choose_next_queue() {
       }
     }
     // add 1 to prevent div by 0
-    core_req_freqs[core] = __core2freq_LUT[core] / (1 + __core2instr_LUT[core]);
+    core_req_freqs[core] =
+        1.0 * __core2freq_LUT[core] / (1 + __core2instr_LUT[core]);
   }
 
   int best_q = 0;
   double freq_offset = 0.01;  // to prevent division by 0
 
-  for (int i = 1; i < NUM_QUEUES; i++) {
-    // freq - , size +
-    double prev_metric =
-        __queue2size_LUT[best_q] / (freq_offset + core_req_freqs[best_q]);
-    double new_metric = __queue2size_LUT[i] / (freq_offset + core_req_freqs[i]);
-    if (new_metric > prev_metric) {
-      best_q = i;
+  int sum = 0;
+  for (int i = 0; i < NUM_QUEUES; i++) sum += lw_pos_in_queue[i];
+
+  if (sum == -NUM_QUEUES) {
+    for (int i = 1; i < NUM_QUEUES; i++) {
+      // freq - , size +
+      double prev_metric =
+          __queue2size_LUT[best_q] / (freq_offset + core_req_freqs[best_q]);
+      double new_metric =
+          __queue2size_LUT[i] / (freq_offset + core_req_freqs[i]);
+      if (new_metric > prev_metric) {
+        best_q = i;
+      }
     }
-    // cout << new_metric << endl;
+  } else {
+    for (int i = 1; i < NUM_QUEUES; i++) {
+      // freq - , size +
+      double prev_metric =
+          __queue2size_LUT[best_q] / (freq_offset + core_req_freqs[best_q]);
+      double new_metric =
+          __queue2size_LUT[i] / (freq_offset + core_req_freqs[i]);
+      if (lw_pos_in_queue[i] != -1 && new_metric > prev_metric) {
+        best_q = i;
+      }
+    }
   }
 
   // Floating point operations
