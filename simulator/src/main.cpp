@@ -9,6 +9,7 @@ namespace fs = std::filesystem;
 
 void print_usage();
 int main(int argc, char* argv[]) {
+  srand(time(NULL));
   if (argc < 3) {
     print_usage();
     return -1;
@@ -96,6 +97,7 @@ int main(int argc, char* argv[]) {
     int idx = 0;
     while (!remaining_cores.empty()) {
       idx = rand() % remaining_cores.size();
+      // idx = 0;
       auto& core = cores[remaining_cores[idx]];
       remaining_cores.erase(remaining_cores.begin() + idx);
 

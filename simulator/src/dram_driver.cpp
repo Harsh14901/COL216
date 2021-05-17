@@ -168,15 +168,15 @@ void DramDriver::perform_tasks() {
 }
 
 void DramDriver::enqueue_request(Request& request) {
-  int enqueue_delay = 1;
-  string enqueue_remark = "Selecting queue";
+  // int enqueue_delay = 1;
+  // string enqueue_remark = "Selecting queue";
 
   auto row = dram.addr2rowcol(request.addr).first;
 
   int unallocated_q = -1;
   for (int i = 0; i < NUM_QUEUES; i++) {
     if (__queue2row_LUT[i] == row) {
-      add_delay(enqueue_delay, enqueue_remark);
+      // add_delay(enqueue_delay, enqueue_remark);
       // add_delay(0, enqueue_remark);
       insert_request(request, i);
 
@@ -191,7 +191,7 @@ void DramDriver::enqueue_request(Request& request) {
   } else {
     __queue2row_LUT[unallocated_q] = row;
 
-    add_delay(enqueue_delay, enqueue_remark);
+    // add_delay(enqueue_delay, enqueue_remark);
     // add_delay(0, enqueue_remark);
     insert_request(request, unallocated_q);
   }
@@ -299,7 +299,7 @@ void DramDriver::complete_request() {
   auto req = get_curr_request();
   auto core = req->core;
 
-  int completion_delay = 1;
+  int completion_delay = 0;
   string completion_remark = "Completing request";
 
   if (req->is_SW()) {
