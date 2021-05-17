@@ -83,7 +83,6 @@ int main(int argc, char* argv[]) {
   }
 
   unordered_set<int> fault_cores;
-  vector<int> block_count(N, 0);
 
   for (int i = 0; i < M; i++) {
     stats.clock_cycles = i + 1;
@@ -91,25 +90,6 @@ int main(int argc, char* argv[]) {
     driver.perform_tasks();
 
     for (auto& core : cores) {
-      if (core.last_blocked) {
-        block_count[core.get_id()]++;
-      }
-    }
-    vector<pair<int, int>> core_heap;
-    for (int i = 0; i < N; i++) {
-      core_heap.push_back(make_pair(block_count[i], cores[i].get_id()));
-    }
-
-    make_heap(core_heap.begin(), core_heap.end(),
-              [&](const pair<int, int>& a, const pair<int, int>& b) {
-                return a.first <= b.first;
-              });
-
-    for (int j = 0; j < N; j++) {
-      auto& core = cores[core_heap.front().second];
-      pop_heap(core_heap.begin(), core_heap.end());
-      core_heap.pop_back();
-
       int id = core.get_id();
       if (stats.clock_cycles == register_write_times[id] ||
           fault_cores.find(id) != fault_cores.end())
